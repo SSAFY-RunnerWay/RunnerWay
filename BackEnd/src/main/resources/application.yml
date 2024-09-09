@@ -1,0 +1,48 @@
+server:
+  servlet:
+    context-path: /api
+spring:
+  profiles:
+    include: key
+
+  datasource:
+    url: jdbc:mysql://${serverhost}:${dbport}/runnerway
+    username: ${mysqlusername}
+    password: ${mysqlpassword}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        diarect: org.hibernate.dialect.MysqlDialect
+        jdbc:
+          batch_size: 1000
+        show_sql: false
+        format_sql: false
+        use_sql_comments: false
+        order_updates: true
+        default_batch_fetch_size: 16
+
+    open-in-view: false
+
+  data:
+    redis:
+      host: ${serverhost}
+      port: ${redisport}
+      password: ${redispassword}
+
+springdoc:
+  swagger-ui:
+    path: ${swagger-url}
+
+logging:
+  level:
+    org.hibernate.SQL: info
+
+jwt:
+  expiration_time: 3600000 #1시간
+  secret: ${JWT}
