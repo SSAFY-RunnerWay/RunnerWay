@@ -17,9 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,6 +64,20 @@ public class MemberController {
     })
     public ResponseEntity<MemberSelectResponseDto> selectMember() {
         Long memberId = MemberInfo.getId();
+        MemberSelectResponseDto memberSelectResponseDto = memberService.selectMember(memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(memberSelectResponseDto);
+    }
+
+    @GetMapping("/rankers/{memberId}")
+    @Operation(summary = "랭커정보 조회", description = "랭커정보 조회시 사용하는 API")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "랭커정보 조회 성공",
+            content = @Content(mediaType = "application/json")
+        )
+    })
+    public ResponseEntity<MemberSelectResponseDto> selectRanker(@PathVariable("memberId") Long memberId) {
         MemberSelectResponseDto memberSelectResponseDto = memberService.selectMember(memberId);
         return ResponseEntity.status(HttpStatus.OK).body(memberSelectResponseDto);
     }

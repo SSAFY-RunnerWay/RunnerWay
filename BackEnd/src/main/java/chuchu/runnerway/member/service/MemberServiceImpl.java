@@ -7,6 +7,7 @@ import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
 import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
+import chuchu.runnerway.member.exception.ResignedMemberException;
 import chuchu.runnerway.member.repository.MemberImageRepository;
 import chuchu.runnerway.member.repository.MemberRepository;
 import chuchu.runnerway.security.util.JwtUtil;
@@ -48,13 +49,9 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId).orElseThrow(
             NotFoundMemberException::new
         );
-        MemberSelectResponseDto memberSelectResponseDto = mapper.map(member, MemberSelectResponseDto.class);
-//        MemberImageDto memberImageDto = mapper.map(memberImageRepository.findByMember(member), MemberImageDto.class);
+        if (member.getIsResign() == 1) throw new ResignedMemberException();
 
-        MemberSelectResponseDto responseDto = mapper.map(member, MemberSelectResponseDto.class);
-//        responseDto.setMemberImage(memberImageDto);
-
-        return memberSelectResponseDto;
+        return mapper.map(member, MemberSelectResponseDto.class);
     }
 
     private void saveMemberImage(MemberSignUpRequestDto signUpMemberDto, Member savedMember) {
