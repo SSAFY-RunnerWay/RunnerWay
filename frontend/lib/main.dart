@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'widgets/location.dart'; // location.dart 파일을 import
 import 'widgets/map.dart'; // map.dart 파일을 import
-
+import 'widgets/line.dart'; // line.dart 파일을 import
+import 'widgets/google_map_polyline.dart'; // google_map_polyline.dart 파일을 import
 
 void main() {
   runApp(const MyApp());
@@ -76,7 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => const GeolocatorWidget()), // location.dart의 GeolocatorWidget 호출
+          builder: (context) =>
+              const GeolocatorWidget()), // location.dart의 GeolocatorWidget 호출
     );
   }
 
@@ -86,6 +88,23 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       MaterialPageRoute(
           builder: (context) => const MyMap()), // map.dart의 MyMap 호출
+    );
+  }
+
+  // line.dart 파일의 MyLine 페이지로 이동하는 메소드
+  void _navigateToLine(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MyLine()), // line.dart의 MyLine 호출
+    );
+  }
+
+  void _navigateToGoogleMapPolyline(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              const GoogleMapPolyline()), // Navigates to GoogleMapPolyline
     );
   }
 
@@ -134,12 +153,21 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             ElevatedButton(
-              onPressed: () => _navigateToLocation(context),  // 위치 페이지로 이동
+              onPressed: () => _navigateToLocation(context), // 위치 페이지로 이동
               child: const Text('Go to Location'),
             ),
             ElevatedButton(
-              onPressed: () => _navigateToMap(context),  // 맵 페이지로 이동
+              onPressed: () => _navigateToMap(context), // 맵 페이지로 이동
               child: const Text('Go to Map'),
+            ),
+            ElevatedButton(
+              onPressed: () => _navigateToLine(context), // 라인 페이지로 이동
+              child: const Text('Go to Line'),
+            ),
+            ElevatedButton(
+              onPressed: () => _navigateToGoogleMapPolyline(context),
+              // Navigates to the Polyline page
+              child: const Text('Go to GoogleMapPolyline'),
             ),
           ],
         ),
