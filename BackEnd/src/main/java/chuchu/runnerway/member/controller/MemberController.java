@@ -3,6 +3,7 @@ package chuchu.runnerway.member.controller;
 import chuchu.runnerway.common.dto.ErrorResponseDto;
 import chuchu.runnerway.common.util.MemberInfo;
 import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
+import chuchu.runnerway.member.dto.request.MemberUpdateRequestDto;
 import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
@@ -19,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -80,6 +82,20 @@ public class MemberController {
     public ResponseEntity<MemberSelectResponseDto> selectRanker(@PathVariable("memberId") Long memberId) {
         MemberSelectResponseDto memberSelectResponseDto = memberService.selectMember(memberId);
         return ResponseEntity.status(HttpStatus.OK).body(memberSelectResponseDto);
+    }
+
+    @PatchMapping
+    @Operation(summary = "회원정보 수정", description = "회원정보 수정 할 때 사용하는 API")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+            description = "닉네임, 프로필 이미지, 생일, 키, 몸무게 변경가능",
+            content = @Content(mediaType = "application/json"))
+    })
+    public ResponseEntity<?> updateMember(
+        @RequestBody MemberUpdateRequestDto memberUpdateRequestDto) {
+        Long memberId = MemberInfo.getId();
+        memberService.updateMember(memberUpdateRequestDto, memberId);
+        return ResponseEntity.status(HttpStatus.OK).body("회원정보 수정완료!!");
     }
 
     @ExceptionHandler({MemberDuplicateException.class, NotFoundMemberException.class,

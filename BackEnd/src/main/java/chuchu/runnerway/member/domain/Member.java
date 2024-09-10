@@ -1,6 +1,7 @@
 package chuchu.runnerway.member.domain;
 
 import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
+import chuchu.runnerway.member.dto.request.MemberUpdateRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -60,6 +61,13 @@ public class Member {
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private MemberImage memberImage;
+
+    public void updateMember(MemberUpdateRequestDto memberUpdateRequestDto) {
+        this.nickname = memberUpdateRequestDto.getNickname();
+        this.birth = memberUpdateRequestDto.getBirth();
+        this.height = memberUpdateRequestDto.getHeight();
+        this.weight = memberUpdateRequestDto.getWeight();
+    }
 
     @Builder(builderMethodName = "signupBuilder")
     public Member(MemberSignUpRequestDto memberSignUpRequestDto) {

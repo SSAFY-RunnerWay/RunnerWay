@@ -2,6 +2,7 @@ package chuchu.runnerway.member.domain;
 
 import static jakarta.persistence.FetchType.*;
 
+import chuchu.runnerway.member.dto.MemberImageDto;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import jakarta.persistence.Column;
@@ -41,4 +42,9 @@ public class MemberImage {
 
     @Column(name = "path")
     private String path;
+
+    public void updateMemberImage(MemberImageDto memberImageDto) {
+        this.url = memberImageDto.getUrl();
+        this.path = memberImageDto.getPath();
+    }
 }

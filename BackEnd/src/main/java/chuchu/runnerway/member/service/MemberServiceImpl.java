@@ -4,6 +4,7 @@ import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.domain.MemberImage;
 import chuchu.runnerway.member.dto.MemberDto;
 import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
+import chuchu.runnerway.member.dto.request.MemberUpdateRequestDto;
 import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
@@ -44,6 +45,7 @@ public class MemberServiceImpl implements MemberService {
         return jwtUtil.createAccessToken(mapper.map(savedMember, MemberDto.class));
     }
 
+    @Transactional
     @Override
     public MemberSelectResponseDto selectMember(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(
@@ -52,6 +54,23 @@ public class MemberServiceImpl implements MemberService {
         if (member.getIsResign() == 1) throw new ResignedMemberException();
 
         return mapper.map(member, MemberSelectResponseDto.class);
+    }
+
+    @Transactional
+    @Override
+    public void updateMember(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+            NotFoundMemberException::new
+        );
+        member.updateMember(memberUpdateRequestDto);
+
+        MemberImage memberImage = memberImageRepository.findByMember(member).orElseThrow(
+            NotFoundMemberException::new
+        );
+        memberImage.updateMemberImage(memberUpdateRequestDto.getMemberImage());
+
+        memberRepository.save(member);
+        memberImageRepository.save(memberImage);
     }
 
     private void saveMemberImage(MemberSignUpRequestDto signUpMemberDto, Member savedMember) {
