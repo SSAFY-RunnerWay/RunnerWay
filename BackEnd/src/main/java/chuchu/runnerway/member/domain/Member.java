@@ -58,7 +58,7 @@ public class Member {
     @ColumnDefault("0")
     private Integer isResign;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private MemberImage memberImage;
 
     @Builder(builderMethodName = "signupBuilder")

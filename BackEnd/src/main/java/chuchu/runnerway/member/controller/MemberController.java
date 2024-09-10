@@ -1,7 +1,9 @@
 package chuchu.runnerway.member.controller;
 
 import chuchu.runnerway.common.dto.ErrorResponseDto;
+import chuchu.runnerway.common.util.MemberInfo;
 import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
+import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
 import chuchu.runnerway.member.exception.ResignedMemberException;
@@ -15,7 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +51,21 @@ public class MemberController {
     ) {
         String accessToken = memberService.signUp(memberSignUpRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(accessToken);
+    }
+
+    @GetMapping
+    @Operation(summary = "개인정보 조회", description = "개인정보 조회시 사용하는 API")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "개인정보 조회 성공",
+            content = @Content(mediaType = "application/json")
+        )
+    })
+    public ResponseEntity<MemberSelectResponseDto> selectMember() {
+        Long memberId = MemberInfo.getId();
+        MemberSelectResponseDto memberSelectResponseDto = memberService.selectMember(memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(memberSelectResponseDto);
     }
 
     @ExceptionHandler({MemberDuplicateException.class, NotFoundMemberException.class,

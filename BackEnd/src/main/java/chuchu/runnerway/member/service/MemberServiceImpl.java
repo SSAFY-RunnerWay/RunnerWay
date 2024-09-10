@@ -4,7 +4,9 @@ import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.domain.MemberImage;
 import chuchu.runnerway.member.dto.MemberDto;
 import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
+import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
+import chuchu.runnerway.member.exception.NotFoundMemberException;
 import chuchu.runnerway.member.repository.MemberImageRepository;
 import chuchu.runnerway.member.repository.MemberRepository;
 import chuchu.runnerway.security.util.JwtUtil;
@@ -39,6 +41,20 @@ public class MemberServiceImpl implements MemberService {
         saveMemberImage(signUpMemberDto, savedMember);
 
         return jwtUtil.createAccessToken(mapper.map(savedMember, MemberDto.class));
+    }
+
+    @Override
+    public MemberSelectResponseDto selectMember(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+            NotFoundMemberException::new
+        );
+        MemberSelectResponseDto memberSelectResponseDto = mapper.map(member, MemberSelectResponseDto.class);
+//        MemberImageDto memberImageDto = mapper.map(memberImageRepository.findByMember(member), MemberImageDto.class);
+
+        MemberSelectResponseDto responseDto = mapper.map(member, MemberSelectResponseDto.class);
+//        responseDto.setMemberImage(memberImageDto);
+
+        return memberSelectResponseDto;
     }
 
     private void saveMemberImage(MemberSignUpRequestDto signUpMemberDto, Member savedMember) {
