@@ -1,10 +1,12 @@
 package chuchu.runnerway.member.domain;
 
+import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -56,6 +58,16 @@ public class Member {
     @ColumnDefault("0")
     private Integer isResign;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private MemberImage memberImage;
+
+    @Builder(builderMethodName = "signupBuilder")
+    public Member(MemberSignUpRequestDto memberSignUpRequestDto) {
+        this.email = memberSignUpRequestDto.getEmail();
+        this.joinType = memberSignUpRequestDto.getJoinType();
+        this.nickname = memberSignUpRequestDto.getNickname();
+        this.birth = memberSignUpRequestDto.getBirth();
+        this.height = memberSignUpRequestDto.getHeight();
+        this.weight = memberSignUpRequestDto.getWeight();
+    }
 }

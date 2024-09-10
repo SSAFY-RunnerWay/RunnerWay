@@ -33,7 +33,7 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] AUTH_PERMIT_PATH_LIST = {
-        "/", "/api/members"
+        "/", "/members/sign-up"
     };
 
     @Bean
@@ -77,9 +77,9 @@ public class SecurityConfig {
             // 권한 규칙 작성
             .authorizeHttpRequests((authorizeRequests) ->
                 authorizeRequests
-                    //.requestMatchers(AUTH_PERMIT_PATH_LIST).permitAll()
+                    .requestMatchers(AUTH_PERMIT_PATH_LIST).permitAll()
                     //@PreAuthrization을 사용할 것이기 때문에 모든 경로에 대한 인증처리는 Pass
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
             );
 
         return http.build();
