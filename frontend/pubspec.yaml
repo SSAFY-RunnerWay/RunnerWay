@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  baseflow_plugin_template: ^2.2.0
+  geolocator: ^13.0.1
 
 
   # The following adds the Cupertino Icons font to your application.

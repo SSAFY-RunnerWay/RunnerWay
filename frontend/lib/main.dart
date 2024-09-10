@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'widgets/map.dart'; // map.dart 파일을 import
 
 void main() {
   runApp(const MyApp());
@@ -68,6 +69,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // 새로운 화면으로 이동하는 메소드 추가
+  void _navigateToMap(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              const GeolocatorWidget()), // map.dart의 GeolocatorWidget 호출
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -111,6 +122,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            ElevatedButton(
+              onPressed: () => _navigateToMap(context),  // 버튼 클릭 시 맵 페이지로 이동
+              child: const Text('Go to Map'),
             ),
           ],
         ),
