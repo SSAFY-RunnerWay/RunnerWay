@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'widgets/location.dart'; // location.dart 파일을 import
+import 'widgets/map.dart'; // map.dart 파일을 import
+
 
 void main() {
   runApp(const MyApp());
@@ -69,12 +71,21 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // location.dart 파일의 GeolocatorWidget 페이지로 이동하는 메소드
   void _navigateToLocation(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              const GeolocatorWidget()), // location.dart의 GeolocatorWidget 호출
+          builder: (context) => const GeolocatorWidget()), // location.dart의 GeolocatorWidget 호출
+    );
+  }
+
+  // map.dart 파일의 MyMap 페이지로 이동하는 메소드
+  void _navigateToMap(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => const MyMap()), // map.dart의 MyMap 호출
     );
   }
 
@@ -123,8 +134,12 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             ElevatedButton(
-              onPressed: () => _navigateToLocation(context),  // 버튼 클릭 시 맵 페이지로 이동
+              onPressed: () => _navigateToLocation(context),  // 위치 페이지로 이동
               child: const Text('Go to Location'),
+            ),
+            ElevatedButton(
+              onPressed: () => _navigateToMap(context),  // 맵 페이지로 이동
+              child: const Text('Go to Map'),
             ),
           ],
         ),
