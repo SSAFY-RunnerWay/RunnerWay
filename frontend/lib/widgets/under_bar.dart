@@ -1,23 +1,18 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/main_screen.dart';
+import 'package:frontend/screens/runner_pick_screen.dart';
 import '../common/MyFlutterApp.dart';
 
-class UnderBar extends StatefulWidget {
-  const UnderBar({Key? key}) : super(key: key);
+class UnderBar extends StatelessWidget {
+  final int selectedIndex;
+  final Function(int) onItemTapped;
 
-  @override
-  State<StatefulWidget> createState() => _UnderBarState();
-}
-
-class _UnderBarState extends State<UnderBar> {
-  int _selectedIndex = 0; // 현재 선택된 탭 인덱스
-
-  void _onItemTapped(int index) {
-    log('$index');
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  const UnderBar({
+    super.key,
+    required this.selectedIndex,
+    required this.onItemTapped,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -74,33 +69,39 @@ class _UnderBarState extends State<UnderBar> {
               ),
             ),
           ),
+
           // 플로팅 액션 버튼(가운데 강조된 버튼)
           Positioned(
             left: (screenWidth / 2) - 30, // 화면의 가운데에 배치
             top: 0,
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: ShapeDecoration(
-                color: Color(0xFF1EA6FC),
-                shape: OvalBorder(),
-                shadows: [
-                  BoxShadow(
-                    color: Color(0x961EA6FC),
-                    blurRadius: 12,
-                    offset: Offset(0, 4),
-                    spreadRadius: 0,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 29,
+            child: GestureDetector(
+              onTap: () {
+                // 모달 띄우기
+                showModalBottomSheet(context: context, builder: (BuildContext context) {
+                  return const ModalContent();
+                },
+                );
+              },
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: ShapeDecoration(
+                  color: Color(0xFF1EA6FC),
+                  shape: OvalBorder(),
+                  shadows: [
+                    BoxShadow(
+                      color: Color(0x961EA6FC),
+                      blurRadius: 12,
+                      offset: Offset(0, 4),
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
+                child: Center(
+                    child: Image.asset('assets/images/shoe.png', height: 32,)
                 ),
               ),
-            ),
+            )
 
           ),
           // 선택된 탭의 상단 바
@@ -109,7 +110,7 @@ class _UnderBarState extends State<UnderBar> {
             left: _getBarPosition(screenWidth), // 선택된 탭에 따라 위치를 동적으로 설정
             child: Container(
               width: screenWidth / 5 - 5, // 각 탭의 너비에 맞추어 바의 폭 설정
-              height: 3,
+              height: 5,
               color: Color(0xFF1EA6FC), // 바의 색상
             ),
           ),
@@ -120,13 +121,13 @@ class _UnderBarState extends State<UnderBar> {
 
   // 선택된 탭에 따라 상단 바의 위치를 반환하는 함수
   double _getBarPosition(double screenWidth) {
-    switch (_selectedIndex) {
+    switch (selectedIndex) {
       case 0:
         return 17; // '메인' 탭의 바 위치
       case 1:
-        return 12 + screenWidth / 5; // '러너픽' 탭의 바 위치
+        return 13 + screenWidth / 5; // '러너픽' 탭의 바 위치
       case 2:
-        return 3 * screenWidth / 5 + 2; // '기록' 탭의 바 위치
+        return 3 * screenWidth / 5 + 3; // '기록' 탭의 바 위치
       case 3:
         return 4 * screenWidth / 5 - 3; // '마이' 탭의 바 위치
       default:
@@ -137,7 +138,7 @@ class _UnderBarState extends State<UnderBar> {
   // 내비게이션 아이템을 생성하는 함수
   Widget _buildNavItem(int index, String label, IconData iconData, double itemWidth, {bool isLargeIcon = false, bool hasSizedBox = false}) {
     return GestureDetector(
-      onTap: () => _onItemTapped(index),
+      onTap: () => onItemTapped(index),
       child: Container(
         width: itemWidth,
         height: 56,
@@ -148,7 +149,7 @@ class _UnderBarState extends State<UnderBar> {
             Icon(
               iconData,
               size: isLargeIcon ? 32 : 22, // 메인과 마이의 아이콘은 크게, 나머지는 기본 크기
-              color: _selectedIndex == index
+              color: selectedIndex == index
                   ? Color(0xFF1EA6FC)
                   : Color(0xFF6C7072),
             ),
@@ -156,7 +157,7 @@ class _UnderBarState extends State<UnderBar> {
             Text(
               label,
               style: TextStyle(
-                color: _selectedIndex == index
+                color: selectedIndex == index
                     ? Color(0xFF1EA6FC)
                     : Color(0xFF6C7072),
                 fontSize: 10,
@@ -167,6 +168,55 @@ class _UnderBarState extends State<UnderBar> {
           ],
         ),
       ),
+    );
+  }
+}
+
+// 나 혼자 뛰기 러닝 모달
+class ModalContent extends StatelessWidget {
+  const ModalContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        CustomPaint(
+          size: const Size(200, 100),
+        ),
+        Positioned(
+          bottom: 20,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // 취소 버튼
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Column(
+                  children: const [
+                    Icon(Icons.arrow_back, size: 30, color: Colors.black),
+                    Text('취소', style: TextStyle(color: Colors.black)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 40),
+              // 러닝 시작 버튼
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  // 여기서 러닝 시작 로직 추가
+                },
+                child: Column(
+                  children: const [
+                    Icon(Icons.directions_run, size: 30, color: Colors.blue),
+                    Text('러닝 시작', style: TextStyle(color: Colors.blue)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
