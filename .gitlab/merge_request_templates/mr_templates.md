@@ -1,4 +1,4 @@
-# Feature Request
+# Merge Request
 
 - Part
   - [ ] FE
