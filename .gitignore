@@ -8,6 +8,7 @@ etc/letsencrypt/
 
 # ADDED GITIGONRE
 .build/**
+.gradle/**
 
 # User-specific stuff
 .idea
