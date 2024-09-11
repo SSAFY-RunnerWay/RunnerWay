@@ -1,14 +1,18 @@
 package chuchu.runnerway.member.service;
 
+import chuchu.runnerway.member.domain.FavoriteCourse;
 import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.domain.MemberImage;
+import chuchu.runnerway.member.dto.FavoriteCourseDto;
 import chuchu.runnerway.member.dto.MemberDto;
+import chuchu.runnerway.member.dto.request.MemberFavoriteCourseRequestDto;
 import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
 import chuchu.runnerway.member.dto.request.MemberUpdateRequestDto;
 import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
 import chuchu.runnerway.member.exception.ResignedMemberException;
+import chuchu.runnerway.member.repository.FavoriteCourseRepository;
 import chuchu.runnerway.member.repository.MemberImageRepository;
 import chuchu.runnerway.member.repository.MemberRepository;
 import chuchu.runnerway.security.util.JwtUtil;
@@ -24,8 +28,9 @@ public class MemberServiceImpl implements MemberService {
 
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
-    private final ModelMapper mapper;
     private final MemberImageRepository memberImageRepository;
+    private final FavoriteCourseRepository favoriteCourseRepository;
+    private final ModelMapper mapper;
 
     @Transactional
     @Override
@@ -71,6 +76,24 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(member);
         memberImageRepository.save(memberImage);
+    }
+
+    @Override
+    public void registFavoriteCourses(
+        MemberFavoriteCourseRequestDto memberFavoriteCourseRequestDto,
+        Long memberId
+    ) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+            NotFoundMemberException::new
+        );
+
+        for (FavoriteCourseDto favoriteCourse : memberFavoriteCourseRequestDto.getFavoriteCourses()) {
+            favoriteCourseRepository.save(FavoriteCourse.builder()
+                .member(member)
+                .tagName(favoriteCourse.getTagName())
+                .build()
+            );
+        }
     }
 
     private void saveMemberImage(MemberSignUpRequestDto signUpMemberDto, Member savedMember) {

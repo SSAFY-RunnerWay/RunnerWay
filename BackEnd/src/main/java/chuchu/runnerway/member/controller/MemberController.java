@@ -2,6 +2,7 @@ package chuchu.runnerway.member.controller;
 
 import chuchu.runnerway.common.dto.ErrorResponseDto;
 import chuchu.runnerway.common.util.MemberInfo;
+import chuchu.runnerway.member.dto.request.MemberFavoriteCourseRequestDto;
 import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
 import chuchu.runnerway.member.dto.request.MemberUpdateRequestDto;
 import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
@@ -53,6 +54,28 @@ public class MemberController {
     ) {
         String accessToken = memberService.signUp(memberSignUpRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(accessToken);
+    }
+
+    @PostMapping("/tags")
+    @Operation(summary = "회원 선호 정보 등록", description = "회원가입 할 때 사용하는 API")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "선호 정보 등록에 성공하였습니다!",
+            content = @Content(mediaType = "application/json")
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Error Message 로 전달함",
+            content = @Content(mediaType = "application/json")
+        ),
+    })
+    public ResponseEntity<?> registFavoriteCourse(
+        @RequestBody MemberFavoriteCourseRequestDto memberFavoriteCourseRequestDto
+    ) {
+        Long memberId = MemberInfo.getId();
+        memberService.registFavoriteCourses(memberFavoriteCourseRequestDto, memberId);
+        return ResponseEntity.status(HttpStatus.OK).body("선호 정보 등록에 성공하였습니다!");
     }
 
     @GetMapping
