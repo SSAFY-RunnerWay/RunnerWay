@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/views/runnerPick/runner_pick_screen.dart';
+import 'package:get/get.dart';
 import 'widgets/under_bar.dart';
-import 'views/main/main_screen.dart';
+import 'routes/app_routes.dart';
+import 'controllers/under_bar_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,55 +11,34 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // root of application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false, // debug 표시 제거
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'notosans',
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff1EA6FC)),
         useMaterial3: true,
       ),
+      // 여기서 Home을 직접 렌더링
       home: const Home(),
+      getPages: AppRoutes.routes,
     );
   }
 }
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
-  _HomeWithUnderBarState createState() => _HomeWithUnderBarState();
-}
-
-class _HomeWithUnderBarState extends State<Home> {
-  int _selectedIndex = 0; // 현재 선택된 탭 인덱스
-
-  // 각 탭에 해당하는 화면들
-  final List<Widget> _pages = [
-    const MainScreen(),
-    const RunnerPickScreen(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // UnderBarController 인스턴스 생성
+    final UnderBarController controller = Get.put(UnderBarController());
+
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages, // 탭에 따라 표시되는 페이지
-      ),
-      bottomNavigationBar: UnderBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped, // 탭 선택 시 인덱스 변경
-      ),
+      body: Obx(() => controller.getCurrentPage()), // 현재 페이지 표시
+      bottomNavigationBar: UnderBar(), // UnderBar 추가
     );
   }
 }
