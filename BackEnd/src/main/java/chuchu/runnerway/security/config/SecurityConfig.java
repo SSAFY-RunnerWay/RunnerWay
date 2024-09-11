@@ -33,7 +33,7 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] AUTH_PERMIT_PATH_LIST = {
-        "/", "/members/sign-up"
+        "/", "/members/sign-up", "/oauth/**"
     };
 
     @Bean
