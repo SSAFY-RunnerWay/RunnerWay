@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/map/running_map.dart';
 import '../../widgets/map/location.dart'; // location.dart 파일을 import
 import '../../widgets/map/geolocation.dart'; // geolocation.dart 파일을 import
 import '../../widgets/map/map.dart'; // map.dart 파일을 import
 import '../../widgets/map/line.dart'; // line.dart 파일을 import
-import '../../widgets/map/google_map_polyline.dart'; // google_map_polyline.dart 파일을 import
+import '../../widgets/map/result_map.dart'; // result_map.dart 파일을 import
+import '../../widgets/map/running_map.dart'; // result_map.dart 파일을 import
 
 class RunningView extends StatelessWidget {
   const RunningView({super.key});
@@ -45,21 +47,30 @@ class RunningView extends StatelessWidget {
     );
   }
 
-  void _navigateToGoogleMapPolyline(BuildContext context) {
+  void _navigateToRusultMap(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) =>
-              const GoogleMapPolyline()), // Navigates to GoogleMapPolyline
+              const RusultMap()), // Navigates to GoogleMapPolyline
+    );
+  }
+
+  void _navigateToRunningMap(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              const RunningMap()), // Navigates to GoogleMapPolyline
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Running Screen'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Running Screen'),
+      // ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -81,9 +92,14 @@ class RunningView extends StatelessWidget {
               child: const Text('Go to Line'),
             ),
             ElevatedButton(
-              onPressed: () => _navigateToGoogleMapPolyline(context),
+              onPressed: () => _navigateToRusultMap(context),
               // Navigates to the Polyline page
-              child: const Text('Go to GoogleMapPolyline'),
+              child: const Text('Go to ResultMap'),
+            ),
+            ElevatedButton(
+              onPressed: () => _navigateToRunningMap(context),
+              // Navigates to the Polyline page
+              child: const Text('Go to RunningMap'),
             ),
           ],
         ),
