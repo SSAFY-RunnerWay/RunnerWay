@@ -1,103 +1,63 @@
 import 'package:flutter/material.dart';
-import 'widgets/button.dart';
+import 'package:frontend/screens/runner_pick_screen.dart';
+import 'widgets/under_bar.dart';
+import 'screens/main_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // root of application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        backgroundColor: const Color(0xFFFFFFFF),
-        body: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 40,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 50,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Hey soyeon',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 34,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      Text(
-                        'welcome!!',
-                        style: TextStyle(
-                          color: Colors.black.withOpacity(0.8),
-                          fontSize: 24,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 120,
-              ),
-              Text(
-                'Total',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.black.withOpacity(0.8),
-                ),
-              ),
-              const Text(
-                'money',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 42,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Button(
-                      text: 'active',
-                      bgColor: Color(0xFF1C1516),
-                      textColor: Colors.white),
-                  Button(
-                      text: 'inActive',
-                      bgColor: Color(0xFFE8E8E8),
-                      textColor: Colors.white),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Column(
-                children: <Widget>[
-                  Button(
-                    text: 'run',
-                    bgColor: Color(0xFFEC0F0F),
-                    textColor: Colors.white,
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
+      debugShowCheckedModeBanner: false, // debug 표시 제거
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        fontFamily: 'notosans',
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff1EA6FC)),
+        useMaterial3: true,
+      ),
+      home: const Home(),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  const Home({super.key});
+
+  @override
+  _HomeWithUnderBarState createState() => _HomeWithUnderBarState();
+}
+
+class _HomeWithUnderBarState extends State<Home> {
+  int _selectedIndex = 0; // 현재 선택된 탭 인덱스
+
+  // 각 탭에 해당하는 화면들
+  final List<Widget> _pages = [
+    const MainScreen(),
+    const RunnerPickScreen(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pages, // 탭에 따라 표시되는 페이지
+      ),
+      bottomNavigationBar: UnderBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped, // 탭 선택 시 인덱스 변경
       ),
     );
   }
