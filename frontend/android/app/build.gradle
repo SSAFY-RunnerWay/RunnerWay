@@ -5,6 +5,16 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader("UTF-8") { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def GOOGLE_MAPS_API_KEY = localProperties.getProperty("GOOGLE_MAPS_API_KEY")
+
 android {
     namespace = "com.runnerway.frontend"
     compileSdk = flutter.compileSdkVersion
@@ -24,11 +34,15 @@ android {
         applicationId = "com.runnerway.frontend"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
+        minSdkVersion = 20
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        resValue "string", "google_maps_key", GOOGLE_MAPS_API_KEY
     }
+
 
     buildTypes {
         release {
@@ -36,6 +50,10 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.debug
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 

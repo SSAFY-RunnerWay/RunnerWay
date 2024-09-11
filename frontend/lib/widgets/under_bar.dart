@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/screens/main_screen.dart';
 import 'package:frontend/screens/runner_pick_screen.dart';
 import '../common/MyFlutterApp.dart';
+import '../screens/running_screen.dart';
 
 class UnderBar extends StatelessWidget {
   final int selectedIndex;
@@ -203,11 +204,14 @@ class ModalContent extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 40),
-              // 러닝 시작 버튼
+              // 러닝 시작 버튼 -> RunningScreen으로 이동
               GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
-                  // 여기서 러닝 시작 로직 추가
+                  Navigator.pop(context); // 모달 닫기
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const RunningScreen()), // RunningScreen 페이지로 이동
+                  );
                 },
                 child: Column(
                   children: const [
