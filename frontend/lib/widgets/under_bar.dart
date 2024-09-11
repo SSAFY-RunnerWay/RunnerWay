@@ -103,7 +103,7 @@ class UnderBar extends StatelessWidget {
                   ),
                   child: Center(
                       child: Image.asset(
-                    'assets/icon/shoe.png',
+                    'assets/icons/shoe.png',
                     height: 32,
                   )),
                 ),
