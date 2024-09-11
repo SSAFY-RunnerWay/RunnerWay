@@ -33,7 +33,8 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] AUTH_PERMIT_PATH_LIST = {
-        "/", "/members/sign-up", "/oauth/**", "/members/duplication-nickname/**"
+        "/", "/members/sign-up", "/oauth/**", "/members/duplication-nickname/**",
+        "/swagger-ui/*", "/v3/api-docs/swagger-config", "/v3/api-docs", "/secret/**"
     };
 
     @Bean
