@@ -43,25 +43,29 @@ class UnderBar extends StatelessWidget {
                     left: 5,
                     top: 7,
                     child: _buildNavItem(
-                        0, '메인', Icons.home, screenWidth / 4, controller),
+                        0, '메인', Icons.home, screenWidth / 4, controller,
+                        isLargeIcon: true),
                   ),
                   Positioned(
                     left: screenWidth / 5,
                     top: 7,
                     child: _buildNavItem(1, '러너픽', MyFlutterApp.road_1,
-                        screenWidth / 4, controller),
+                        screenWidth / 4, controller,
+                        hasSizedBox: true),
                   ),
                   Positioned(
                     left: 3 * screenWidth / 5 - 10,
                     top: 7,
                     child: _buildNavItem(2, '기록', MyFlutterApp.calendar_empty,
-                        screenWidth / 4, controller),
+                        screenWidth / 4, controller,
+                        hasSizedBox: true),
                   ),
                   Positioned(
                     left: 4 * screenWidth / 5 - 15,
                     top: 7,
                     child: _buildNavItem(
-                        3, '마이', Icons.person, screenWidth / 4, controller),
+                        3, '마이', Icons.person, screenWidth / 4, controller,
+                        isLargeIcon: true),
                   ),
                 ],
               ),
@@ -138,7 +142,8 @@ class UnderBar extends StatelessWidget {
 
   // 네비게이션 아이템을 생성하는 함수
   Widget _buildNavItem(int index, String label, IconData iconData,
-      double itemWidth, UnderBarController controller) {
+      double itemWidth, UnderBarController controller,
+      {bool isLargeIcon = false, bool hasSizedBox = false}) {
     return GestureDetector(
       onTap: () => controller.changeTabIndex(index),
       child: Obx(() => Container(
@@ -150,19 +155,20 @@ class UnderBar extends StatelessWidget {
               children: [
                 Icon(
                   iconData,
-                  size: 22, // 아이콘 크기
-                  color: controller.selectedIndex.value == index
-                      ? const Color(0xFF1EA6FC)
-                      : const Color(0xFF6C7072),
+                  size: isLargeIcon ? 32 : 22, // 메인과 마이의 아이콘은 크게, 나머지는 기본 크기
+                  color: controller.selectedIndex == index
+                      ? Color(0xFF1EA6FC)
+                      : Color(0xFF6C7072),
                 ),
-                const SizedBox(height: 6),
+                if (hasSizedBox) SizedBox(height: 6), // 러너픽과 기록에만 추가되는 간격
                 Text(
                   label,
                   style: TextStyle(
-                    color: controller.selectedIndex.value == index
-                        ? const Color(0xFF1EA6FC)
-                        : const Color(0xFF6C7072),
+                    color: controller.selectedIndex == index
+                        ? Color(0xFF1EA6FC)
+                        : Color(0xFF6C7072),
                     fontSize: 10,
+                    fontFamily: 'Noto Sans KR',
                     fontWeight: FontWeight.w400,
                   ),
                 ),
