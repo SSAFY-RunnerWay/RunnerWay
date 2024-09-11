@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../common/MyFlutterApp.dart';
-import '../screens/running_screen.dart';
+import '../views/running/running_screen.dart';
 
 class UnderBar extends StatelessWidget {
   final int selectedIndex;
@@ -46,22 +46,28 @@ class UnderBar extends StatelessWidget {
                   Positioned(
                     left: 5,
                     top: 7,
-                    child: _buildNavItem(0, '메인', Icons.home, screenWidth / 4, isLargeIcon: true),
+                    child: _buildNavItem(0, '메인', Icons.home, screenWidth / 4,
+                        isLargeIcon: true),
                   ),
                   Positioned(
                     left: screenWidth / 5,
                     top: 7,
-                    child: _buildNavItem(1, '러너픽', MyFlutterApp.road_1, screenWidth / 4, hasSizedBox: true),
+                    child: _buildNavItem(
+                        1, '러너픽', MyFlutterApp.road_1, screenWidth / 4,
+                        hasSizedBox: true),
                   ),
                   Positioned(
                     left: 3 * screenWidth / 5 - 10,
                     top: 7,
-                    child: _buildNavItem(2, '기록', MyFlutterApp.calendar_empty, screenWidth / 4, hasSizedBox: true),
+                    child: _buildNavItem(
+                        2, '기록', MyFlutterApp.calendar_empty, screenWidth / 4,
+                        hasSizedBox: true),
                   ),
                   Positioned(
                     left: 4 * screenWidth / 5 - 15,
                     top: 7,
-                    child: _buildNavItem(3, '마이', Icons.person, screenWidth / 4, isLargeIcon: true),
+                    child: _buildNavItem(3, '마이', Icons.person, screenWidth / 4,
+                        isLargeIcon: true),
                   ),
                 ],
               ),
@@ -70,41 +76,40 @@ class UnderBar extends StatelessWidget {
 
           // 플로팅 액션 버튼(가운데 강조된 버튼)
           Positioned(
-            left: (screenWidth / 2) - 30, // 화면의 가운데에 배치
-            top: 0,
-            child: GestureDetector(
-              onTap: () {
-                // 모달 띄우기
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context)
-                {
-                  return const ModalContent();
+              left: (screenWidth / 2) - 30, // 화면의 가운데에 배치
+              top: 0,
+              child: GestureDetector(
+                onTap: () {
+                  // 모달 띄우기
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const ModalContent();
+                    },
+                  );
                 },
-                );
-              },
-              child: Container(
-                width: 60,
-                height: 60,
-                decoration: ShapeDecoration(
-                  color: Color(0xFF1EA6FC),
-                  shape: OvalBorder(),
-                  shadows: [
-                    BoxShadow(
-                      color: Color(0x961EA6FC),
-                      blurRadius: 12,
-                      offset: Offset(0, 4),
-                      spreadRadius: 0,
-                    ),
-                  ],
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: ShapeDecoration(
+                    color: Color(0xFF1EA6FC),
+                    shape: OvalBorder(),
+                    shadows: [
+                      BoxShadow(
+                        color: Color(0x961EA6FC),
+                        blurRadius: 12,
+                        offset: Offset(0, 4),
+                        spreadRadius: 0,
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                      child: Image.asset(
+                    'assets/icon/shoe.png',
+                    height: 32,
+                  )),
                 ),
-                child: Center(
-                    child: Image.asset('assets/icon/shoe.png', height: 32,)
-                ),
-              ),
-            )
-
-          ),
+              )),
           // 선택된 탭의 상단 바
           Positioned(
             top: 30, // 바의 고정된 상단 위치
@@ -137,7 +142,9 @@ class UnderBar extends StatelessWidget {
   }
 
   // 내비게이션 아이템을 생성하는 함수
-  Widget _buildNavItem(int index, String label, IconData iconData, double itemWidth, {bool isLargeIcon = false, bool hasSizedBox = false}) {
+  Widget _buildNavItem(
+      int index, String label, IconData iconData, double itemWidth,
+      {bool isLargeIcon = false, bool hasSizedBox = false}) {
     return GestureDetector(
       onTap: () => onItemTapped(index),
       child: Container(
@@ -207,7 +214,9 @@ class ModalContent extends StatelessWidget {
                   Navigator.pop(context); // 모달 닫기
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const RunningScreen()), // RunningScreen 페이지로 이동
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const RunningScreen()), // RunningScreen 페이지로 이동
                   );
                 },
                 child: Column(

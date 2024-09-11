@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../widgets/map/location.dart'; // location.dart 파일을 import
-import '../widgets/map/geolocation.dart'; // geolocation.dart 파일을 import
-import '../widgets/map/map.dart'; // map.dart 파일을 import
-import '../widgets/map/line.dart'; // line.dart 파일을 import
-import '../widgets/map/google_map_polyline.dart'; // google_map_polyline.dart 파일을 import
+import '../../widgets/map/location.dart'; // location.dart 파일을 import
+import '../../widgets/map/geolocation.dart'; // geolocation.dart 파일을 import
+import '../../widgets/map/map.dart'; // map.dart 파일을 import
+import '../../widgets/map/line.dart'; // line.dart 파일을 import
+import '../../widgets/map/google_map_polyline.dart'; // google_map_polyline.dart 파일을 import
 
 class RunningScreen extends StatelessWidget {
   const RunningScreen({super.key});
@@ -13,7 +13,8 @@ class RunningScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => const LocationPage()), // location.dart의 LocationPage 호출
+          builder: (context) =>
+              const LocationPage()), // location.dart의 LocationPage 호출
     );
   }
 
@@ -23,7 +24,7 @@ class RunningScreen extends StatelessWidget {
       context,
       MaterialPageRoute(
           builder: (context) =>
-          const GeolocatorWidget()), // geolocation.dart의 GeolocatorWidget 호출
+              const GeolocatorWidget()), // geolocation.dart의 GeolocatorWidget 호출
     );
   }
 
@@ -49,7 +50,7 @@ class RunningScreen extends StatelessWidget {
       context,
       MaterialPageRoute(
           builder: (context) =>
-          const GoogleMapPolyline()), // Navigates to GoogleMapPolyline
+              const GoogleMapPolyline()), // Navigates to GoogleMapPolyline
     );
   }
 

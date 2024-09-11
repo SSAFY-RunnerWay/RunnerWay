@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/runner_pick_screen.dart';
+import 'package:frontend/views/runnerPick/runner_pick_screen.dart';
 import 'widgets/under_bar.dart';
-import 'screens/main_screen.dart';
-import 'screens/running_screen.dart'; // 새로 만든 running_screen.dart 파일을 import
+import 'views/main/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
