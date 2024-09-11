@@ -6,7 +6,7 @@ spring:
     include: key
 
   datasource:
-    url: jdbc:mysql://${serverhost}:${dbport}/runnerway
+    url: jdbc:mysql://${serverhost}:${dbport}/chutest
     username: ${mysqlusername}
     password: ${mysqlpassword}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -46,3 +46,8 @@ logging:
 jwt:
   expiration_time: 3600000 #1시간
   secret: ${JWT}
+
+kakao:
+  grant-type: authorization_code
+  client-id: ${kakao-client-id}
+  redirect-uri: ${kakao-redirect-uri}
