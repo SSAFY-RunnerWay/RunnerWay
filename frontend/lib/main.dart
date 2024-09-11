@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'widgets/location.dart'; // geolocation.dart 파일을 import
-import 'widgets/geolocation.dart'; // geolocation.dart 파일을 import
-import 'widgets/map.dart'; // map.dart 파일을 import
-import 'widgets/line.dart'; // line.dart 파일을 import
-import 'widgets/google_map_polyline.dart'; // google_map_polyline.dart 파일을 import
+import 'widgets/map/location.dart'; // geolocation.dart 파일을 import
+import 'widgets/map/geolocation.dart'; // geolocation.dart 파일을 import
+import 'widgets/map/map.dart'; // map.dart 파일을 import
+import 'widgets/map/line.dart'; // line.dart 파일을 import
+import 'widgets/map/google_map_polyline.dart'; // google_map_polyline.dart 파일을 import
 
 void main() {
   runApp(const MyApp());
