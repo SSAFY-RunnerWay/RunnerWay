@@ -54,6 +54,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - assets/icon/
 
   fonts:
     - family: notosans

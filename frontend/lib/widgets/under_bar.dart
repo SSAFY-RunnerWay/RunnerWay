@@ -1,7 +1,4 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/main_screen.dart';
-import 'package:frontend/screens/runner_pick_screen.dart';
 import '../common/MyFlutterApp.dart';
 
 class UnderBar extends StatelessWidget {
@@ -101,7 +98,7 @@ class UnderBar extends StatelessWidget {
                   ],
                 ),
                 child: Center(
-                    child: Image.asset('assets/images/shoe.png', height: 32,)
+                    child: Image.asset('assets/icon/shoe.png', height: 32,)
                 ),
               ),
             )
