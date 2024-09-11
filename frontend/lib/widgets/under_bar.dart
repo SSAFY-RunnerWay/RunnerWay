@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../common/MyFlutterApp.dart';
-import '../views/running/running_screen.dart';
+import '../controllers/under_bar_controller.dart';
+import '../views/running/running_view.dart';
 
 class UnderBar extends StatelessWidget {
-  final int selectedIndex;
-  final Function(int) onItemTapped;
-
-  const UnderBar({
-    super.key,
-    required this.selectedIndex,
-    required this.onItemTapped,
-  });
-
   @override
   Widget build(BuildContext context) {
-    // 기기 가로길이 가져와 가로 길이를 설정
+    // UnderBarController 인스턴스를 찾음
+    final UnderBarController controller = Get.find<UnderBarController>();
+
+    // 기기 가로 길이 가져오기
     final double screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
@@ -27,7 +23,7 @@ class UnderBar extends StatelessWidget {
             left: 0,
             top: 30,
             child: Container(
-              width: screenWidth, // 화면 너비에 맞추어 설정
+              width: screenWidth,
               height: 80,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -42,31 +38,33 @@ class UnderBar extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  // 탭 아이템들의 배치
+                  // 네비게이션 아이템들 배치
                   Positioned(
                     left: 5,
                     top: 7,
-                    child: _buildNavItem(0, '메인', Icons.home, screenWidth / 4,
+                    child: _buildNavItem(
+                        0, '메인', Icons.home, screenWidth / 4, controller,
                         isLargeIcon: true),
                   ),
                   Positioned(
                     left: screenWidth / 5,
                     top: 7,
-                    child: _buildNavItem(
-                        1, '러너픽', MyFlutterApp.road_1, screenWidth / 4,
+                    child: _buildNavItem(1, '러너픽', MyFlutterApp.road_1,
+                        screenWidth / 4, controller,
                         hasSizedBox: true),
                   ),
                   Positioned(
                     left: 3 * screenWidth / 5 - 10,
                     top: 7,
-                    child: _buildNavItem(
-                        2, '기록', MyFlutterApp.calendar_empty, screenWidth / 4,
+                    child: _buildNavItem(2, '기록', MyFlutterApp.calendar_empty,
+                        screenWidth / 4, controller,
                         hasSizedBox: true),
                   ),
                   Positioned(
                     left: 4 * screenWidth / 5 - 15,
                     top: 7,
-                    child: _buildNavItem(3, '마이', Icons.person, screenWidth / 4,
+                    child: _buildNavItem(
+                        3, '마이', Icons.person, screenWidth / 4, controller,
                         isLargeIcon: true),
                   ),
                 ],
@@ -105,28 +103,29 @@ class UnderBar extends StatelessWidget {
                   ),
                   child: Center(
                       child: Image.asset(
-                    'assets/icon/shoe.png',
+                    'assets/icons/shoe.png',
                     height: 32,
                   )),
                 ),
               )),
           // 선택된 탭의 상단 바
-          Positioned(
-            top: 30, // 바의 고정된 상단 위치
-            left: _getBarPosition(screenWidth), // 선택된 탭에 따라 위치를 동적으로 설정
-            child: Container(
-              width: screenWidth / 5 - 5, // 각 탭의 너비에 맞추어 바의 폭 설정
-              height: 5,
-              color: Color(0xFF1EA6FC), // 바의 색상
-            ),
-          ),
+          Obx(() => Positioned(
+                top: 30, // 바의 고정된 상단 위치
+                left: _getBarPosition(screenWidth,
+                    controller.selectedIndex.value), // 선택된 탭에 따라 위치를 동적으로 설정
+                child: Container(
+                  width: screenWidth / 5 - 5, // 각 탭의 너비에 맞추어 바의 폭 설정
+                  height: 5,
+                  color: const Color(0xFF1EA6FC), // 바의 색상
+                ),
+              )),
         ],
       ),
     );
   }
 
   // 선택된 탭에 따라 상단 바의 위치를 반환하는 함수
-  double _getBarPosition(double screenWidth) {
+  double _getBarPosition(double screenWidth, int selectedIndex) {
     switch (selectedIndex) {
       case 0:
         return 17; // '메인' 탭의 바 위치
@@ -141,41 +140,41 @@ class UnderBar extends StatelessWidget {
     }
   }
 
-  // 내비게이션 아이템을 생성하는 함수
-  Widget _buildNavItem(
-      int index, String label, IconData iconData, double itemWidth,
+  // 네비게이션 아이템을 생성하는 함수
+  Widget _buildNavItem(int index, String label, IconData iconData,
+      double itemWidth, UnderBarController controller,
       {bool isLargeIcon = false, bool hasSizedBox = false}) {
     return GestureDetector(
-      onTap: () => onItemTapped(index),
-      child: Container(
-        width: itemWidth,
-        height: 56,
-        color: Colors.white, // 아이템 배경색
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              iconData,
-              size: isLargeIcon ? 32 : 22, // 메인과 마이의 아이콘은 크게, 나머지는 기본 크기
-              color: selectedIndex == index
-                  ? Color(0xFF1EA6FC)
-                  : Color(0xFF6C7072),
+      onTap: () => controller.changeTabIndex(index),
+      child: Obx(() => Container(
+            width: itemWidth,
+            height: 56,
+            color: Colors.white, // 아이템 배경색
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  iconData,
+                  size: isLargeIcon ? 32 : 22, // 메인과 마이의 아이콘은 크게, 나머지는 기본 크기
+                  color: controller.selectedIndex == index
+                      ? Color(0xFF1EA6FC)
+                      : Color(0xFF6C7072),
+                ),
+                if (hasSizedBox) SizedBox(height: 6), // 러너픽과 기록에만 추가되는 간격
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: controller.selectedIndex == index
+                        ? Color(0xFF1EA6FC)
+                        : Color(0xFF6C7072),
+                    fontSize: 10,
+                    fontFamily: 'Noto Sans KR',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
             ),
-            if (hasSizedBox) SizedBox(height: 6), // 러너픽과 기록에만 추가되는 간격
-            Text(
-              label,
-              style: TextStyle(
-                color: selectedIndex == index
-                    ? Color(0xFF1EA6FC)
-                    : Color(0xFF6C7072),
-                fontSize: 10,
-                fontFamily: 'Noto Sans KR',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 }
@@ -216,7 +215,7 @@ class ModalContent extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            const RunningScreen()), // RunningScreen 페이지로 이동
+                            const RunningView()), // RunningScreen 페이지로 이동
                   );
                 },
                 child: Column(

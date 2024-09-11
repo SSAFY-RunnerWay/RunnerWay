@@ -7,8 +7,8 @@ import '../../widgets/map/line.dart'; // line.dart 파일을 import
 import '../../widgets/map/result_map.dart'; // result_map.dart 파일을 import
 import '../../widgets/map/running_map.dart'; // result_map.dart 파일을 import
 
-class RunningScreen extends StatelessWidget {
-  const RunningScreen({super.key});
+class RunningView extends StatelessWidget {
+  const RunningView({super.key});
 
   // location.dart 파일의 GeolocatorWidget 페이지로 이동하는 메소드
   void _navigateToLocation(BuildContext context) {
