@@ -77,7 +77,10 @@ class UnderBar extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 // 모달 띄우기
-                showModalBottomSheet(context: context, builder: (BuildContext context) {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context)
+                {
                   return const ModalContent();
                 },
                 );
