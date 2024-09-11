@@ -5,6 +5,7 @@ import chuchu.runnerway.common.util.MemberInfo;
 import chuchu.runnerway.member.dto.request.MemberFavoriteCourseRequestDto;
 import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
 import chuchu.runnerway.member.dto.request.MemberUpdateRequestDto;
+import chuchu.runnerway.member.dto.response.DuplicateNicknameResponseDto;
 import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
@@ -106,6 +107,22 @@ public class MemberController {
     public ResponseEntity<MemberSelectResponseDto> selectRanker(@PathVariable("memberId") Long memberId) {
         MemberSelectResponseDto memberSelectResponseDto = memberService.selectMember(memberId);
         return ResponseEntity.status(HttpStatus.OK).body(memberSelectResponseDto);
+    }
+
+    @GetMapping("/duplication-nickname/{nickname}")
+    @Operation(summary = "닉네임 중복확인", description = "회원가입시 닉네임 중복체크에 사용하는 API")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "true: 중복 | false: 중복 아님",
+            content = @Content(mediaType = "application/json")
+        )
+    })
+    public ResponseEntity<DuplicateNicknameResponseDto> isDuplicateNickname(
+        @PathVariable("nickname") String nickname
+    ) {
+        DuplicateNicknameResponseDto responseDto = memberService.checkDuplicateNickname(nickname);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @PatchMapping

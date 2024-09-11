@@ -8,6 +8,7 @@ import chuchu.runnerway.member.dto.MemberDto;
 import chuchu.runnerway.member.dto.request.MemberFavoriteCourseRequestDto;
 import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
 import chuchu.runnerway.member.dto.request.MemberUpdateRequestDto;
+import chuchu.runnerway.member.dto.response.DuplicateNicknameResponseDto;
 import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
@@ -104,6 +105,15 @@ public class MemberServiceImpl implements MemberService {
         );
         member.resign();
         memberRepository.save(member);
+    }
+
+    @Override
+    public DuplicateNicknameResponseDto checkDuplicateNickname(String nickname) {
+        Optional<Member> member = memberRepository.findByNickname(nickname);
+        if (member.isPresent()) {
+            return new DuplicateNicknameResponseDto(true);
+        }
+        return new DuplicateNicknameResponseDto(false);
     }
 
     private void saveMemberImage(MemberSignUpRequestDto signUpMemberDto, Member savedMember) {
