@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, // debug 표시 제거
       title: 'Flutter Demo',
       theme: ThemeData(
+        fontFamily: 'notosans',
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff1EA6FC)),
         useMaterial3: true,
       ),
