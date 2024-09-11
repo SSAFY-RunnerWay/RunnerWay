@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'widgets/location.dart'; // location.dart 파일을 import
+import 'widgets/location.dart'; // geolocation.dart 파일을 import
+import 'widgets/geolocation.dart'; // geolocation.dart 파일을 import
 import 'widgets/map.dart'; // map.dart 파일을 import
 import 'widgets/line.dart'; // line.dart 파일을 import
 import 'widgets/google_map_polyline.dart'; // google_map_polyline.dart 파일을 import
@@ -74,6 +75,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // location.dart 파일의 GeolocatorWidget 페이지로 이동하는 메소드
   void _navigateToLocation(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => const LocationPage()), // location.dart의 LocationPage 호출
+    );
+  }
+
+  // geolocation.dart 파일의 GeolocatorWidget 페이지로 이동하는 메소드
+  void _navigateToGeoLocation(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -155,6 +165,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () => _navigateToLocation(context), // 위치 페이지로 이동
               child: const Text('Go to Location'),
+            ),
+            ElevatedButton(
+              onPressed: () => _navigateToGeoLocation(context), // 위치 페이지로 이동
+              child: const Text('Go to GeoLocation'),
             ),
             ElevatedButton(
               onPressed: () => _navigateToMap(context), // 맵 페이지로 이동
