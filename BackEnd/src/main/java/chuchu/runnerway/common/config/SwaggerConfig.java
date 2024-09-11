@@ -28,7 +28,7 @@ public class SwaggerConfig {
     }
     private Info apiInfo() {
         return new Info()
-                .title("세이푸트 APIS") // API의 제목
+                .title("RUNNER WAY APIS") // API의 제목
                 .description("API 모음집입니다.") // API에 대한 설명
                 .version("1.0.0"); // API의 버전
     }
