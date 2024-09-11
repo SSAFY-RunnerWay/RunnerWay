@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.controller;
 
+import chuchu.runnerway.course.dto.request.UserCourseRegistRequestDto;
 import chuchu.runnerway.course.dto.response.UserDetailResponseDto;
 import chuchu.runnerway.course.dto.response.UserListResponseDto;
 import chuchu.runnerway.course.model.service.UserCourseService;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,5 +53,21 @@ public class UserController {
     public ResponseEntity<?> getUserCourse(@PathVariable("courseId") Long courseId) {
         UserDetailResponseDto course = userCourseService.getOfficialCourse(courseId);
         return ResponseEntity.ok(course);
+    }
+
+    @PostMapping
+    @Operation(summary = "유저 코스 등록", description = "유저 코스 등록 API")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "유저 코스 등록 성공",
+            content = @Content(mediaType = "application/json")
+        )
+    })
+    public ResponseEntity<?> registUserCourse(
+        @RequestBody UserCourseRegistRequestDto userCourseRegistRequestDto
+    ) {
+        userCourseService.registUserCourse(userCourseRegistRequestDto);
+        return ResponseEntity.ok("유저 코스 등록 성공");
     }
 }

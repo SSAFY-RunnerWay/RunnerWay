@@ -1,23 +1,33 @@
 package chuchu.runnerway.course.model.service;
 
+import chuchu.runnerway.course.dto.request.UserCourseRegistRequestDto;
 import chuchu.runnerway.course.dto.response.UserDetailResponseDto;
 import chuchu.runnerway.course.dto.response.UserListResponseDto;
 import chuchu.runnerway.course.entity.Course;
+import chuchu.runnerway.course.entity.CourseImage;
+import chuchu.runnerway.course.model.repository.CourseImageRepository;
 import chuchu.runnerway.course.model.repository.UserCourseRepository;
+import chuchu.runnerway.member.domain.Member;
+import chuchu.runnerway.member.exception.NotFoundMemberException;
+import chuchu.runnerway.member.repository.MemberRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserCourseServiceImpl implements UserCourseService {
 
     private final UserCourseRepository userCourseRepository;
+    private final CourseImageRepository courseImageRepository;
     private final ModelMapper mapper;
+    private final MemberRepository memberRepository;
 
+    @Transactional
     @Override
     public List<UserListResponseDto> findAllOfficialCourse(double lat, double lng) {
         List<Course> courses = userCourseRepository.findAll(lat, lng);
@@ -40,11 +50,39 @@ public class UserCourseServiceImpl implements UserCourseService {
             .toList();
     }
 
+    @Transactional
     @Override
     public UserDetailResponseDto getOfficialCourse(Long courseId) {
         Course course = userCourseRepository.findById(courseId)
             .orElseThrow(NoSuchElementException::new);
         return mapper.map(course, UserDetailResponseDto.class);
+    }
+
+    @Transactional
+    @Override
+    public void registUserCourse(UserCourseRegistRequestDto userCourseRegistRequestDto) {
+        Course userCourse = Course.builder().build();
+        System.out.println("@@@@@@@@@@@@@@@@="+userCourseRegistRequestDto.getMemberId());
+        Member member = memberRepository.findById(userCourseRegistRequestDto.getMemberId()).orElseThrow(
+            NotFoundMemberException::new
+        );
+
+        userCourse.updateUserCourse(userCourseRegistRequestDto, member);
+        Course savedCourse = userCourseRepository.save(userCourse);
+
+        saveMemberImage(userCourseRegistRequestDto, savedCourse);
+    }
+
+    private void saveMemberImage(
+        UserCourseRegistRequestDto userCourseRegistRequestDto,
+        Course savedCourse
+    ) {
+        CourseImage courseImage = CourseImage.builder()
+            .course(savedCourse)
+            .url(userCourseRegistRequestDto.getCourseImage().getUrl())
+            .path(userCourseRegistRequestDto.getCourseImage().getPath())
+            .build();
+        courseImageRepository.save(courseImage);
     }
 
     private double calcDistance(double slat, double slng, double elat, double elng) {
