@@ -35,6 +35,11 @@ spring:
       port: ${redisport}
       password: ${redispassword}
 
+    elasticsearch:
+      client:
+        rest:
+          uris: http://localhost:9200
+
 springdoc:
   swagger-ui:
     path: ${swagger-url}
@@ -51,3 +56,4 @@ kakao:
   grant-type: authorization_code
   client-id: ${kakao-client-id}
   redirect-uri: ${kakao-redirect-uri}
+
