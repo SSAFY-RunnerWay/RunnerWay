@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
-class Button extends StatelessWidget {
+class WideButton extends StatelessWidget {
   final String text;
   final Color bgColor;
+  final Color? bdColor; // borderLine nullable로 둠
   final Color textColor;
   final Function(int) onItemTapped;
 
-  Button({
+  WideButton({
     super.key,
     required this.text,
     required this.bgColor,
     required this.textColor,
     required this.onItemTapped,
+    this.bdColor,
   });
 
   @override
@@ -19,6 +21,9 @@ class Button extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: bgColor,
+        border: bdColor != null
+            ? Border.all(color: bdColor!) // bdColor가 null이 아닐 때만 적용,
+            : null,
         borderRadius: BorderRadius.circular(48),
       ),
       child: Padding(
