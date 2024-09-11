@@ -56,6 +56,29 @@ flutter:
     - assets/images/
 
   fonts:
+    - family: notosans
+      fonts:
+        - asset: assets/fonts/notosans/NotoSans-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/notosans/NotoSans-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/notosans/NotoSans-light.ttf
+          weight: 300
+        - asset: assets/fonts/notosans/NotoSans-regular.ttf
+          weight: 400
+        - asset: assets/fonts/notosans/NotoSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/notosans/NotoSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/notosans/NotoSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/notosans/NotoSans-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/notosans/NotoSans-Black.ttf
+          weight: 900
+    - family: playball
+      fonts:
+        - asset: assets/fonts/playball/Playball-Regular.ttf
     - family: MyFlutterApp
       fonts:
         - asset: assets/fonts/MyFlutterApp.ttf
