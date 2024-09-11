@@ -10,4 +10,5 @@ public interface MemberService {
     MemberSelectResponseDto selectMember(Long memberId);
     void updateMember(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId);
     void registFavoriteCourses(MemberFavoriteCourseRequestDto memberFavoriteCourseRequestDto, Long memberId);
+    void resignMember(Long memberId);
 }

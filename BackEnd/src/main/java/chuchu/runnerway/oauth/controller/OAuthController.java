@@ -1,10 +1,11 @@
 package chuchu.runnerway.oauth.controller;
 
+import chuchu.runnerway.member.exception.MemberDuplicateException;
+import chuchu.runnerway.member.exception.ResignedMemberException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import chuchu.runnerway.oauth.dto.AlreadySignUpResponseDto;
 import chuchu.runnerway.oauth.dto.KakaoMemberResponseDto;
-import chuchu.runnerway.oauth.exception.AlreadySignUpException;
 import chuchu.runnerway.oauth.service.KakaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -50,8 +51,8 @@ public class OAuthController {
         return ResponseEntity.status(HttpStatus.OK).body(kakaoMemberResponseDto);
     }
 
-    @ExceptionHandler(AlreadySignUpException.class)
-    public ResponseEntity<?> alreadySignUp(AlreadySignUpException e)
+    @ExceptionHandler({MemberDuplicateException.class, ResignedMemberException.class})
+    public ResponseEntity<?> alreadySignUp(RuntimeException e)
         throws JsonProcessingException {
         AlreadySignUpResponseDto alreadySignUpResponseDto = new AlreadySignUpResponseDto(
             303,

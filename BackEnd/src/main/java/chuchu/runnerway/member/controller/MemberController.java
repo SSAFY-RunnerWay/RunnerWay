@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -119,6 +120,19 @@ public class MemberController {
         Long memberId = MemberInfo.getId();
         memberService.updateMember(memberUpdateRequestDto, memberId);
         return ResponseEntity.status(HttpStatus.OK).body("회원정보 수정완료!!");
+    }
+
+    @DeleteMapping
+    @Operation(summary = "회원 탈퇴", description = "회원탈퇴 할 때 사용하는 API")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+            description = "회원 탈퇴 성공",
+            content = @Content(mediaType = "application/json"))
+    })
+    public ResponseEntity<?> resignMember() {
+        Long memberId = MemberInfo.getId();
+        memberService.resignMember(memberId);
+        return ResponseEntity.status(HttpStatus.OK).body("회원 탈퇴 성공");
     }
 
     @ExceptionHandler({MemberDuplicateException.class, NotFoundMemberException.class,

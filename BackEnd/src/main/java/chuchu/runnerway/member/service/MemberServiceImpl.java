@@ -96,6 +96,16 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Transactional
+    @Override
+    public void resignMember(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+            NotFoundMemberException::new
+        );
+        member.resign();
+        memberRepository.save(member);
+    }
+
     private void saveMemberImage(MemberSignUpRequestDto signUpMemberDto, Member savedMember) {
         MemberImage memberImage = MemberImage.builder()
             .member(savedMember)

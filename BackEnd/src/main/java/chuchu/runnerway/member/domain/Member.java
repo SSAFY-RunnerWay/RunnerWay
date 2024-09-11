@@ -69,6 +69,10 @@ public class Member {
         this.weight = memberUpdateRequestDto.getWeight();
     }
 
+    public void resign() {
+        this.isResign = 1;
+    }
+
     @Builder(builderMethodName = "signupBuilder")
     public Member(MemberSignUpRequestDto memberSignUpRequestDto) {
         this.email = memberSignUpRequestDto.getEmail();

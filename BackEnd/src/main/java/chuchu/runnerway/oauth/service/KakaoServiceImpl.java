@@ -1,5 +1,7 @@
 package chuchu.runnerway.oauth.service;
 
+import chuchu.runnerway.member.exception.MemberDuplicateException;
+import chuchu.runnerway.member.exception.ResignedMemberException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +9,6 @@ import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.dto.MemberDto;
 import chuchu.runnerway.member.repository.MemberRepository;
 import chuchu.runnerway.oauth.dto.KakaoMemberResponseDto;
-import chuchu.runnerway.oauth.exception.AlreadySignUpException;
 import chuchu.runnerway.security.util.JwtUtil;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +46,12 @@ public class KakaoServiceImpl implements KakaoService {
         //이미 가입한 유저라면
         Optional<Member> member = memberRepository.findByEmail(kakaoMemberResponseDto.getEmail());
         if (member.isPresent()) {
+            if (member.get().getIsResign().equals(1)) {
+                throw new ResignedMemberException();
+            }
             MemberDto memberDto = mapper.map(member.get(), MemberDto.class);
             String token = jwtUtil.createAccessToken(memberDto);
-            throw new AlreadySignUpException(token);
+            throw new MemberDuplicateException(token);
         }
         return kakaoMemberResponseDto;
     }
