@@ -1,11 +1,12 @@
 package chuchu.runnerway.course.model.service;
 
+import chuchu.runnerway.course.dto.response.UserDetailResponseDto;
 import chuchu.runnerway.course.dto.response.UserListResponseDto;
 import chuchu.runnerway.course.entity.Course;
 import chuchu.runnerway.course.model.repository.UserCourseRepository;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,13 @@ public class UserCourseServiceImpl implements UserCourseService {
             // distance로 오름차순 정렬
             .sorted(Comparator.comparing(UserListResponseDto::getDistance))
             .toList();
+    }
+
+    @Override
+    public UserDetailResponseDto getOfficialCourse(Long courseId) {
+        Course course = userCourseRepository.findById(courseId)
+            .orElseThrow(NoSuchElementException::new);
+        return mapper.map(course, UserDetailResponseDto.class);
     }
 
     private double calcDistance(double slat, double slng, double elat, double elng) {
