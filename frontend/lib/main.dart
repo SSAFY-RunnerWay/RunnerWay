@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/views/runnerPick/runner_pick_screen.dart';
+import 'package:frontend/views/main/main_view.dart';
+import 'package:frontend/views/mypage/mypage-view.dart';
+import 'package:frontend/views/record/record_view.dart';
+import 'package:frontend/views/runnerPick/runner_pick_view.dart';
+import 'package:get/get.dart';
 import 'widgets/under_bar.dart';
-import 'views/main/main_screen.dart';
+import 'routes/app_routes.dart';
+import 'controllers/under_bar_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,55 +15,40 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // root of application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false, // debug 표시 제거
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'notosans',
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff1EA6FC)),
         useMaterial3: true,
       ),
-      home: const Home(),
+      // 여기서 Home을 직접 렌더링
+      home: Home(),
+      getPages: AppRoutes.routes,
     );
   }
 }
 
-class Home extends StatefulWidget {
-  const Home({super.key});
-
-  @override
-  _HomeWithUnderBarState createState() => _HomeWithUnderBarState();
-}
-
-class _HomeWithUnderBarState extends State<Home> {
-  int _selectedIndex = 0; // 현재 선택된 탭 인덱스
-
-  // 각 탭에 해당하는 화면들
-  final List<Widget> _pages = [
-    const MainScreen(),
-    const RunnerPickScreen(),
+class Home extends StatelessWidget {
+  // 탭별 화면
+  static List<Widget> tabPages = <Widget>[
+    MainView(),
+    RunnerPickView(),
+    RecordView(),
+    MypageView(),
   ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages, // 탭에 따라 표시되는 페이지
-      ),
-      bottomNavigationBar: UnderBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped, // 탭 선택 시 인덱스 변경
-      ),
+      body: Obx(() => SafeArea(
+          child:
+              // static 변수를 이용해 컨트롤러 접근
+              tabPages[UnderBarController.to.selectedIndex.value])),
+      bottomNavigationBar: UnderBar(),
     );
   }
 }
