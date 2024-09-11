@@ -33,6 +33,10 @@ class MyApp extends StatelessWidget {
 }
 
 class Home extends StatelessWidget {
+  // 페이지 전환을 위한 controller 인스턴스화
+  // Get.put : 수명이 페이지와 같음
+  final UnderBarController controller = Get.put(UnderBarController());
+
   // 탭별 화면
   static List<Widget> tabPages = <Widget>[
     MainView(),
