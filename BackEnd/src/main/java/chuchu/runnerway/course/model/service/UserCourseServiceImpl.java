@@ -91,6 +91,25 @@ public class UserCourseServiceImpl implements UserCourseService {
             .toList();
     }
 
+    @Override
+    public List<UserListResponseDto> findPopularLatelyUserCourse(double lat, double lng) {
+        List<Course> courses = userCourseRepository.findPopularLately(lat, lng);
+        return courses.stream()
+            .map(course -> {
+                // Course -> UserListResponseDto 변환
+                UserListResponseDto dto = mapper.map(course, UserListResponseDto.class);
+
+                // calcDistance 함수를 사용해 사용자와 코스 간의 거리 계산
+                double distance = calcDistance(lat, lng, Double.parseDouble(course.getLat()), Double.parseDouble(course.getLng()));
+
+                // 계산된 거리 값을 UserListResponseDto의 distance 변수에 설정
+                dto.setDistance(distance);
+
+                return dto;
+            })
+            .toList();
+    }
+
     private void saveMemberImage(
         UserCourseRegistRequestDto userCourseRegistRequestDto,
         Course savedCourse

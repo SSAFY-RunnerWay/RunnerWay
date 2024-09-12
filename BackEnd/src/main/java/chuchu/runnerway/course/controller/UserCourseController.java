@@ -69,6 +69,20 @@ public class UserCourseController {
         return ResponseEntity.ok(userCourseList);
     }
 
+    @GetMapping("/popularity/lately")
+    @Operation(summary = "최근 인기 유저 코스 조회", description = "최근 인기 유저 코스 조회시 사용하는 API")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "최근 인기 유저 코스 조회 성공",
+            content = @Content(mediaType = "application/json")
+        )
+    })
+    public ResponseEntity<?> selectPopularLatelyList(@RequestParam Double lat, @RequestParam Double lng) {
+        List<UserListResponseDto> userCourseList = userCourseService.findPopularLatelyUserCourse(lat, lng);
+        return ResponseEntity.ok(userCourseList);
+    }
+
     @PostMapping
     @Operation(summary = "유저 코스 등록", description = "유저 코스 등록 API")
     @ApiResponses(value = {

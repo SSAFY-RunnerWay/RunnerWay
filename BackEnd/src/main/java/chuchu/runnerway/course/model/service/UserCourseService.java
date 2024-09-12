@@ -11,4 +11,5 @@ public interface UserCourseService {
     UserDetailResponseDto getUserCourse(Long courseId);
     void registUserCourse(UserCourseRegistRequestDto userCourseRegistRequestDto);
     List<UserListResponseDto> findPopularAllUserCourse(double lat, double lng);
+    List<UserListResponseDto> findPopularLatelyUserCourse(double lat, double lng);
 }
