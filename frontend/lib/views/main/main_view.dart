@@ -6,9 +6,13 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      body: Center(
-        child: Text('Main Page'),
+      body: Container(
+        padding: EdgeInsets.all(16),
+        color: Color(0xff1EA6FC),
       ),
       bottomNavigationBar: UnderBar(),
     );
