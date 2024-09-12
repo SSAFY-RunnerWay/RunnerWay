@@ -9,8 +9,6 @@ class UnderBarController extends GetxController {
 
   // 탭 변경 메서드
   void changeTabIndex(int index) {
-    if (index >= 0 && index < 4) {
-      selectedIndex.value = index;
-    }
+    selectedIndex.value = index;
   }
 }
