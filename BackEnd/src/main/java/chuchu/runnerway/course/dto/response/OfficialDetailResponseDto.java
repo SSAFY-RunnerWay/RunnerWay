@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.dto.response;
 
+import chuchu.runnerway.course.dto.CourseImageDto;
 import chuchu.runnerway.course.entity.CourseType;
 import lombok.Data;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class OfficialDetailResponseDto {
     private double courseLength;
     private double averageCalorie;
 
-    private String url;
+    private CourseImageDto courseImage;
 
 
 }
