@@ -1,5 +1,6 @@
 package chuchu.runnerway.runningRecord.mapper;
 
+import chuchu.runnerway.runningRecord.dto.request.RecordRegistRequestDto;
 import chuchu.runnerway.runningRecord.dto.response.RecordDetailResponseDto;
 import chuchu.runnerway.runningRecord.dto.response.RecordResponseDto;
 import chuchu.runnerway.runningRecord.entity.RunningRecord;
@@ -25,4 +26,6 @@ public interface RunningRecordMapper {
     @IterableMapping(qualifiedByName = "RecordList")
     List<RecordResponseDto> toRecordResponseDtoList(List<RunningRecord> runningRecordList);
 
+    @Mapping(source = "courseId", target = "course.courseId")
+    RunningRecord toRegistRunningRecordDto(RecordRegistRequestDto requestDto);
 }

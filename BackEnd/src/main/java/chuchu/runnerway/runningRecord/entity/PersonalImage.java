@@ -1,11 +1,16 @@
 package chuchu.runnerway.runningRecord.entity;
 
+import chuchu.runnerway.runningRecord.dto.request.RecordRegistRequestDto;
+import chuchu.runnerway.runningRecord.dto.request.RecordUpdatePictureRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
 @Getter
 public class PersonalImage {
+
+    public PersonalImage() {
+    }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long recordId;
@@ -20,4 +25,19 @@ public class PersonalImage {
 
     @Column(name = "path")
     private String path;
+
+
+
+    public void createPersonalImage(RunningRecord runningRecord, RecordRegistRequestDto requestDto) {
+        this.runningRecord = runningRecord;
+        this.url = requestDto.getPersonalImage().getUrl();
+        this.path = requestDto.getPersonalImage().getPath();
+    }
+
+    public void updatePersonalImage(RunningRecord runningRecord, RecordUpdatePictureRequestDto requestDto){
+        this.runningRecord = runningRecord;
+        this.url = requestDto.getUrl();
+        this.path = requestDto.getPath();
+    }
+
 }
