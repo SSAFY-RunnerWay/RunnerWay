@@ -72,6 +72,7 @@ public class UserCourseServiceImpl implements UserCourseService {
         saveMemberImage(userCourseRegistRequestDto, savedCourse);
     }
 
+    @Transactional
     @Override
     public List<UserListResponseDto> findPopularAllUserCourse(double lat, double lng) {
         List<Course> courses = userCourseRepository.findPopularAll(lat, lng);
@@ -91,6 +92,7 @@ public class UserCourseServiceImpl implements UserCourseService {
             .toList();
     }
 
+    @Transactional
     @Override
     public List<UserListResponseDto> findPopularLatelyUserCourse(double lat, double lng) {
         List<Course> courses = userCourseRepository.findPopularLately(lat, lng);

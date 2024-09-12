@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CourseImageDto {
-    private Long memberId;
+    private Long courseId;
     private String url;
     private String path;
 }
