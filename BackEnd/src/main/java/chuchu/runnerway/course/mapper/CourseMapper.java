@@ -12,10 +12,10 @@ import java.util.List;
 public interface CourseMapper {
     CourseMapper INSTANCE = Mappers.getMapper(CourseMapper.class);
 
-    @Mapping(source = "course.courseImage.url", target = "url")
+    @Mapping(source = "course.courseImage.url", target = "courseImage.url")
     OfficialDetailResponseDto toOfficialDetailResponseDto(Course course);
 
-    @Mapping(source = "course.courseImage.url", target = "url")
+    @Mapping(source = "course.courseImage.url", target = "courseImage.url")
     @Named("OfficialList")
     OfficialListResponseDto toOfficialListResponseDto(Course course);
 

@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.dto.response;
 
+import chuchu.runnerway.course.dto.CourseImageDto;
 import lombok.Data;
 import lombok.Getter;
 
@@ -14,6 +15,6 @@ public class OfficialListResponseDto {
     private int level;
     private double courseLength;
 
-    private String url;
+    private CourseImageDto courseImage;
 
 }

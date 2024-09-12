@@ -12,7 +12,8 @@ public interface OfficialCourseRepository extends JpaRepository<Course, Long> {
 
     @Query(value = "SELECT * FROM course c " +
             "WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(c.lat)) * " +
-            "cos(radians(c.lng) - radians(:lng)) + sin(radians(:lat)) * sin(radians(c.lat)))) <= 3",
+            "cos(radians(c.lng) - radians(:lng)) + sin(radians(:lat)) * sin(radians(c.lat)))) <= 3 " +
+            "and c.course_type = 'official'",
             nativeQuery = true)
     List<Course> findAll(@Param("lat") double lat, @Param("lng") double lng);
 
