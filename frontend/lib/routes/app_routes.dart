@@ -6,9 +6,21 @@ import 'package:frontend/views/runnerPick/runner_pick_view.dart';
 
 class AppRoutes {
   static final routes = [
-    GetPage(name: '/main', page: () => MainView()),
-    GetPage(name: '/runner-pick', page: () => RunnerPickView()),
-    GetPage(name: '/record', page: () => RecordView()),
-    GetPage(name: '/mypage', page: () => MypageView()),
+    GetPage(
+        name: '/main',
+        page: () => MainView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/runner-pick',
+        page: () => RunnerPickView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/record',
+        page: () => RecordView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/mypage',
+        page: () => MypageView(),
+        transition: Transition.noTransition),
   ];
 }
