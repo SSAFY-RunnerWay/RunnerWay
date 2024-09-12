@@ -15,4 +15,13 @@ public interface UserCourseRepository extends JpaRepository<Course, Long> {
             "AND c.course_type = 'user'",
             nativeQuery = true)
     List<Course> findAll(@Param("lat") double lat, @Param("lng") double lng);
+
+    @Query(value = "SELECT * FROM course c " +
+        "WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(c.lat)) * " +
+        "cos(radians(c.lng) - radians(:lng)) + sin(radians(:lat)) * sin(radians(c.lat)))) <= 3 " +
+        "AND c.course_type = 'user' " +
+        "ORDER BY c.count DESC " +
+        "LIMIT 3",
+        nativeQuery = true)
+    List<Course> findPopularAll(@Param("lat") double lat, @Param("lng") double lng);
 }

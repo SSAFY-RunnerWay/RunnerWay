@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user-course")
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class UserCourseController {
 
     private final UserCourseService userCourseService;
 
@@ -37,7 +37,7 @@ public class UserController {
         )
     })
     public ResponseEntity<?> selectUserCourseList(@RequestParam Double lat, @RequestParam Double lng) {
-        List<UserListResponseDto> userCourseList = userCourseService.findAllOfficialCourse(lat, lng);
+        List<UserListResponseDto> userCourseList = userCourseService.findAllUserCourse(lat, lng);
         return ResponseEntity.status(HttpStatus.OK).body(userCourseList);
     }
 
@@ -51,8 +51,22 @@ public class UserController {
         )
     })
     public ResponseEntity<?> getUserCourse(@PathVariable("courseId") Long courseId) {
-        UserDetailResponseDto course = userCourseService.getOfficialCourse(courseId);
+        UserDetailResponseDto course = userCourseService.getUserCourse(courseId);
         return ResponseEntity.ok(course);
+    }
+
+    @GetMapping("/popularity/all")
+    @Operation(summary = "전체 인기 유저 코스 조회", description = "전체 인기 유저 코스 조회시 사용하는 API")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "전체 인기 유저 코스 조회 성공",
+            content = @Content(mediaType = "application/json")
+        )
+    })
+    public ResponseEntity<?> selectPopularAllList(@RequestParam Double lat, @RequestParam Double lng) {
+        List<UserListResponseDto> userCourseList = userCourseService.findPopularAllUserCourse(lat, lng);
+        return ResponseEntity.ok(userCourseList);
     }
 
     @PostMapping

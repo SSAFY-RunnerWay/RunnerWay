@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface UserCourseService {
 
-    List<UserListResponseDto> findAllOfficialCourse(double lat, double lng);
-    UserDetailResponseDto getOfficialCourse(Long courseId);
+    List<UserListResponseDto> findAllUserCourse(double lat, double lng);
+    UserDetailResponseDto getUserCourse(Long courseId);
     void registUserCourse(UserCourseRegistRequestDto userCourseRegistRequestDto);
+    List<UserListResponseDto> findPopularAllUserCourse(double lat, double lng);
 }

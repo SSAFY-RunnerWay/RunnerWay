@@ -29,7 +29,7 @@ public class UserCourseServiceImpl implements UserCourseService {
 
     @Transactional
     @Override
-    public List<UserListResponseDto> findAllOfficialCourse(double lat, double lng) {
+    public List<UserListResponseDto> findAllUserCourse(double lat, double lng) {
         List<Course> courses = userCourseRepository.findAll(lat, lng);
 
         return courses.stream()
@@ -52,7 +52,7 @@ public class UserCourseServiceImpl implements UserCourseService {
 
     @Transactional
     @Override
-    public UserDetailResponseDto getOfficialCourse(Long courseId) {
+    public UserDetailResponseDto getUserCourse(Long courseId) {
         Course course = userCourseRepository.findById(courseId)
             .orElseThrow(NoSuchElementException::new);
         return mapper.map(course, UserDetailResponseDto.class);
@@ -62,7 +62,6 @@ public class UserCourseServiceImpl implements UserCourseService {
     @Override
     public void registUserCourse(UserCourseRegistRequestDto userCourseRegistRequestDto) {
         Course userCourse = Course.builder().build();
-        System.out.println("@@@@@@@@@@@@@@@@="+userCourseRegistRequestDto.getMemberId());
         Member member = memberRepository.findById(userCourseRegistRequestDto.getMemberId()).orElseThrow(
             NotFoundMemberException::new
         );
@@ -71,6 +70,25 @@ public class UserCourseServiceImpl implements UserCourseService {
         Course savedCourse = userCourseRepository.save(userCourse);
 
         saveMemberImage(userCourseRegistRequestDto, savedCourse);
+    }
+
+    @Override
+    public List<UserListResponseDto> findPopularAllUserCourse(double lat, double lng) {
+        List<Course> courses = userCourseRepository.findPopularAll(lat, lng);
+        return courses.stream()
+            .map(course -> {
+                // Course -> UserListResponseDto 변환
+                UserListResponseDto dto = mapper.map(course, UserListResponseDto.class);
+
+                // calcDistance 함수를 사용해 사용자와 코스 간의 거리 계산
+                double distance = calcDistance(lat, lng, Double.parseDouble(course.getLat()), Double.parseDouble(course.getLng()));
+
+                // 계산된 거리 값을 UserListResponseDto의 distance 변수에 설정
+                dto.setDistance(distance);
+
+                return dto;
+            })
+            .toList();
     }
 
     private void saveMemberImage(
