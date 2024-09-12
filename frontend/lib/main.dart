@@ -16,15 +16,16 @@ class MyApp extends StatelessWidget {
     // 앱 시작 시 전역 상태로 UnderBarController 등록
     Get.put(UnderBarController());
     return SafeArea(
-        child: GetMaterialApp(
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white, // 모든 페이지의 배경색을 흰색으로 설정
-        colorSchemeSeed: Colors.white,
+      child: GetMaterialApp(
+        theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white, // 모든 페이지의 배경색을 흰색으로 설정
+          colorSchemeSeed: Colors.white,
+        ),
+        debugShowCheckedModeBanner: false,
+        // 여기서 Home을 직접 렌더링
+        initialRoute: '/main',
+        getPages: AppRoutes.routes,
       ),
-      debugShowCheckedModeBanner: false,
-      // 여기서 Home을 직접 렌더링
-      initialRoute: '/main',
-      getPages: AppRoutes.routes,
-    ));
+    );
   }
 }
