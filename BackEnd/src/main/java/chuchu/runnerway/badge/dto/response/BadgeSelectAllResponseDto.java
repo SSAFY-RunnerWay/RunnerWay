@@ -7,6 +7,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class BadgesSelectResponseDto {
-    List<BadgeDto> myBadgeList;
+public class BadgeSelectAllResponseDto {
+    private List<BadgeDto> myBadgeList;
 }

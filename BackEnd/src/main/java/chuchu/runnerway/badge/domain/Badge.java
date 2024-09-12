@@ -49,5 +49,5 @@ public class Badge {
     private BadgeItems badgeItem;
 
     @Column(name = "get_time", columnDefinition = "TIMESTAMP")
-    private LocalDateTime createTime;
+    private LocalDateTime getTime;
 }

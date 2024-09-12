@@ -2,8 +2,13 @@ package chuchu.runnerway.badge.service;
 
 import chuchu.runnerway.badge.domain.Badge;
 import chuchu.runnerway.badge.dto.BadgeDto;
-import chuchu.runnerway.badge.dto.response.BadgesSelectResponseDto;
+import chuchu.runnerway.badge.dto.BadgeImageDto;
+import chuchu.runnerway.badge.dto.response.BadgeSelectAllResponseDto;
+import chuchu.runnerway.badge.dto.response.BadgeSelectResponseDto;
+import chuchu.runnerway.badge.exception.NotFoundBadgeException;
+import chuchu.runnerway.badge.exception.NotOwnerBadgeException;
 import chuchu.runnerway.badge.repository.BadgeRepository;
+import chuchu.runnerway.common.util.MemberInfo;
 import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
 import chuchu.runnerway.member.repository.MemberRepository;
@@ -21,7 +26,7 @@ public class BadgeServiceImpl implements BadgeService {
     private final ModelMapper mapper;
 
     @Override
-    public BadgesSelectResponseDto selectAllMyBadge(Long memberId) {
+    public BadgeSelectAllResponseDto selectAllMyBadge(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(
             NotFoundMemberException::new
         );
@@ -36,6 +41,31 @@ public class BadgeServiceImpl implements BadgeService {
                 return dto;
             })
             .toList();
-        return new BadgesSelectResponseDto(badgeDtoList);
+        return new BadgeSelectAllResponseDto(badgeDtoList);
+    }
+
+    @Override
+    public BadgeSelectResponseDto selectBadge(Long badgeId) {
+        Badge badge = badgeRepository.findById(badgeId).orElseThrow(
+            NotFoundBadgeException::new
+        );
+        Long loginUserId = MemberInfo.getId();
+        Member badgeOwner = badge.getMember();
+        if (!badgeOwner.getMemberId().equals(loginUserId)) {
+            throw new NotOwnerBadgeException();
+        }
+
+        return getBadgeSelectResponseDto(badge);
+    }
+
+    private BadgeSelectResponseDto getBadgeSelectResponseDto(Badge badge) {
+        String name = badge.getBadgeItem().getName();
+        String content = badge.getBadgeItem().getContent();
+
+        // BadgeImage를 BadgeImageDto로 매핑
+        BadgeImageDto badgeImageDto = mapper.map(badge.getBadgeItem().getBadgeImage(), BadgeImageDto.class);
+
+        // BadgeSelectResponseDto로 변환
+        return new BadgeSelectResponseDto(name, content, badge.getGetTime(), badgeImageDto);
     }
 }
