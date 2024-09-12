@@ -19,18 +19,19 @@ class RecordView extends StatelessWidget {
             const SizedBox(height: 20),
             JoinRunningButton(
               onItemTapped: (index) {
+                // 추후 종료 기능 추가
                 print("Running button tapped: $index");
               },
             ),
             const SizedBox(height: 20), // 간격 추가
             WideButton(
               text: "종료", // 버튼 텍스트
-              bgColor: Color(0xFF1C1516), // 배경 색상: 검정
+              bgColor: Color(0xFF1C1516), // 배경 색상: 우리 검정
               textColor: Colors.white,
               width: 208,
               height: 40,
               fontSize: 14,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w500, // medium이라면 안 둬도 됨
               onItemTapped: (index) {
                 print("wide button click");
               },
@@ -41,7 +42,7 @@ class RecordView extends StatelessWidget {
             WideButton(
                 text: "취소",
                 bgColor: Colors.white,
-                bdColor: Color(0xFFE8E8E8),
+                bdColor: Color(0xFFE8E8E8), // borderLine 있다면 추가
                 textColor: Color(0xFF1C1516),
                 width: 208,
                 height: 40,

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class WideButton extends StatelessWidget {
   final String text;
-  final Color bgColor;
-  final Color? bdColor; // borderLine nullable로 둠
+  final Color bgColor; // background color
+  final Color? bdColor; // borderLine은 nullable로 둠
   final Color textColor;
   final double fontSize;
   final FontWeight fontWeight;
@@ -18,10 +18,10 @@ class WideButton extends StatelessWidget {
     required this.textColor,
     required this.onItemTapped,
     this.bdColor,
-    this.width = 200,
+    this.width = 200, // 추후 모달 창에 맞춰 변경 예정
     this.height = 50,
     this.fontSize = 14,
-    this.fontWeight = FontWeight.w400,
+    this.fontWeight = FontWeight.w500, // 기본 값은 medium으로 둠
   });
 
   @override
