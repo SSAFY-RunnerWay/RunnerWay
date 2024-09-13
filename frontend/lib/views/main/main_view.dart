@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/search_condition.dart';
 import 'package:frontend/widgets/under_bar.dart';
 import 'widget/search_bar.dart';
 
@@ -93,41 +94,42 @@ class MainView extends StatelessWidget {
             ),
           ),
 
-          // 오늘의 추천 코스
+          // 오늘의 추천 코스 container
           Padding(
             padding: EdgeInsets.all(20), // Horizontal padding only
-            child: Align(
-              alignment: Alignment.topLeft, // Align to the top-left corner
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Left-align the text
-                mainAxisAlignment: MainAxisAlignment.start, // Align to the top
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '오늘의 ',
-                        style: TextStyle(
-                          fontWeight:
-                              FontWeight.w700, // Add some styling if needed
-                          fontSize: 22, // Adjust the size if necessary
-                        ),
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // Left-align the text
+              mainAxisAlignment: MainAxisAlignment.start, // Align to the top
+              children: [
+                // title
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '오늘의 ',
+                      style: TextStyle(
+                        fontWeight:
+                            FontWeight.w700, // Add some styling if needed
+                        fontSize: 22, // Adjust the size if necessary
                       ),
-                      Text(
-                        '추천코스',
-                        style: TextStyle(
-                          fontWeight:
-                              FontWeight.w400, // Add some styling if needed
-                          fontSize: 22, // Adjust the size if necessary
-                        ),
+                    ),
+                    Text(
+                      '추천코스',
+                      style: TextStyle(
+                        fontWeight:
+                            FontWeight.w400, // Add some styling if needed
+                        fontSize: 22, // Adjust the size if necessary
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+
+                // 검색 조건 section
+                SearchCondition()
+              ],
             ),
-          )
+          ),
         ],
       ),
       bottomNavigationBar: UnderBar(),
