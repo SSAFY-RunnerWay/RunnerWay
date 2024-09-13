@@ -18,7 +18,7 @@
 - 캐시 사용
     - real-time에 대해서 반복적인 update 발생
         - redis(cache)의 key-value를 이용하여 real-time(참여자 수) update를 하고 특정 기간 (24시간)마다 데이터베이스(mysql) 반영
-    - 가변성이 많은 data 조회
+    - 가변성이 적은 data 조회
         - 자주 변화하지 않는 data에 대해서 redis(cache)에 저장 후 조회 시 성능 향상
 - 추천 알고리즘
     - data 부족 시 CBF, 충분한 data가 쌓여 있을 시 CF알고리즘 이용하여 하이브리드 필터 적용 추천
