@@ -20,7 +20,7 @@ class MainView extends StatelessWidget {
           ),
 
           // Runner들의 Pick
-          Expanded(
+          Container(
             child: Stack(
               children: [
                 // Stack을 Expanded로 감싸 남은 공간을 차지하게 함
@@ -46,7 +46,7 @@ class MainView extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
-                              fontSize: 20,
+                              fontSize: 22,
                             ),
                           ),
                           Text(
@@ -54,13 +54,13 @@ class MainView extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'playball',
-                              fontSize: 30,
+                              fontSize: 32,
                             ),
                           ),
                         ],
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 6,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 24),
@@ -72,7 +72,7 @@ class MainView extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 16,
+                                fontSize: 18,
                               ),
                             ),
                             Text(
@@ -80,7 +80,7 @@ class MainView extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 16,
+                                fontSize: 18,
                               ),
                             )
                           ],
@@ -95,13 +95,37 @@ class MainView extends StatelessWidget {
 
           // 오늘의 추천 코스
           Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('오늘의 추천 코스'),
-              ],
+            padding: EdgeInsets.all(20), // Horizontal padding only
+            child: Align(
+              alignment: Alignment.topLeft, // Align to the top-left corner
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start, // Left-align the text
+                mainAxisAlignment: MainAxisAlignment.start, // Align to the top
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '오늘의 ',
+                        style: TextStyle(
+                          fontWeight:
+                              FontWeight.w700, // Add some styling if needed
+                          fontSize: 22, // Adjust the size if necessary
+                        ),
+                      ),
+                      Text(
+                        '추천코스',
+                        style: TextStyle(
+                          fontWeight:
+                              FontWeight.w400, // Add some styling if needed
+                          fontSize: 22, // Adjust the size if necessary
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           )
         ],
