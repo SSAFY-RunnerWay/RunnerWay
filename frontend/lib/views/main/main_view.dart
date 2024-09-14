@@ -125,7 +125,8 @@ class MainView extends StatelessWidget {
                   ],
                 ),
 
-                // 검색 조건 section
+                SizedBox(height: 15),
+                // 검색 조건 위젯
                 SearchCondition()
               ],
             ),
