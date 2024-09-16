@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/views/main/main_view.dart';
-import 'package:frontend/views/mypage/mypage-view.dart';
-import 'package:frontend/views/record/record_view.dart';
-import 'package:frontend/views/runnerPick/runner_pick_view.dart';
 import 'package:get/get.dart';
-import 'widgets/under_bar.dart';
 import 'routes/app_routes.dart';
 import 'controllers/under_bar_controller.dart';
 
@@ -17,42 +12,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 앱 시작 시 전역 상태로 UnderBarController 등록
+    Get.put(UnderBarController());
+
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        fontFamily: 'notosans',
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff1EA6FC)),
-        useMaterial3: true,
-      ),
       // 여기서 Home을 직접 렌더링
-      home: Home(),
+      initialRoute: '/main',
       getPages: AppRoutes.routes,
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  // 페이지 전환을 위한 controller 인스턴스화
-  // Get.put : 수명이 페이지와 같음
-  final UnderBarController controller = Get.put(UnderBarController());
-
-  // 탭별 화면
-  static List<Widget> tabPages = <Widget>[
-    MainView(),
-    RunnerPickView(),
-    RecordView(),
-    MypageView(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Obx(() => SafeArea(
-          child:
-              // static 변수를 이용해 컨트롤러 접근
-              tabPages[UnderBarController.to.selectedIndex.value])),
-      bottomNavigationBar: UnderBar(),
     );
   }
 }
