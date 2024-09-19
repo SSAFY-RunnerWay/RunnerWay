@@ -36,6 +36,8 @@ dependencies:
   geolocator: ^12.0.0
   google_maps_flutter: ^2.9.0
   flutter_polyline_points: ^2.1.0
+  flutter_dotenv: ^5.1.0
+  envied: ^0.5.4+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -44,6 +46,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^2.4.12
+  envied_generator: ^0.5.4+1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -60,6 +64,9 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/images/auth/
+    - assets/images/medals/
+    - .env
 
   fonts:
     - family: notosans

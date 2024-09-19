@@ -6,8 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
-    <application
-        android:name="${applicationName}"
+    <application>
+<!--        어플 이름인데 나중에 수정해야하면 수정할 것-->
+<!--        android:name="${applicationName}"-->
+        android:name="android.app.Application"
         android:icon="@mipmap/ic_launcher"
         android:label="frontend">
         <activity
@@ -38,7 +40,7 @@
             android:value="2" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="GOOGLE_MAPS_API_KEY" />
+            android:value="${GOOGLE_MAPS_API_KEY}" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
