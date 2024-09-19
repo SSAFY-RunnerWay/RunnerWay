@@ -32,5 +32,6 @@ public class RecordRegistRequestDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp finishDate;
     private PersonalImageDto personalImage;
+    private String logPath;
 
 }

@@ -16,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/record")
@@ -77,7 +79,7 @@ public class RunningController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "러닝 기록 등록 성공",
+                    description = "러닝 기록 등록 성공, true시 랭킹 등록",
                     content = @Content(mediaType = "application/json")
             ),
             @ApiResponse(
@@ -88,9 +90,12 @@ public class RunningController {
     })
     @PostMapping
     public ResponseEntity<?> registerRunningRecord(@Valid @RequestBody RecordRegistRequestDto requestDto){
-        runningRecordService.registRecord(requestDto);
+        boolean rankingCheck = runningRecordService.registRecord(requestDto);
 
-        return ResponseEntity.status(201).body("기록 등록 완료!!");
+        if(rankingCheck)
+            return ResponseEntity.status(201).body("true");
+        else
+            return ResponseEntity.status(201).body("false");
     }
 
     @Operation(summary = "러닝 기록 사진 수정", description = "러닝 기록 사진 수정 시 사용하는 API")
