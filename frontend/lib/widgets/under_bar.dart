@@ -54,7 +54,7 @@ class UnderBar extends StatelessWidget {
                             hasSizedBox: true),
                       ),
                       Positioned(
-                        left: 3 * screenWidth / 5 - 10,
+                        left: 3 * screenWidth / 5 - 15,
                         top: 7,
                         child: _buildNavItem(
                             2,
@@ -65,7 +65,7 @@ class UnderBar extends StatelessWidget {
                             hasSizedBox: true),
                       ),
                       Positioned(
-                        left: 4 * screenWidth / 5 - 15,
+                        left: 4 * screenWidth / 5 - 20,
                         top: 7,
                         child: _buildNavItem(
                             3, '마이', Icons.person, screenWidth / 4, controller,
@@ -138,9 +138,9 @@ class UnderBar extends StatelessWidget {
       case 1:
         return 13 + screenWidth / 5; // '러너픽' 탭의 바 위치
       case 2:
-        return 3 * screenWidth / 5 + 3; // '기록' 탭의 바 위치
+        return 3 * screenWidth / 5; // '기록' 탭의 바 위치
       case 3:
-        return 4 * screenWidth / 5 - 3; // '마이' 탭의 바 위치
+        return 4 * screenWidth / 5 - 6; // '마이' 탭의 바 위치
       default:
         return 0;
     }
