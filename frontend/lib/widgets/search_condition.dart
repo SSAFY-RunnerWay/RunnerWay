@@ -38,6 +38,7 @@ class SearchCondition extends StatelessWidget {
               ),
               onChanged: (String? newCondition) {
                 controller.updateSortCondition(newCondition!);
+                // TODO: 검색 기준 바뀌는 경우, 다시 정렬
               },
               dropdownColor: Color(0xff1C1516),
               underline: Container(),
@@ -49,7 +50,7 @@ class SearchCondition extends StatelessWidget {
       ),
 
       SizedBox(
-        width: 16,
+        width: 14,
       ),
 
       // 난이도 필터 버튼
@@ -84,7 +85,7 @@ class SearchCondition extends StatelessWidget {
       ),
 
       SizedBox(
-        width: 16,
+        width: 14,
       ),
 
       // 코스 거리 필터 버튼
@@ -115,6 +116,20 @@ class SearchCondition extends StatelessWidget {
               Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black),
             ],
           ),
+        ),
+      ),
+
+      // 남은 공간 차지
+      Spacer(),
+
+      // 현위치 불러오기 버튼
+      IconButton(
+        onPressed: () {
+          // TODO : 현위치로 정렬하기
+        },
+        icon: Image.asset(
+          'assets/images/gps.png',
+          width: 30,
         ),
       ),
     ]);
