@@ -32,7 +32,7 @@ class RunningView extends StatelessWidget {
   }
 
   void _navigateToRusultMap() {
-    Get.to(() => const RusultMap());
+    Get.to(() => const ResultMap());
   }
 
   void _navigateToRunningMap() {
