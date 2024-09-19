@@ -3,6 +3,7 @@ import 'package:frontend/views/record/record_view.dart';
 import 'package:get/get.dart';
 import 'package:frontend/views/main/main_view.dart';
 import 'package:frontend/views/runnerPick/runner_pick_view.dart';
+import 'package:frontend/views/auth/signup_view.dart';
 
 class AppRoutes {
   static final routes = [
@@ -21,6 +22,10 @@ class AppRoutes {
     GetPage(
         name: '/mypage',
         page: () => MypageView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/signup',
+        page: () => SignUpView(),
         transition: Transition.noTransition),
   ];
 }
