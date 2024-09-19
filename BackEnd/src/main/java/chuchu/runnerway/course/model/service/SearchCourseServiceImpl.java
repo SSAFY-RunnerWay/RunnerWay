@@ -6,11 +6,13 @@ import chuchu.runnerway.course.entity.Course;
 import chuchu.runnerway.course.entity.ElasticSearchCourse;
 import chuchu.runnerway.course.model.repository.ElasticSearchCourseRepository;
 import chuchu.runnerway.course.model.repository.OfficialCourseRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
     private final ElasticSearchCourseRepository elasticSearchCourseRepository;
     private final OfficialCourseRepository officialCourseRepository;
 
+    // 검색
     @Override
     public SelectAllResponseDto search(String searchWord, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "courseId"));
@@ -78,7 +81,11 @@ public class SearchCourseServiceImpl implements SearchCourseService{
     }
 
     @Override
+    @Transactional
+    @Scheduled(cron = "0 0 3 * * *", zone = "Asia/Seoul") // 매일 새벽 3시에 elastic index 갱신
     public void insertCourse() {
+        elasticSearchCourseRepository.deleteAll();
+
         List<Course> coruseList = officialCourseRepository.findAll();
 
         List<ElasticSearchCourse> elasticSearchCourseList = coruseList.stream()

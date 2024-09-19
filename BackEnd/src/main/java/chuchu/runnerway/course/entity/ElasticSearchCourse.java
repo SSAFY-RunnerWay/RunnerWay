@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -39,7 +40,7 @@ public class ElasticSearchCourse {
     @Field(type = FieldType.Integer, name = "average_downhill")
     private Integer averageDownhill;
 
-    @Field(type = FieldType.Date, name = "average_time")
+    @Field(type = FieldType.Date, name = "average_time", format = DateFormat.date_hour_minute_second)
     private LocalDateTime averageTime;
 
     @Field(type = FieldType.Double, name = "course_length")
@@ -52,7 +53,7 @@ public class ElasticSearchCourse {
     @Field(type = FieldType.Keyword, name = "courseType")
     private CourseType courseType;
 
-    @Field(type = FieldType.Date, name = "regist_date")
+    @Field(type = FieldType.Date, name = "regist_date", format = DateFormat.date_hour_minute_second)
     private LocalDateTime registDate;
 
     @Field(type = FieldType.Double, name = "average_calorie")
