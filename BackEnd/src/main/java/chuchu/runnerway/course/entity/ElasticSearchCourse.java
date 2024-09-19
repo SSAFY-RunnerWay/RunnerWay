@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -7,12 +8,12 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Document(indexName = "elasticsearchcourse")
 @Getter
 @Builder
+@AllArgsConstructor
 public class ElasticSearchCourse {
     @Id
     private Long courseId;
@@ -36,10 +37,10 @@ public class ElasticSearchCourse {
     private Integer averageSlope;
 
     @Field(type = FieldType.Integer, name = "average_downhill")
-    private int averageDownhill;
+    private Integer averageDownhill;
 
     @Field(type = FieldType.Date, name = "average_time")
-    private Time averageTime;
+    private LocalDateTime averageTime;
 
     @Field(type = FieldType.Double, name = "course_length")
     private double courseLength;
@@ -49,10 +50,10 @@ public class ElasticSearchCourse {
     private Long memberId;
 
     @Field(type = FieldType.Keyword, name = "courseType")
-    private String courseType;
+    private CourseType courseType;
 
     @Field(type = FieldType.Date, name = "regist_date")
-    private Timestamp registDate;
+    private LocalDateTime registDate;
 
     @Field(type = FieldType.Double, name = "average_calorie")
     private double averageCalorie;

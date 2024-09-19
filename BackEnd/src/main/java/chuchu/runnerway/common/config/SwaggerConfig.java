@@ -5,6 +5,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import java.util.ArrayList;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,8 +22,12 @@ public class SwaggerConfig {
                 .scheme("bearer")
                 .bearerFormat("JWT")
         );
+
+        ArrayList<Server> servers = new ArrayList<>();
+        servers.add(new Server().url("https://j11b304.p.ssafy.io/api").description("Deploy Server"));
         return new OpenAPI()
                 .components(new Components())
+                .servers(servers)
                 .info(apiInfo())
                 .addSecurityItem(securityRequirement)
                 .components(components);
