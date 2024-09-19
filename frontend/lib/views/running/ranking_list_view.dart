@@ -1,50 +1,79 @@
 import 'package:flutter/material.dart';
-import '../../widgets/ranking_card.dart';
+import '../../widgets/ranking_card.dart'; // RankingCard 위젯을 import
 
 class RankingListView extends StatelessWidget {
-  // 사용자 데이터를 여기에 추가합니다.
-  final List<Map<String, String>> users = [
+  // API 데이터 예시
+  final List<Map<String, dynamic>> apiData = [
     {
-      'name': '백만불짜리 다리',
-      'time': '4\' 00\'\'',
-      'image': 'assets/profile1.png',
+      "score": "00:41:00",
+      "memberDto": {
+        "memberId": 1,
+        "nickname": "관리자",
+        "memberImage": null,
+      }
     },
     {
-      'name': '엄마 나 2등했어 !!!',
-      'time': '5\' 00\'\'',
-      'image': 'assets/profile2.png',
+      "score": "00:41:30",
+      "memberDto": {
+        "memberId": 2,
+        "nickname": "runner123",
+        "memberImage": null,
+      }
     },
     {
-      'name': '소연2',
-      'time': '5\' 10\'\'',
-      'image': 'assets/profile3.png',
+      "score": "00:42:00",
+      "memberDto": {
+        "memberId": 6,
+        "nickname": "runner123234",
+        "memberImage": {
+          "memberId": 6,
+          "url": "http://example.com/profile.jpg",
+          "path": "/images/profile.jpg",
+        }
+      }
     },
     {
-      'name': '소연3',
-      'time': '5\' 12\'\'',
-      'image': 'assets/profile4.png',
+      "score": "00:43:00",
+      "memberDto": {
+        "memberId": 4,
+        "nickname": "runner1232",
+        "memberImage": null,
+      }
     },
     {
-      'name': '소연4',
-      'time': '5\' 20\'\'',
-      'image': 'assets/profile5.png',
+      "score": "00:43:30",
+      "memberDto": {
+        "memberId": 13,
+        "nickname": "runn2w322422",
+        "memberImage": {
+          "memberId": 13,
+          "url": "http://example.com/profile.jpg",
+          "path": "/images/profile.jpg",
+        }
+      }
     },
   ];
+
+  // 전체 버튼 활성화 상태를 관리하는 단일 변수
+  final bool isActive = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Ranking List')),
       body: ListView.builder(
-        padding: EdgeInsets.all(20),
-        itemCount: users.length,
+        itemCount: apiData.length,
         itemBuilder: (context, index) {
-          final user = users[index];
+          final user = apiData[index];
+          final memberDto = user['memberDto'];
+          final memberImage = memberDto['memberImage'];
+
           return RankingCard(
-            name: user['name']!,
-            time: user['time']!,
-            imagePath: user['image']!,
+            name: memberDto['nickname'] ?? 'Unknown',
+            time: user['score'] ?? '00:00:00',
+            imageUrl: memberImage != null ? memberImage['url'] : null,
             rank: index + 1,
+            isActive: isActive,
           );
         },
       ),

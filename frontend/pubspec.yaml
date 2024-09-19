@@ -65,6 +65,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/images/auth/
+    - assets/images/medals/
     - .env
 
   fonts:
