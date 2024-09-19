@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 public class OfficialDetailResponseDto {
@@ -18,7 +19,7 @@ public class OfficialDetailResponseDto {
     private Long count;
     private int level;
     private int averageSlope;
-    private Time averageTime;
+    private LocalDateTime averageTime;
     private double courseLength;
     private double averageCalorie;
 

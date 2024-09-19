@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -20,7 +21,7 @@ public class Course {
     }
 
     @Builder
-    public Course(Long courseId, CourseImage courseImage, String name, String address, String content, Long count, int level, int averageSlope, int averageDownhill, Time averageTime, double courseLength, CourseType courseType, Timestamp registDate, double averageCalorie, String lat, String lng) {
+    public Course(Long courseId, CourseImage courseImage, String name, String address, String content, Long count, int level, int averageSlope, int averageDownhill, LocalDateTime averageTime, double courseLength, CourseType courseType, LocalDateTime registDate, double averageCalorie, String lat, String lng) {
         this.courseId = courseId;
         this.courseImage = courseImage;
         this.name = name;
@@ -71,7 +72,7 @@ public class Course {
     private int averageDownhill;
 
     @Column(name = "average_time")
-    private Time averageTime;
+    private LocalDateTime averageTime;
 
     @Column(name = "course_length")
     private double courseLength;
@@ -82,7 +83,7 @@ public class Course {
 
     @Column(name = "regist_date")
     @CreationTimestamp
-    private Timestamp registDate;
+    private LocalDateTime registDate;
 
     @Column(name = "average_calorie", nullable = false)
     private double averageCalorie;

@@ -42,6 +42,7 @@ springdoc:
 logging:
   level:
     org.hibernate.SQL: info
+    org.springframework.data.elasticsearch: DEBUG
 
 jwt:
   expiration_time: 3600000 #1시간
@@ -51,3 +52,8 @@ kakao:
   grant-type: authorization_code
   client-id: ${kakao-client-id}
   redirect-uri: ${kakao-redirect-uri}
+
+elasticsearch:
+  username: ${elastic-user-name}
+  password: ${elastic-password}
+
