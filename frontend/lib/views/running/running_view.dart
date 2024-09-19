@@ -5,6 +5,7 @@ import '../../widgets/map/geolocation.dart'; // geolocation.dart 파일을 impor
 import '../../widgets/map/map.dart'; // map.dart 파일을 import
 import '../../widgets/map/line.dart'; // line.dart 파일을 import
 import '../../widgets/map/result_map.dart'; // result_map.dart 파일을 import
+import '../../views/running/ranking_list_view.dart'; // result_map.dart 파일을 import
 import 'package:get/get.dart'; // result_map.dart 파일을 import
 
 class RunningView extends StatelessWidget {
@@ -36,6 +37,10 @@ class RunningView extends StatelessWidget {
 
   void _navigateToRunningMap() {
     Get.to(() => const RunningMap());
+  }
+
+  void _navigateToRankingListView() {
+    Get.to(() => RankingListView());
   }
 
   @override
@@ -73,6 +78,11 @@ class RunningView extends StatelessWidget {
               onPressed: () => _navigateToRunningMap(),
               // Navigates to the Polyline page
               child: const Text('Go to RunningMap'),
+            ),
+            ElevatedButton(
+              onPressed: () => _navigateToRankingListView(),
+              // Navigates to the RankingList page
+              child: const Text('Go to RankingList'),
             ),
           ],
         ),
