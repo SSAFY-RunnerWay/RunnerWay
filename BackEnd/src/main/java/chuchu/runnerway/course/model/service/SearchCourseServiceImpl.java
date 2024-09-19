@@ -28,27 +28,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
     public SelectAllResponseDto search(String searchWord, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "courseId"));
 
-//        List<ElasticSearchCourse> sd = elasticSearchCourseRepository.findByName(searchWord);
-//        List<SearchCourseResponseDto> searchCourseResponseDtoList = sd.stream().map(domain -> new SearchCourseResponseDto(
-//                domain.getCourseId(),
-//                domain.getName(),
-//                domain.getAddress(),
-//                domain.getContent(),
-//                domain.getCount(),
-//                domain.getLevel(),
-//                domain.getAverageSlope(),
-//                domain.getAverageDownhill(),
-//                domain.getAverageTime(),
-//                domain.getCourseLength(),
-//                domain.getMemberId(),
-//                domain.getCourseType(),
-//                domain.getRegistDate(),
-//                domain.getAverageCalorie(),
-//                domain.getLat(),
-//                domain.getLng()
-//        )).toList();
-
-        Page<ElasticSearchCourse> searchPage = elasticSearchCourseRepository.findByName(searchWord, pageable);
+        Page<ElasticSearchCourse> searchPage = elasticSearchCourseRepository.findByNameOrAddress(searchWord, searchWord, pageable);
 
         List<SearchCourseResponseDto> searchCourseResponseDtoList = searchPage.getContent().stream()
                 .map(domain -> new SearchCourseResponseDto(
