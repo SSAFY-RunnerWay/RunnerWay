@@ -1,8 +1,12 @@
 package chuchu.runnerway.runningRecord.model.service;
 
 import chuchu.runnerway.common.util.MemberInfo;
+import chuchu.runnerway.course.entity.Course;
 import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.repository.MemberRepository;
+import chuchu.runnerway.ranking.entity.Ranking;
+import chuchu.runnerway.ranking.model.repository.RankingRepository;
+import chuchu.runnerway.ranking.model.service.RankingService;
 import chuchu.runnerway.runningRecord.dto.request.RecordRegistRequestDto;
 import chuchu.runnerway.runningRecord.dto.request.RecordUpdateCommentRequestDto;
 import chuchu.runnerway.runningRecord.dto.request.RecordUpdatePictureRequestDto;
@@ -16,6 +20,7 @@ import chuchu.runnerway.runningRecord.model.repository.PersonalImageRepository;
 import chuchu.runnerway.runningRecord.model.repository.RunningRecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.webmvc.ui.SwaggerConfigResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +39,10 @@ public class RunningRecordServiceImpl implements RunningRecordService{
     private final RunningRecordMapper runningRecordMapper;
     private final MemberRepository memberRepository;
     private final PersonalImageRepository personalImageRepository;
+
+    private final RankingRepository rankingRepository;
+    private final SwaggerConfigResource swaggerConfigResource;
+
 
     @Override
     public List<RecordResponseDto> getRecords(int year, int month, Integer day) {
@@ -69,7 +78,7 @@ public class RunningRecordServiceImpl implements RunningRecordService{
 
     @Transactional
     @Override
-    public void registRecord(RecordRegistRequestDto requestDto) {
+    public boolean registRecord(RecordRegistRequestDto requestDto) {
         Long memberId = MemberInfo.getId();
         Member member = memberRepository.findById(memberId)
                         .orElseThrow(NoSuchElementException::new);
@@ -81,6 +90,9 @@ public class RunningRecordServiceImpl implements RunningRecordService{
         PersonalImage image = new PersonalImage();
         image.createPersonalImage(runningRecord, requestDto);
         personalImageRepository.save(image);
+
+        // 코스 랭킹 등록
+        return registRanking(runningRecord.getCourse(), runningRecord, requestDto.getLogPath());
     }
 
     @Transactional
@@ -105,4 +117,64 @@ public class RunningRecordServiceImpl implements RunningRecordService{
         runningRecordRepository.save(runningRecord);
     }
 
+    @Transactional
+    @Override
+    public boolean registRanking(Course course, RunningRecord runningRecord, String logPath) {
+        // 1. 코스에 대한 랭킹 조회
+        List<Ranking> rankings = rankingRepository.findByCourse_CourseIdOrderByScore(course.getCourseId());
+
+        // 현재 뛴 시간 조회
+        Time score = runningRecord.getScore();
+
+        // 예외처리 : 랭킹의 인원이 5명 이하일 시
+        Long memberId = MemberInfo.getId();
+        if(rankings.size() < 5){
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(NoSuchElementException::new);
+
+            // 만약 내 아이디가 존재한다면
+            Ranking myRanking = rankingRepository.findByCourse_CourseIdAndMember_MemberId(course.getCourseId(), memberId);
+            if(myRanking != null){
+                if(score.before(myRanking.getScore())){
+                    rankingRepository.deleteById(myRanking.getRankId());
+                }
+                else return false;
+            }
+
+            Ranking ranking = new Ranking();
+            ranking.createRanking(course, member, score, logPath);
+            rankingRepository.save(ranking);
+            return true;
+        }
+
+        else {
+            Ranking myRanking = rankingRepository.findByCourse_CourseIdAndMember_MemberId(course.getCourseId(), memberId);
+            // 랭킹에 인원이 다 차지 않았는데 내 기록이 존재하고 기록 갱신이라면
+            // 내 기록을 삭제하고 새로 갱신된 기록으로 대체
+            if(myRanking != null){
+                if(score.before(myRanking.getScore())){
+                    rankingRepository.deleteById(myRanking.getRankId());
+                    Member member = memberRepository.findById(memberId)
+                            .orElseThrow(NoSuchElementException::new);
+                    Ranking ranking = new Ranking();
+                    ranking.createRanking(course, member, score, logPath);
+                    rankingRepository.save(ranking);
+                    return true;
+                }
+                else return false;
+            }
+            if(score.before(rankings.get(rankings.size()-1).getScore())){
+                Member member = memberRepository.findById(memberId)
+                                .orElseThrow(NoSuchElementException::new);
+                rankingRepository.deleteById(rankings.get(rankings.size()-1).getRankId());
+                Ranking ranking = new Ranking();
+                ranking.createRanking(course, member, score, logPath);
+                log.info("path: {}", ranking.getPath());
+                rankingRepository.save(ranking);
+                return true;
+            }
+            return false;
+        }
+    }
+    
 }
