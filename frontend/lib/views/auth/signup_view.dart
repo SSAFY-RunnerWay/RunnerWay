@@ -7,16 +7,13 @@ class SignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(20.0), // 화면 전체 margin 20
+        padding: const EdgeInsets.all(20), // 화면 전체 margin 20
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 50,
-            ),
+            SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -30,17 +27,15 @@ class SignUpView extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 40,
-            ),
+            SizedBox(height: 40),
             // 회원가입 유저 이미지
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.account_circle_rounded,
-                  color: Color(0xFF1C1516),
-                  size: 90,
+                Image.asset(
+                  'assets/images/auth/defaultProfile.png',
+                  width: 100,
+                  height: 100,
                 ),
               ],
             ),
@@ -69,9 +64,7 @@ class SignUpView extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             // 텍스트필드가 보이도록 Expanded 사용
             Row(
               children: [
