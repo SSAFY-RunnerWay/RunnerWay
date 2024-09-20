@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.controller;
 
+import chuchu.runnerway.course.dto.response.MatchByWordResponseDto;
 import chuchu.runnerway.course.dto.response.SelectAllResponseDto;
 import chuchu.runnerway.course.model.service.SearchCourseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -35,6 +38,22 @@ public class SearchCourseController {
 
         return ResponseEntity.ok(selectAllResponseDtoList);
     }
+
+    @GetMapping("/candidate")
+    @Operation(summary = "검색어 매칭", description = "검색 자동완성에 사용하는 API")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "사용자가 입력한 단어와 일치하는 검색어 후보 조회",
+                    content = @Content(mediaType = "application/json")
+            ),
+    })
+    public ResponseEntity<?> matchByWord(@RequestParam("searchWord") String searchWord) {
+        List<MatchByWordResponseDto> matchByWordResponseDtoList = searchCourseService.matchByWord(searchWord);
+
+        return ResponseEntity.ok(matchByWordResponseDtoList);
+    }
+
 
     // 추후 스케줄링으로 변경할 api 입니다. 완성 후 지우겠슴다~
     @PostMapping
