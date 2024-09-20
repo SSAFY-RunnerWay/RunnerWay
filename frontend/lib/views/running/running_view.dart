@@ -49,6 +49,10 @@ class RunningView extends StatelessWidget {
     Get.to(() => ReviewDetailView());
   }
 
+  void _navigateToReviewWriteView() {
+    Get.to(() => ReviewWriteView());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,6 +98,11 @@ class RunningView extends StatelessWidget {
               onPressed: () => _navigateToReviewDetailView(),
               // Navigates to the RunningDetail page
               child: const Text('Go to ReviewDetail'),
+            ),
+            ElevatedButton(
+              onPressed: () => _navigateToReviewWriteView(),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to ReviewWrite'),
             ),
           ],
         ),

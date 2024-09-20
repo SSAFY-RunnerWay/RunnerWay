@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 // 임의의 지도 위젯 가져오기 (result_map.dart에서)
 import '../../widgets/map/result_map.dart';
 
 class ReviewDetailView extends StatelessWidget {
+  const ReviewDetailView({super.key});
   // 제목, 주소, 시간, 내용
   final String title = "유성천 옆 산책로";
   final String address = "대전광역시 문화원로 80";

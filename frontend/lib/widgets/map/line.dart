@@ -6,7 +6,8 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 void line() => runApp(MyLine());
 
 class MyLine extends StatelessWidget {
-  // This widget is the root of your application.
+  const MyLine({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,6 +30,8 @@ class MyLine extends StatelessWidget {
 }
 
 class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
   @override
   _MapScreenState createState() => _MapScreenState();
 }

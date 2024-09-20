@@ -5,10 +5,10 @@ class LocationPage extends StatefulWidget {
   const LocationPage({super.key});
 
   @override
-  _LocationPageState createState() => _LocationPageState();
+  LocationPageState createState() => LocationPageState();
 }
 
-class _LocationPageState extends State<LocationPage> {
+class LocationPageState extends State<LocationPage> {
   double? lat;
   double? lng;
   Location location = Location();
@@ -60,8 +60,8 @@ class _LocationPageState extends State<LocationPage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                child: const Text("Locate Me"),
                 onPressed: _locateMe,
+                child: const Text("Locate Me"),
               ),
             ),
           ],

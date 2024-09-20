@@ -7,8 +7,8 @@ import 'package:geolocator/geolocator.dart';
 
 /// Defines the main theme color.
 final MaterialColor themeMaterialColor =
-BaseflowPluginExample.createMaterialColor(
-    const Color.fromRGBO(48, 49, 60, 1));
+    BaseflowPluginExample.createMaterialColor(
+        const Color.fromRGBO(48, 49, 60, 1));
 
 void geolocation() {
   runApp(const GeolocatorWidget());
@@ -17,7 +17,7 @@ void geolocation() {
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
   /// Creates a new GeolocatorWidget.
-  const GeolocatorWidget({Key? key}) : super(key: key);
+  const GeolocatorWidget({super.key});
 
   /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
@@ -117,7 +117,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         pages: [
           ExamplePage(
             Icons.location_on,
-                (context) => Scaffold(
+            (context) => Scaffold(
               backgroundColor: Theme.of(context).colorScheme.surface,
               body: ListView.builder(
                 itemCount: _positionItems.length,
@@ -158,11 +158,11 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                     tooltip: (_positionStreamSubscription == null)
                         ? 'Start position updates'
                         : _positionStreamSubscription!.isPaused
-                        ? 'Resume'
-                        : 'Pause',
+                            ? 'Resume'
+                            : 'Pause',
                     backgroundColor: _determineButtonColor(),
                     child: (_positionStreamSubscription == null ||
-                        _positionStreamSubscription!.isPaused)
+                            _positionStreamSubscription!.isPaused)
                         ? const Icon(Icons.play_arrow)
                         : const Icon(Icons.pause),
                   ),
@@ -269,31 +269,31 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       final serviceStatusStream = _geolocatorPlatform.getServiceStatusStream();
       _serviceStatusStreamSubscription =
           serviceStatusStream.handleError((error) {
-            _serviceStatusStreamSubscription?.cancel();
-            _serviceStatusStreamSubscription = null;
-          }).listen((serviceStatus) {
-            String serviceStatusValue;
-            if (serviceStatus == ServiceStatus.enabled) {
-              if (positionStreamStarted) {
-                _toggleListening();
-              }
-              serviceStatusValue = 'enabled';
-            } else {
-              if (_positionStreamSubscription != null) {
-                setState(() {
-                  _positionStreamSubscription?.cancel();
-                  _positionStreamSubscription = null;
-                  _updatePositionList(
-                      _PositionItemType.log, 'Position Stream has been canceled');
-                });
-              }
-              serviceStatusValue = 'disabled';
-            }
-            _updatePositionList(
-              _PositionItemType.log,
-              'Location service has been $serviceStatusValue',
-            );
-          });
+        _serviceStatusStreamSubscription?.cancel();
+        _serviceStatusStreamSubscription = null;
+      }).listen((serviceStatus) {
+        String serviceStatusValue;
+        if (serviceStatus == ServiceStatus.enabled) {
+          if (positionStreamStarted) {
+            _toggleListening();
+          }
+          serviceStatusValue = 'enabled';
+        } else {
+          if (_positionStreamSubscription != null) {
+            setState(() {
+              _positionStreamSubscription?.cancel();
+              _positionStreamSubscription = null;
+              _updatePositionList(
+                  _PositionItemType.log, 'Position Stream has been canceled');
+            });
+          }
+          serviceStatusValue = 'disabled';
+        }
+        _updatePositionList(
+          _PositionItemType.log,
+          'Location service has been $serviceStatusValue',
+        );
+      });
     }
   }
 
@@ -304,9 +304,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
       }).listen((position) => _updatePositionList(
-        _PositionItemType.position,
-        position.toString(),
-      ));
+            _PositionItemType.position,
+            position.toString(),
+          ));
       _positionStreamSubscription?.pause();
     }
 
