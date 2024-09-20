@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
-// 임의의 지도 위젯 가져오기 (result_map.dart에서)
 import '../../widgets/map/result_map.dart';
+import '../../widgets/review_record_item.dart';
+import '../../widgets/review_info_item.dart';
 
 class ReviewDetailView extends StatelessWidget {
-  const ReviewDetailView({super.key});
-  // 제목, 주소, 시간, 내용
-  final String title = "유성천 옆 산책로";
-  final String address = "대전광역시 문화원로 80";
-  final String time = "2024-09-06 09:24:27";
-  final String content =
-      "오늘 날씨 너무 선선해!\n선선한 날씨에 뛰니까 10km도 뛸 수 있었당\n다음주에는 10km 1시간 내로 도전 !!!";
+  ReviewDetailView({super.key});
+
+  // 제목, 주소, 시간, 내용 등을 하나의 Map으로 관리
+  final Map<String, dynamic> details = {
+    'title': "유성천 옆 산책로",
+    'address': "대전광역시 문화원로 80",
+    'time': DateTime(2024, 9, 6, 9, 24, 27), // DateTime 객체
+    'image': '',
+    'content':
+        "오늘 날씨 너무 선선해!\n선선한 날씨에 뛰니까 10km도 뛸 수 있었당\n다음주에는 10km 1시간 내로 도전 !!!",
+  };
+
+  final List<num> records = const [10, 4016, 67, 480];
 
   @override
   Widget build(BuildContext context) {
@@ -36,43 +43,11 @@ class ReviewDetailView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // 제목과 시간, 주소
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            SizedBox(height: 6),
-                            Row(
-                              children: [
-                                Image.asset(
-                                  'assets/icons/location.png',
-                                  width: 20,
-                                  height: 20,
-                                ),
-                                SizedBox(width: 5),
-                                Expanded(
-                                  child: Text(
-                                    address,
-                                    style: TextStyle(
-                                        fontSize: 16, color: Color(0xffA0A0A0)),
-                                  ),
-                                ),
-                                Text(
-                                  time,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xffA0A0A0),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                        // LocationInfo 위젯 사용하여 데이터 표시
+                        LocationInfo(
+                          title: details['title'],
+                          address: details['address'],
+                          time: details['time'],
                         ),
                         SizedBox(height: 20),
                         // 러닝 사진
@@ -91,7 +66,7 @@ class ReviewDetailView extends StatelessWidget {
                         ),
                         SizedBox(height: 16),
                         Text(
-                          content,
+                          details['content'],
                           style: TextStyle(
                             fontSize: 16,
                             color: Color(0xffA0A0A0),
@@ -110,10 +85,12 @@ class ReviewDetailView extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            _buildDetailItem('10km', '운동 거리'),
-                            _buildDetailItem('01:06:56', '운동 시간'),
-                            _buildDetailItem('67%', '러닝 경사도'),
-                            _buildDetailItem('480kcal', '소모 칼로리'),
+                            ReviewRecordItem(value: records[0], label: '운동 거리'),
+                            ReviewRecordItem(value: records[1], label: '운동 시간'),
+                            ReviewRecordItem(
+                                value: records[2], label: '러닝 경사도'),
+                            ReviewRecordItem(
+                                value: records[3], label: '소모 칼로리'),
                           ],
                         ),
                         SizedBox(height: 44),
@@ -134,29 +111,6 @@ class ReviewDetailView extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildDetailItem(String value, String label) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w400,
-            color: Color(0xff1EA6FC),
-          ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            color: Color(0xffA0A0A0),
-          ),
-        ),
-      ],
     );
   }
 }
