@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/button/wide_button.dart';
+import 'package:frontend/widgets/modal/birth_modal.dart';
 
 class SignUpView extends StatelessWidget {
   const SignUpView({super.key});
@@ -7,6 +8,8 @@ class SignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController _nicknameController = TextEditingController();
+    final TextEditingController _dateController =
+        TextEditingController(); // 생년월일 입력을 위한 컨트롤러
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20), // 화면 전체 margin 20
@@ -40,9 +43,7 @@ class SignUpView extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 40,
-            ),
+            SizedBox(height: 40),
             // 회원가입 폼 시작
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -95,9 +96,7 @@ class SignUpView extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 35,
-            ),
+            SizedBox(height: 35),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -111,6 +110,8 @@ class SignUpView extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 10),
+            BirthModal(birthController: _dateController),
           ],
         ),
       ),
