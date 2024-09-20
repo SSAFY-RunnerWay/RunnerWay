@@ -28,7 +28,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
     public SelectAllResponseDto search(String searchWord, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "courseId"));
 
-        Page<ElasticSearchCourse> searchPage = elasticSearchCourseRepository.findByNameOrAddress(searchWord, searchWord, pageable);
+        Page<ElasticSearchCourse> searchPage = elasticSearchCourseRepository.findByNameOrAddressOrMemberNickname(searchWord, searchWord, searchWord, pageable);
 
         List<SearchCourseResponseDto> searchCourseResponseDtoList = searchPage.getContent().stream()
                 .map(domain -> new SearchCourseResponseDto(
@@ -43,6 +43,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
                         domain.getAverageTime(),
                         domain.getCourseLength(),
                         domain.getMemberId(),
+                        domain.getMemberNickname(),
                         domain.getCourseType(),
                         domain.getRegistDate(),
                         domain.getAverageCalorie(),
@@ -81,6 +82,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
                         domain.getAverageTime(),
                         domain.getCourseLength(),
                         domain.getMember().getMemberId(),
+                        domain.getMember().getNickname(),
                         domain.getCourseType(),
                         domain.getRegistDate(),
                         domain.getAverageCalorie(),

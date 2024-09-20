@@ -7,5 +7,5 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 
 public interface ElasticSearchCourseRepository extends ElasticsearchRepository<ElasticSearchCourse, Long> {
-    Page<ElasticSearchCourse> findByNameOrAddress(String name, String address, Pageable pageable);
+    Page<ElasticSearchCourse> findByNameOrAddressOrMemberNickname(String name, String address, String memberNickname, Pageable pageable);
 }
