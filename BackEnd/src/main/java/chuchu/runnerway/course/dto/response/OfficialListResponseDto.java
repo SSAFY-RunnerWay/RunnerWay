@@ -14,7 +14,8 @@ public class OfficialListResponseDto {
     private Long count;
     private int level;
     private double courseLength;
-
+    private double lat;
+    private double lng;
     private CourseImageDto courseImage;
 
 }
