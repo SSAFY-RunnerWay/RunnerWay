@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:frontend/widgets/course/course_card.dart';
 import 'package:frontend/widgets/search_condition.dart';
 import 'package:frontend/widgets/under_bar.dart';
+import 'package:get/get.dart';
+import '../../controllers/main_controller.dart';
 import 'widget/search_bar.dart';
 
 class MainView extends StatelessWidget {
-  const MainView({super.key});
+  final MainController controller = Get.put(MainController());
 
   @override
   Widget build(BuildContext context) {
