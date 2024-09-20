@@ -1,5 +1,5 @@
 class Course {
-  final String name;
+  final String title;
   final String imageUrl;
   final double distance;
   final String level;
@@ -7,7 +7,7 @@ class Course {
   final int participants;
 
   Course({
-    required this.name,
+    required this.title,
     required this.imageUrl,
     required this.distance,
     required this.level,
@@ -18,7 +18,7 @@ class Course {
   // JSON 데이터를 파싱하여 Course 객체 생성
   factory Course.fromJson(Map<String, dynamic> json) {
     return Course(
-      name: json['name'],
+      title: json['title'],
       imageUrl: json['imageUrl'],
       distance: json['distance'].toDouble(),
       level: json['level'],

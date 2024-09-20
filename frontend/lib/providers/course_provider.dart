@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../../models/course/course.dart';
+import '../models/course/course.dart';
 
 class CourseProvider extends GetConnect {
   // 공식 코스 리스트 가져오기
