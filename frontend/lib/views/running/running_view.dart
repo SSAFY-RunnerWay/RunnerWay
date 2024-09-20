@@ -6,7 +6,8 @@ import '../../widgets/map/map.dart'; // map.dart 파일을 import
 import '../../widgets/map/line.dart'; // line.dart 파일을 import
 import '../../widgets/map/result_map.dart'; // result_map.dart 파일을 import
 import 'ranking_list_view.dart'; // result_map.dart 파일을 import
-import 'running_detail_view.dart'; // result_map.dart 파일을 import
+import 'review_detail_view.dart'; // result_map.dart 파일을 import
+import 'review_write_view.dart'; // result_map.dart 파일을 import
 import 'package:get/get.dart'; // result_map.dart 파일을 import
 
 class RunningView extends StatelessWidget {
@@ -44,8 +45,8 @@ class RunningView extends StatelessWidget {
     Get.to(() => RankingListView());
   }
 
-  void _navigateToRunningDetailView() {
-    Get.to(() => RunningDetailView());
+  void _navigateToReviewDetailView() {
+    Get.to(() => ReviewDetailView());
   }
 
   @override
@@ -90,9 +91,9 @@ class RunningView extends StatelessWidget {
               child: const Text('Go to RankingList'),
             ),
             ElevatedButton(
-              onPressed: () => _navigateToRunningDetailView(),
+              onPressed: () => _navigateToReviewDetailView(),
               // Navigates to the RunningDetail page
-              child: const Text('Go to RunningDetail'),
+              child: const Text('Go to ReviewDetail'),
             ),
           ],
         ),
