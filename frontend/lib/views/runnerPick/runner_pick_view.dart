@@ -7,7 +7,9 @@ class RunnerPickView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView(
-      child: Container(color: Colors.black),
+      child: Center(
+        child: Text('Runner Pick Page'),
+      ),
     );
   }
 }
