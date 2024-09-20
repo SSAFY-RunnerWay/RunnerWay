@@ -13,5 +13,7 @@ public class UserListResponseDto {
     private double courseLength;
     private double distance;
     private String url;
+    private double lat;
+    private double lng;
     private CourseImageDto courseImage;
 }

@@ -22,7 +22,8 @@ public class OfficialDetailResponseDto {
     private LocalDateTime averageTime;
     private double courseLength;
     private double averageCalorie;
-
+    private double lat;
+    private double lng;
     private CourseImageDto courseImage;
 
 
