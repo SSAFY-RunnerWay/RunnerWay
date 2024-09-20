@@ -41,7 +41,7 @@ class RankingCard extends StatelessWidget {
                       ),
                       child: ClipRRect(
                         child: Image.network(
-                          imageUrl ?? 'assets/images/auth/defaultProfile.png',
+                          imageUrl ?? 'assets/images/auth/default_profile.png',
                           width: 60,
                           height: 60,
                           fit: BoxFit.cover,
@@ -55,7 +55,7 @@ class RankingCard extends StatelessWidget {
                             ),
                             child: ClipRRect(
                               child: Image.asset(
-                                'assets/images/auth/defaultProfile.png',
+                                'assets/images/auth/default_profile.png',
                                 fit: BoxFit.cover,
                               ),
                             ),

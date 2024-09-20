@@ -6,6 +6,7 @@ class SignUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController _nicknameController = TextEditingController();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20), // 화면 전체 margin 20
@@ -33,7 +34,7 @@ class SignUpView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/images/auth/defaultProfile.png',
+                  'assets/images/auth/default_profile.png',
                   width: 100,
                   height: 100,
                 ),
@@ -70,10 +71,26 @@ class SignUpView extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: _nicknameController,
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: '닉네임을 입력하세요',
+                      border: InputBorder.none,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(22),
+                        borderSide: BorderSide(color: Colors.black12),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(22),
+                        borderSide: BorderSide(color: Colors.blueAccent),
+                      ),
+                      filled: true,
+                      hintText: '  닉네임 (2~8자)',
+                      hintStyle: TextStyle(
+                        color: Color(0xFF72777A),
+                      ),
+                      fillColor: Color(0xFFE3E5E5).withOpacity(0.4),
                     ),
+                    cursorColor: Colors.blueAccent,
+                    cursorErrorColor: Colors.red,
                   ),
                 ),
               ],
