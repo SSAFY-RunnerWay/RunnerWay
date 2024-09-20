@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'dart:async';
 
 class RunningMap extends StatefulWidget {
   const RunningMap({super.key});
@@ -10,9 +11,7 @@ class RunningMap extends StatefulWidget {
 }
 
 class _RunningMapState extends State<RunningMap> {
-  // 현재 위치를 저장할 변수
   LatLng? myCurrentLocation;
-  // 초기 지도 중심 좌표
   LatLng? mapCenter;
 
   Set<Marker> markers = {};
@@ -24,15 +23,16 @@ class _RunningMapState extends State<RunningMap> {
   bool isLocationEnabled = false;
 
   List<LatLng> pointOnMap = [];
+  StreamSubscription<LocationData>? _locationSubscription; // 스트림 구독 변수 추가
 
   @override
   void initState() {
     super.initState();
     _locateMe(); // 페이지 진입 시 위치 권한 요청 및 위치 추적 시작
-    // _setPolylineAndMarkers();
   }
 
   void _updatePolyline() {
+    if (!mounted) return; // mounted 체크
     setState(() {
       _polyline.clear();
       _polyline.add(
@@ -68,28 +68,9 @@ class _RunningMapState extends State<RunningMap> {
       isLocationEnabled = true;
     });
 
-    // 위치가 변경될 때마다 현재 위치 저장 및 마커 업데이트
-    location.onLocationChanged.listen((res) {
-      setState(() {
-        myCurrentLocation = LatLng(res.latitude!, res.longitude!);
-        mapCenter = myCurrentLocation;
-
-        // 현재 위치에 마커 추가
-        // markers.add(
-        //   Marker(
-        //     markerId: const MarkerId("current"),
-        //     position: myCurrentLocation!,
-        //     infoWindow: const InfoWindow(
-        //       title: "My Current Location",
-        //     ),
-        //     icon: BitmapDescriptor.defaultMarkerWithHue(
-        //         BitmapDescriptor.hueGreen),
-        //   ),
-        // );
-      });
-    });
-
-    location.onLocationChanged.listen((res) {
+    // 위치 변경 스트림 구독
+    _locationSubscription = location.onLocationChanged.listen((res) {
+      if (!mounted) return; // mounted 체크
       setState(() {
         myCurrentLocation = LatLng(res.latitude!, res.longitude!);
         mapCenter = myCurrentLocation;
@@ -105,6 +86,8 @@ class _RunningMapState extends State<RunningMap> {
 
   // 지도에 마커 및 폴리라인 설정
   void _setPolylineAndMarkers() {
+    if (pointOnMap.isEmpty) return;
+
     markers.add(
       Marker(
         markerId: const MarkerId("start"),
@@ -129,6 +112,7 @@ class _RunningMapState extends State<RunningMap> {
       ),
     );
 
+    if (!mounted) return; // mounted 체크
     setState(() {
       _polyline.add(
         Polyline(
@@ -138,6 +122,12 @@ class _RunningMapState extends State<RunningMap> {
         ),
       );
     });
+  }
+
+  @override
+  void dispose() {
+    _locationSubscription?.cancel(); // 스트림 구독 취소
+    super.dispose();
   }
 
   @override
