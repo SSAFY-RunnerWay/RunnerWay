@@ -4,6 +4,7 @@ import 'package:frontend/widgets/search_condition.dart';
 import 'package:frontend/widgets/under_bar.dart';
 import 'package:get/get.dart';
 import '../../controllers/main_controller.dart';
+import '../base_view.dart';
 import 'widget/search_bar.dart';
 
 class MainView extends StatelessWidget {
@@ -11,16 +12,18 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return BaseView(
+      child: Column(
         children: [
           // SearchBar
           Container(
             padding: EdgeInsets.all(20),
-            child: Column(children: [
-              CourseSearchBar(),
-              SizedBox(height: 5),
-            ]),
+            child: Column(
+              children: [
+                CourseSearchBar(),
+                SizedBox(height: 5),
+              ],
+            ),
           ),
 
           // Runner들의 Pick
@@ -155,13 +158,14 @@ class MainView extends StatelessWidget {
                       },
                     ),
                   ),
+                  SizedBox(height: 50),
                 ],
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: UnderBar(),
+      // bottomNavigationBar: UnderBar(),
     );
   }
 }
