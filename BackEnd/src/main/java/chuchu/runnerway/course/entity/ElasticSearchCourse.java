@@ -47,10 +47,14 @@ public class ElasticSearchCourse {
     private double courseLength;
 
     // 코스 작성자
-    @Field(type = FieldType.Long, name = "memberId")
+    @Field(type = FieldType.Long, name = "member_id")
     private Long memberId;
 
-    @Field(type = FieldType.Keyword, name = "courseType")
+    // 코스 작성자 닉네임
+    @Field(type = FieldType.Text, name = "member_nickname")
+    private String memberNickname;
+
+    @Field(type = FieldType.Keyword, name = "course_type")
     private CourseType courseType;
 
     @Field(type = FieldType.Date, name = "regist_date", format = DateFormat.date_hour_minute_second)
