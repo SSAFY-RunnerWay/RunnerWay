@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class RusultMap extends StatefulWidget {
-  const RusultMap({super.key});
+class ResultMap extends StatefulWidget {
+  const ResultMap({super.key});
 
   @override
-  State<RusultMap> createState() => _RusultMap();
+  State<ResultMap> createState() => _ResultMap();
 }
 
-class _RusultMap extends State<RusultMap> {
+class _ResultMap extends State<ResultMap> {
   LatLng myCurrentLocation = const LatLng(36.35665, 127.321678);
 
   Set<Marker> markers = {};
