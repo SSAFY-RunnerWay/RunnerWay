@@ -98,44 +98,65 @@ class MainView extends StatelessWidget {
           ),
 
           // 오늘의 추천 코스 container
-          Padding(
-            padding: EdgeInsets.all(20), // Horizontal padding only
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start, // Left-align the text
-              mainAxisAlignment: MainAxisAlignment.start, // Align to the top
-              children: [
-                // title
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '오늘의 ',
-                      style: TextStyle(
-                        fontWeight:
-                            FontWeight.w700, // Add some styling if needed
-                        fontSize: 22, // Adjust the size if necessary
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // title
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '오늘의 ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 22),
                       ),
-                    ),
-                    Text(
-                      '추천코스',
-                      style: TextStyle(
-                        fontWeight:
-                            FontWeight.w400, // Add some styling if needed
-                        fontSize: 22, // Adjust the size if necessary
+                      Text(
+                        '추천코스',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 22,
+                        ),
                       ),
+                    ],
+                  ),
+
+                  // 검색 조건 위젯
+                  SizedBox(height: 15),
+                  SearchCondition(),
+
+                  // 메인 화면 추천 코스 리스트
+                  SizedBox(height: 20),
+                  Expanded(
+                    child: Obx(
+                      () {
+                        if (controller.isLoading.value) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        if (controller.courses.isEmpty) {
+                          return Center(
+                            child: Text('추천 코스가 없습니다.'),
+                          );
+                        }
+
+                        return ListView.builder(
+                          itemCount: controller.courses.length,
+                          itemBuilder: (context, index) {
+                            return CourseCard(
+                                course: controller.courses[index]);
+                          },
+                        );
+                      },
                     ),
-                  ],
-                ),
-
-                // 검색 조건 위젯
-                SizedBox(height: 15),
-                SearchCondition(),
-
-                // 메인 화면 추천 코스 리스트
-                SizedBox(height: 18),
-                CourseCard(),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

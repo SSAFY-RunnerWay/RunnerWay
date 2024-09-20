@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/course.dart';
 
 class CourseCard extends StatelessWidget {
-  // final Course course;
-  //
-  // CourseCard({required this.course});
+  final Course course;
+
+  CourseCard({required this.course});
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.only(bottom: 15),
       color: Colors.white,
       elevation: 0,
       child: Row(
