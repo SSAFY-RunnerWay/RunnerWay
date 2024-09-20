@@ -64,6 +64,9 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/images/main/
+    - assets/images/temp/
+    - assets/images/course/
     - assets/images/auth/
     - assets/images/medals/
     - .env

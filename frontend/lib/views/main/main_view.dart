@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/course/course_card.dart';
 import 'package:frontend/widgets/search_condition.dart';
 import 'package:frontend/widgets/under_bar.dart';
 import 'widget/search_bar.dart';
@@ -27,7 +28,7 @@ class MainView extends StatelessWidget {
                 // Stack을 Expanded로 감싸 남은 공간을 차지하게 함
                 Positioned(
                   child: Image.asset(
-                    'assets/images/running.png',
+                    'assets/images/main/running.png',
                   ),
                 ),
                 Positioned(
@@ -130,7 +131,8 @@ class MainView extends StatelessWidget {
                 SearchCondition(),
 
                 // 메인 화면 추천 코스 리스트
-                SizedBox(height: 15),
+                SizedBox(height: 18),
+                CourseCard(),
               ],
             ),
           ),

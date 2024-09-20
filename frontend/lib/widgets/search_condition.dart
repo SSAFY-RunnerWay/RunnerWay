@@ -17,33 +17,37 @@ class SearchCondition extends StatelessWidget {
             borderRadius: BorderRadius.circular(14),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: DropdownButton<String>(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              value: controller.sortCondition.value,
-              items: <String>['인기순', '거리순'].map<DropdownMenuItem<String>>(
-                (String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: TextStyle(color: Color(0xffE8E8E8), fontSize: 16),
-                    ),
-                  );
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            child: ButtonTheme(
+              padding: EdgeInsets.symmetric(vertical: 0),
+              child: DropdownButton<String>(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                value: controller.sortCondition.value,
+                items: <String>['인기순', '거리순'].map<DropdownMenuItem<String>>(
+                  (String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style:
+                            TextStyle(color: Color(0xffE8E8E8), fontSize: 16),
+                      ),
+                    );
+                  },
+                ).toList(),
+                icon: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: Color(0xffE8E8E8),
+                ),
+                onChanged: (String? newCondition) {
+                  controller.updateSortCondition(newCondition!);
+                  // TODO: 검색 기준 바뀌는 경우, 다시 정렬
                 },
-              ).toList(),
-              icon: Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: Color(0xffE8E8E8),
+                dropdownColor: Color(0xff1C1516),
+                underline: Container(),
+                focusColor: Color(0xff1C1516),
+                borderRadius: BorderRadius.circular(14),
               ),
-              onChanged: (String? newCondition) {
-                controller.updateSortCondition(newCondition!);
-                // TODO: 검색 기준 바뀌는 경우, 다시 정렬
-              },
-              dropdownColor: Color(0xff1C1516),
-              underline: Container(),
-              focusColor: Color(0xff1C1516),
-              borderRadius: BorderRadius.circular(14),
             ),
           ),
         ),
@@ -128,7 +132,7 @@ class SearchCondition extends StatelessWidget {
           // TODO : 현위치로 정렬하기
         },
         icon: Image.asset(
-          'assets/images/gps.png',
+          'assets/images/main/gps.png',
           width: 30,
         ),
       ),
