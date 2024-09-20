@@ -124,7 +124,7 @@ class RankingCard extends StatelessWidget {
     switch (rank) {
       case 1:
         return Image.asset(
-          'assets/images/medals/goldmedal.png',
+          'assets/images/medals/gold_medal.png',
           width: 38,
           height: 30,
           fit: BoxFit.cover,
@@ -132,7 +132,7 @@ class RankingCard extends StatelessWidget {
         break;
       case 2:
         return Image.asset(
-          'assets/images/medals/silvermedal.png',
+          'assets/images/medals/silver_medal.png',
           width: 38,
           height: 30,
           fit: BoxFit.cover,
@@ -140,7 +140,7 @@ class RankingCard extends StatelessWidget {
         break;
       case 3:
         return Image.asset(
-          'assets/images/medals/bronzemedal.png',
+          'assets/images/medals/bronze_medal.png',
           width: 38,
           height: 30,
           fit: BoxFit.cover,
