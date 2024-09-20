@@ -10,12 +10,15 @@ class BirthModal extends StatelessWidget {
   void _selectDate(BuildContext context) async {
     DateTime? tempPickedDate = DateTime.now();
 
-    // Cupertino DatePicker를 사용한 모달 바텀 시트 구현
+    // 하단 달력
     DateTime? pickedDate = await showModalBottomSheet<DateTime>(
       context: context,
       builder: (BuildContext context) {
         return Container(
           height: 300,
+          decoration: BoxDecoration(
+            color: Colors.white,
+          ),
           child: Column(
             children: <Widget>[
               Container(
@@ -23,11 +26,23 @@ class BirthModal extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     CupertinoButton(
-                      child: Text('취소'),
+                      child: Text(
+                        '취소',
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 15,
+                        ),
+                      ),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                     CupertinoButton(
-                      child: Text('완료'),
+                      child: Text(
+                        '완료',
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 15,
+                        ),
+                      ),
                       onPressed: () {
                         Navigator.of(context).pop(tempPickedDate);
                       },
@@ -43,7 +58,7 @@ class BirthModal extends StatelessWidget {
                   onDateTimeChanged: (DateTime dateTime) {
                     tempPickedDate = dateTime;
                   },
-                  minimumYear: 1900,
+                  minimumYear: 1930,
                   maximumYear: DateTime.now().year,
                   maximumDate: DateTime.now(),
                 ),
@@ -65,7 +80,7 @@ class BirthModal extends StatelessWidget {
     return TextFormField(
       controller: birthController,
       decoration: InputDecoration(
-        hintText: 'YYYY-MM-DD',
+        hintText: '  YYYY-MM-DD',
         hintStyle: TextStyle(
           color: Color(0xFF72777A),
         ),

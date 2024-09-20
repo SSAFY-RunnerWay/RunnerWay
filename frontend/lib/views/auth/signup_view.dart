@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/button/wide_button.dart';
 import 'package:frontend/widgets/modal/birth_modal.dart';
+import 'package:frontend/views/auth/signup_input.dart';
 
 class SignUpView extends StatelessWidget {
   const SignUpView({super.key});
@@ -10,7 +11,19 @@ class SignUpView extends StatelessWidget {
     final TextEditingController _nicknameController = TextEditingController();
     final TextEditingController _dateController =
         TextEditingController(); // 생년월일 입력을 위한 컨트롤러
+    final double screenWidth = MediaQuery.of(context).size.width; // 화면 전체 크기
+
     return Scaffold(
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        centerTitle: true,
+        title: Text(
+          '회원가입',
+          style: TextStyle(fontSize: 20, color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        toolbarHeight: 56,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20), // 화면 전체 margin 20
         child: Column(
@@ -18,29 +31,18 @@ class SignUpView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '회원가입',
-                  style: TextStyle(
-                    color: Color(0xFF1C1516),
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 40),
             // 회원가입 유저 이미지
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/auth/default_profile.png',
-                  width: 100,
-                  height: 100,
-                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image.asset(
+                    'assets/images/auth/default_profile.png',
+                    width: 90,
+                    height: 90,
+                  ),
+                )
               ],
             ),
             SizedBox(height: 40),
@@ -67,7 +69,6 @@ class SignUpView extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10),
-            // 텍스트필드가 보이도록 Expanded 사용
             Row(
               children: [
                 Expanded(
@@ -111,7 +112,19 @@ class SignUpView extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10),
+            // 생년월일 달력 modal
             BirthModal(birthController: _dateController),
+            // 키 몸무게 input
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: screenWidth / 6),
+                  child: SignupInput(inputType: 'height'),
+                ),
+                SignupInput(inputType: 'weight'),
+              ],
+            )
           ],
         ),
       ),
