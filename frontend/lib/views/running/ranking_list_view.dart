@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../widgets/ranking_card.dart'; // RankingCard 위젯을 import
 
 class RankingListView extends StatelessWidget {
+  RankingListView({super.key});
+
   // API 데이터 예시
   final List<Map<String, dynamic>> apiData = [
     {

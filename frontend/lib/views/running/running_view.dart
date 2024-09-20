@@ -5,7 +5,9 @@ import '../../widgets/map/geolocation.dart'; // geolocation.dart 파일을 impor
 import '../../widgets/map/map.dart'; // map.dart 파일을 import
 import '../../widgets/map/line.dart'; // line.dart 파일을 import
 import '../../widgets/map/result_map.dart'; // result_map.dart 파일을 import
-import '../../views/running/ranking_list_view.dart'; // result_map.dart 파일을 import
+import 'ranking_list_view.dart'; // result_map.dart 파일을 import
+import 'review_detail_view.dart'; // result_map.dart 파일을 import
+import 'review_write_view.dart'; // result_map.dart 파일을 import
 import 'package:get/get.dart'; // result_map.dart 파일을 import
 
 class RunningView extends StatelessWidget {
@@ -32,7 +34,7 @@ class RunningView extends StatelessWidget {
   }
 
   void _navigateToRusultMap() {
-    Get.to(() => const RusultMap());
+    Get.to(() => const ResultMap());
   }
 
   void _navigateToRunningMap() {
@@ -41,6 +43,14 @@ class RunningView extends StatelessWidget {
 
   void _navigateToRankingListView() {
     Get.to(() => RankingListView());
+  }
+
+  void _navigateToReviewDetailView() {
+    Get.to(() => ReviewDetailView());
+  }
+
+  void _navigateToReviewWriteView() {
+    Get.to(() => ReviewWriteView());
   }
 
   @override
@@ -83,6 +93,16 @@ class RunningView extends StatelessWidget {
               onPressed: () => _navigateToRankingListView(),
               // Navigates to the RankingList page
               child: const Text('Go to RankingList'),
+            ),
+            ElevatedButton(
+              onPressed: () => _navigateToReviewDetailView(),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to ReviewDetail'),
+            ),
+            ElevatedButton(
+              onPressed: () => _navigateToReviewWriteView(),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to ReviewWrite'),
             ),
           ],
         ),
