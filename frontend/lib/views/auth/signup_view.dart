@@ -8,7 +8,7 @@ class SignUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _nicknameController = TextEditingController();
+    // final TextEditingController _nicknameController = TextEditingController();
     final TextEditingController _dateController =
         TextEditingController(); // 생년월일 입력을 위한 컨트롤러
     final double screenWidth = MediaQuery.of(context).size.width; // 화면 전체 크기
@@ -27,8 +27,6 @@ class SignUpView extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(20), // 화면 전체 margin 20
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 50),
             // 회원가입 유저 이미지
@@ -73,7 +71,7 @@ class SignUpView extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
-                    controller: _nicknameController,
+                    // controller: _nicknameController,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       enabledBorder: OutlineInputBorder(
@@ -99,7 +97,6 @@ class SignUpView extends StatelessWidget {
             ),
             SizedBox(height: 35),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   '생년월일',
@@ -116,7 +113,6 @@ class SignUpView extends StatelessWidget {
             BirthModal(birthController: _dateController),
             // 키 몸무게 input
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
                   padding: EdgeInsets.only(right: screenWidth / 6),
@@ -124,6 +120,42 @@ class SignUpView extends StatelessWidget {
                 ),
                 SignupInput(inputType: 'weight'),
               ],
+            ),
+            SizedBox(height: 35),
+            Row(
+              children: [
+                Text(
+                  '성별',
+                  style: TextStyle(
+                    color: Color(0xFF1C1516),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 10),
+            Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                color: Color(0xFFE3E5E5).withOpacity(0.3),
+                border: Border.all(
+                  color: Color(0xFFE3E5E5).withOpacity(0.8),
+                ),
+                borderRadius: BorderRadius.circular(55),
+              ),
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/auth/woman_no.png',
+                    width: 80,
+                    height: 80,
+                  ),
+                ],
+              ),
             )
           ],
         ),
