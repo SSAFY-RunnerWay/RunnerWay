@@ -1,10 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import '../controllers/search_condition_controller.dart';
+import '../controllers/filter_controller.dart';
 
-class SearchCondition extends StatelessWidget {
-  final SearchConditionController controller =
-      Get.put(SearchConditionController());
+class FilterCondition extends StatelessWidget {
+  final FilterController controller = Get.put(FilterController());
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,8 @@ class SearchCondition extends StatelessWidget {
               child: DropdownButton<String>(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 value: controller.sortCondition.value,
-                items: <String>['인기순', '거리순'].map<DropdownMenuItem<String>>(
+                items:
+                    <String>['추천순', '인기순', '거리순'].map<DropdownMenuItem<String>>(
                   (String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -141,7 +141,7 @@ class SearchCondition extends StatelessWidget {
 }
 
 class ConditionDialog extends StatelessWidget {
-  final SearchConditionController controller;
+  final FilterController controller;
   final String conditionType;
 
   ConditionDialog({required this.controller, required this.conditionType});

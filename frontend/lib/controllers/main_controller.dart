@@ -1,22 +1,30 @@
 // controllers/main_controller.dart
 import 'dart:developer';
 
+import 'package:frontend/controllers/filter_controller.dart';
+import 'package:frontend/services/course_service.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:frontend/models/course.dart';
-import 'package:frontend/repositories/course_repository.dart';
 
 class MainController extends GetxController {
   var currentPosition = Rxn<Position>(); // 현재 위치 정보를 관리
   var courses = <Course>[].obs; // 코스 리스트
   var isLoading = true.obs; // 로딩 상태 관리
+  var filteredCourses = <Course>[].obs; // 필터링 및 정렬된 코스 결과
 
-  final CourseRepository _repository = CourseRepository();
+  final CourseService _courseService = CourseService();
+  final FilterController filterController = Get.find<FilterController>();
 
   @override
   void onInit() {
     super.onInit();
     _getCurrentLocation();
+
+    //초기에 filteredCourses를 courses로 세팅
+    ever(courses, (_) {
+      filteredCourses.assignAll(courses);
+    });
 
     // currentPosition이 변경될 때마다 로그를 출력
     ever(currentPosition, (Position? pos) {
@@ -72,7 +80,7 @@ class MainController extends GetxController {
     isLoading(true);
     try {
       final fetchedCourses =
-          await _repository.getOfficialCourses(latitude, longitude);
+          await _courseService.getCoursesWithDistance(currentPosition.value!);
 
       courses.assignAll(fetchedCourses); // 코스 데이터 업데이트
     } catch (e) {
@@ -80,5 +88,33 @@ class MainController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  // 코스 리스트 업데이트 함수
+  void updateCourseList() {
+    var filteredList = courses.toList();
+
+    // 정렬 기준에 맞게 정렬
+    switch (filterController.sortCondition.value) {
+      case '인기순':
+        // 인기순인 경우, count가 큰 순서로 정렬
+        filteredList.sort((a, b) => b.count.compareTo(a.count));
+        break;
+      case '거리순':
+        // 거리순인 경우, distance가 작은 순서로 정렬
+        filteredList.sort((a, b) {
+          if (a.distance == null && b.distance == null) return 0;
+          if (a.distance == null) return 1; // distance가 null인 코스는 뒤로
+          if (b.distance == null) return -1;
+          return a.distance!.compareTo(b.distance!);
+        });
+        break;
+      default:
+        // 추천순인 경우 정렬 구현 x
+        break;
+    }
+
+    // 필터링 및 정렬된 리스트 업데이트
+    filteredCourses.assignAll(filteredList);
   }
 }

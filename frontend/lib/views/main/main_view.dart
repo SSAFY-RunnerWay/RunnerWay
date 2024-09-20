@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/course/course_card.dart';
-import 'package:frontend/widgets/search_condition.dart';
-import 'package:frontend/widgets/under_bar.dart';
+import 'package:frontend/widgets/filter_condition.dart';
 import 'package:get/get.dart';
+import '../../controllers/filter_controller.dart';
 import '../../controllers/main_controller.dart';
 import '../base_view.dart';
 import 'widget/search_bar.dart';
 
 class MainView extends StatelessWidget {
-  final MainController controller = Get.put(MainController());
+  // filtercontroller 먼저 등록
+  final FilterController filterController = Get.put(FilterController());
+  final MainController mainController = Get.put(MainController());
 
   @override
   Widget build(BuildContext context) {
@@ -129,30 +131,30 @@ class MainView extends StatelessWidget {
 
                   // 검색 조건 위젯
                   SizedBox(height: 15),
-                  SearchCondition(),
+                  FilterCondition(),
 
                   // 메인 화면 추천 코스 리스트
                   SizedBox(height: 20),
                   Expanded(
                     child: Obx(
                       () {
-                        if (controller.isLoading.value) {
+                        if (mainController.isLoading.value) {
                           return Center(
                             child: CircularProgressIndicator(),
                           );
                         }
 
-                        if (controller.courses.isEmpty) {
+                        if (mainController.courses.isEmpty) {
                           return Center(
                             child: Text('추천 코스가 없습니다.'),
                           );
                         }
 
                         return ListView.builder(
-                          itemCount: controller.courses.length,
+                          itemCount: mainController.filteredCourses.length,
                           itemBuilder: (context, index) {
                             return CourseCard(
-                                course: controller.courses[index]);
+                                course: mainController.filteredCourses[index]);
                           },
                         );
                       },
