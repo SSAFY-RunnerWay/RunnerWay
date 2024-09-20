@@ -18,7 +18,7 @@ class CourseCard extends StatelessWidget {
           // 코스 이미지
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            // TODO: API 데이터 연결
+            // TODO: 이미지 테스트
             // child: Image.network(src),
             child: Image.asset(
               'assets/images/temp/course1.png',
@@ -44,7 +44,7 @@ class CourseCard extends StatelessWidget {
                   children: [
                     // 코스 제목
                     Text(
-                      '유성천 옆 산책로',
+                      course.name,
                       style: TextStyle(
                         fontSize: 16,
                       ),
@@ -56,7 +56,7 @@ class CourseCard extends StatelessWidget {
 
                     // 거리 정보
                     Text(
-                      '2.8km',
+                      '${(course.courseLength * 10).round() / 10} km',
                       style: TextStyle(
                         fontSize: 12,
                         color: Color(0xffA0A0A0),
@@ -70,12 +70,21 @@ class CourseCard extends StatelessWidget {
                   margin: EdgeInsets.only(top: 6),
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                   decoration: BoxDecoration(
-                      color: Color(0xffFFF7F7),
-                      borderRadius: BorderRadius.circular(4)),
+                    color: course.level == 1
+                        ? Color(0xffFEE500).withOpacity(0.05)
+                        : course.level == 2
+                            ? Color(0xff1EA6FC).withOpacity(0.05)
+                            : Color(0xffFFF7F7),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                   child: Text(
-                    'Lv. 3',
+                    'Lv. ${course.level}',
                     style: TextStyle(
-                      color: Color(0xffF44237),
+                      color: course.level == 1
+                          ? Color(0xffFEE500)
+                          : course.level == 2
+                              ? Color(0xff1EA6FC)
+                              : Color(0xffF44237),
                       fontSize: 12,
                     ),
                   ),
@@ -97,20 +106,23 @@ class CourseCard extends StatelessWidget {
                         width: 6,
                       ),
                       Text(
-                        '대전 광역시',
+                        '${course.address}',
                         style: TextStyle(
                           color: Color(0xffA0A0A0),
                           fontSize: 14,
                         ),
                       )
                     ]),
-                    Text(
-                      '128명 참여 중',
-                      style: TextStyle(
-                        color: Color(0xff1EA6FC),
-                        fontSize: 14,
+
+                    // 1명 이상 참여 중인 경우에만 참여자 수 보이도록 조건 처리
+                    if (course.count > 0)
+                      Text(
+                        '${course.count}명 참여 중',
+                        style: TextStyle(
+                          color: Color(0xff1EA6FC),
+                          fontSize: 14,
+                        ),
                       ),
-                    ),
                   ],
                 )
               ],
