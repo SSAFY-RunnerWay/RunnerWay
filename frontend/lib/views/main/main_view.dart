@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/search_condition.dart';
-import 'package:frontend/widgets/under_bar.dart';
+import 'package:frontend/widgets/course/course_card.dart';
+import 'package:frontend/widgets/filter_condition.dart';
+import 'package:get/get.dart';
+import '../../controllers/filter_controller.dart';
+import '../../controllers/main_controller.dart';
+import '../base_view.dart';
 import 'widget/search_bar.dart';
 
 class MainView extends StatelessWidget {
-  const MainView({super.key});
+  // filtercontroller 먼저 등록
+  final FilterController filterController = Get.put(FilterController());
+  final MainController mainController = Get.put(MainController());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return BaseView(
+      child: Column(
         children: [
           // SearchBar
           Container(
             padding: EdgeInsets.all(20),
-            child: Column(children: [
-              CourseSearchBar(),
-              SizedBox(height: 5),
-            ]),
+            child: Column(
+              children: [
+                CourseSearchBar(),
+                SizedBox(height: 5),
+              ],
+            ),
           ),
 
           // Runner들의 Pick
@@ -27,7 +35,7 @@ class MainView extends StatelessWidget {
                 // Stack을 Expanded로 감싸 남은 공간을 차지하게 함
                 Positioned(
                   child: Image.asset(
-                    'assets/images/running.png',
+                    'assets/images/main/running.png',
                   ),
                 ),
                 Positioned(
@@ -95,45 +103,71 @@ class MainView extends StatelessWidget {
           ),
 
           // 오늘의 추천 코스 container
-          Padding(
-            padding: EdgeInsets.all(20), // Horizontal padding only
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start, // Left-align the text
-              mainAxisAlignment: MainAxisAlignment.start, // Align to the top
-              children: [
-                // title
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '오늘의 ',
-                      style: TextStyle(
-                        fontWeight:
-                            FontWeight.w700, // Add some styling if needed
-                        fontSize: 22, // Adjust the size if necessary
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // title
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '오늘의 ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 22),
                       ),
-                    ),
-                    Text(
-                      '추천코스',
-                      style: TextStyle(
-                        fontWeight:
-                            FontWeight.w400, // Add some styling if needed
-                        fontSize: 22, // Adjust the size if necessary
+                      Text(
+                        '추천코스',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 22,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
-                SizedBox(height: 15),
-                // 검색 조건 위젯
-                SearchCondition()
-              ],
+                  // 검색 조건 위젯
+                  SizedBox(height: 15),
+                  FilterCondition(),
+
+                  // 메인 화면 추천 코스 리스트
+                  SizedBox(height: 20),
+                  Expanded(
+                    child: Obx(
+                      () {
+                        if (mainController.isLoading.value) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        if (mainController.courses.isEmpty) {
+                          return Center(
+                            child: Text('추천 코스가 없습니다.'),
+                          );
+                        }
+
+                        return ListView.builder(
+                          itemCount: mainController.filteredCourses.length,
+                          itemBuilder: (context, index) {
+                            return CourseCard(
+                                course: mainController.filteredCourses[index]);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                ],
+              ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: UnderBar(),
+      // bottomNavigationBar: UnderBar(),
     );
   }
 }

@@ -16,6 +16,7 @@ class UnderBar extends StatelessWidget {
     return Obx(() => Container(
           width: screenWidth,
           height: 110,
+          color: Colors.transparent,
           child: Stack(
             children: [
               // 네비게이션 바의 배경과 그림자
@@ -26,7 +27,7 @@ class UnderBar extends StatelessWidget {
                   width: screenWidth,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.white, // 투명 배경 처리
                     boxShadow: [
                       BoxShadow(
                         color: Color(0x14141414),
@@ -173,7 +174,7 @@ class UnderBar extends StatelessWidget {
       child: Container(
         width: itemWidth,
         height: 56,
-        color: Colors.white, // 아이템 배경색
+        color: Colors.transparent, // 네비게이션 아이템의 배경을 투명하게 설정
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

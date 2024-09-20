@@ -38,6 +38,7 @@ dependencies:
   flutter_polyline_points: ^2.1.0
   flutter_dotenv: ^5.1.0
   envied: ^0.5.4+1
+  dio: 5.7.0
   image_picker: ^0.8.7+3
   intl: ^0.18.1
 
@@ -67,6 +68,9 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/images/main/
+    - assets/images/temp/
+    - assets/images/course/
     - assets/images/auth/
     - assets/images/medals/
     - .env
