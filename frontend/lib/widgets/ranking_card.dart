@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// 페이지 이동 임의로 설정
 import '../widgets/map/running_map.dart';
 
 class RankingCard extends StatelessWidget {
@@ -10,19 +9,19 @@ class RankingCard extends StatelessWidget {
   final int rank;
   final bool isActive;
 
-  RankingCard({
-    Key? key,
+  const RankingCard({
+    super.key,
     required this.name,
     required this.time,
     required this.imageUrl,
     required this.rank,
     required this.isActive,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -34,41 +33,49 @@ class RankingCard extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xffE4E4E4), width: 2),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: ClipRRect(
-                        child: Image.network(
-                          imageUrl ?? 'assets/images/auth/default_profile.png',
-                          width: 60,
-                          height: 60,
+                    child: Image.network(
+                      imageUrl ?? 'assets/images/auth/defaultProfile.png',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Color(0xffE4E4E4), width: 2),
+                        ),
+                        child: Image.asset(
+                          'assets/images/auth/defaultProfile.png',
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color(0xffE4E4E4), width: 2),
-                            ),
-                            child: ClipRRect(
-                              child: Image.asset(
-                                'assets/images/auth/default_profile.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
                         ),
                       ),
                     ),
                   ),
-                  if (rank <= 3) // 상위 3명만 뱃지 표시, 뱃지로 바꿀 시 변경 위치
+                  if (rank <= 3)
                     Positioned(
                       right: -5,
                       bottom: -5,
-                      child: _buildBadge(rank),
+                      child: rank == 1
+                          ? Image.asset(
+                              'assets/images/medals/gold_medal.png',
+                              width: 38,
+                              height: 30,
+                              fit: BoxFit.cover,
+                            )
+                          : rank == 2
+                              ? Image.asset(
+                                  'assets/images/medals/silver_medal.png',
+                                  width: 38,
+                                  height: 30,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  'assets/images/medals/bronze_medal.png',
+                                  width: 38,
+                                  height: 30,
+                                  fit: BoxFit.cover,
+                                ),
                     ),
                 ],
               ),
@@ -85,16 +92,16 @@ class RankingCard extends StatelessWidget {
                     child: Text(
                       time,
                       style: TextStyle(
-                          color: Color(0xff6C7072),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400),
+                        color: Color(0xff6C7072),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ],
           ),
-          // isActive가 true일 때만 ElevatedButton 표시
           if (isActive)
             ElevatedButton(
               onPressed: () {
@@ -115,49 +122,6 @@ class RankingCard extends StatelessWidget {
               ),
             ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBadge(int rank) {
-    Color badgeColor;
-    switch (rank) {
-      case 1:
-        return Image.asset(
-          'assets/images/medals/goldmedal.png',
-          width: 38,
-          height: 30,
-          fit: BoxFit.cover,
-        );
-        break;
-      case 2:
-        return Image.asset(
-          'assets/images/medals/silvermedal.png',
-          width: 38,
-          height: 30,
-          fit: BoxFit.cover,
-        );
-        break;
-      case 3:
-        return Image.asset(
-          'assets/images/medals/bronzemedal.png',
-          width: 38,
-          height: 30,
-          fit: BoxFit.cover,
-        );
-        break;
-      default:
-        badgeColor = Colors.transparent;
-    }
-    return CircleAvatar(
-      backgroundColor: badgeColor,
-      radius: 15,
-      child: Text(
-        '$rank',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w700,
-        ),
       ),
     );
   }
