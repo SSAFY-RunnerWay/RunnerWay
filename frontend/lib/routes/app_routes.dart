@@ -14,7 +14,7 @@ class AppRoutes {
         page: () => MainView(),
         transition: Transition.noTransition),
     GetPage(
-        name: '/course/:id',
+        name: '/course/:courseId',
         page: () => CourseDetailView(),
         transition: Transition.noTransition),
     GetPage(
