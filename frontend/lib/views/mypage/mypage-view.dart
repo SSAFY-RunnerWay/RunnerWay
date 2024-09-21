@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/views/base_view.dart';
 import 'package:frontend/widgets/under_bar.dart';
 import 'package:frontend/views/auth/signup_view.dart';
 
@@ -7,8 +8,8 @@ class MypageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return BaseView(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -25,7 +26,6 @@ class MypageView extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: UnderBar(),
     );
   }
 }
