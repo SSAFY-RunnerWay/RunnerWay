@@ -1,5 +1,6 @@
+import 'package:frontend/views/course/course_detail_view.dart';
 import 'package:frontend/views/main/search_view.dart';
-import 'package:frontend/views/mypage/mypage-view.dart';
+import 'package:frontend/views/mypage/mypage_view.dart';
 import 'package:frontend/views/record/record_view.dart';
 import 'package:get/get.dart';
 import 'package:frontend/views/main/main_view.dart';
@@ -11,6 +12,10 @@ class AppRoutes {
     GetPage(
         name: '/main',
         page: () => MainView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/course/:id',
+        page: () => CourseDetailView(),
         transition: Transition.noTransition),
     GetPage(
         name: '/search',
