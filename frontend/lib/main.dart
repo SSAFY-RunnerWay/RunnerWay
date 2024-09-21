@@ -24,10 +24,24 @@ class MyApp extends StatelessWidget {
           colorSchemeSeed: Colors.white,
         ),
         debugShowCheckedModeBanner: false,
-        // 여기서 Home을 직접 렌더링
         initialRoute: '/main',
         getPages: AppRoutes.routes,
+        scrollBehavior: NoBounceScrollBehavior(), // 커스텀 스크롤 동작 적용
       ),
     );
+  }
+}
+
+// 바운스 효과를 제거하는 커스텀 ScrollBehavior
+class NoBounceScrollBehavior extends ScrollBehavior {
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const ClampingScrollPhysics(); // 바운스 효과를 제거
+  }
+
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child; // 기본 Chrome 유지
   }
 }

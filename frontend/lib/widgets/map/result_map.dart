@@ -80,6 +80,8 @@ class _ResultMap extends State<ResultMap> {
         polylines: _polyline,
         myLocationButtonEnabled: false,
         markers: markers,
+        // 확대 축소 버튼 삭제
+        zoomControlsEnabled: false,
         initialCameraPosition: CameraPosition(
           target: myCurrentLocation,
           zoom: 13,

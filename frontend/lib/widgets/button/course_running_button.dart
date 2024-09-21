@@ -21,7 +21,7 @@ class JoinRunningButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center, // Row 내 아이템을 중앙에 정렬
           children: [
             Image.asset(
-              'assets/icons/runShoe.png', // 파일 경로
+              'assets/icons/run_shoe.png', // 파일 경로
               width: 22, // 이미지 크기 조절
               height: 21,
             ),
