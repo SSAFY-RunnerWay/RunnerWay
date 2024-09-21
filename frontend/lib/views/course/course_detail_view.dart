@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/views/base_view.dart';
-import 'package:get/get.dart';
+import 'package:frontend/views/course/widget/course_main_info.dart';
 
 import '../../widgets/button/back_button.dart';
 
@@ -13,9 +13,18 @@ class CourseDetailView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 뒤로가기
+          // header
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: CustomBackButton(),
+          ),
 
-          CustomBackButton(),
+          // 코스 메인 정보 위젯
+          CourseMainInfo(),
+
+          // 코스 랭킹 위젯
+
+          // 코스 상세 정보 위젯
         ],
       ),
     );

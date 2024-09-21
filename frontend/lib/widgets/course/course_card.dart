@@ -83,7 +83,7 @@ class CourseCard extends StatelessWidget {
                     children: [
                       Row(children: [
                         Image.asset(
-                          'assets/images/course/picker.png',
+                          'assets/icons/picker.png',
                           width: 14,
                         ),
                         SizedBox(
