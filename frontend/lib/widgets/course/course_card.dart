@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/course.dart';
+import 'package:frontend/widgets/course/level_badge.dart';
 
 class CourseCard extends StatelessWidget {
   final Course course;
@@ -66,29 +67,7 @@ class CourseCard extends StatelessWidget {
                 ),
 
                 // level 뱃지
-                Container(
-                  margin: EdgeInsets.only(top: 6),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: course.level == 1
-                        ? Color(0xffFEE500).withOpacity(0.05)
-                        : course.level == 2
-                            ? Color(0xff1EA6FC).withOpacity(0.05)
-                            : Color(0xffFFF7F7),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    'Lv. ${course.level}',
-                    style: TextStyle(
-                      color: course.level == 1
-                          ? Color(0xffFEE500)
-                          : course.level == 2
-                              ? Color(0xff1EA6FC)
-                              : Color(0xffF44237),
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
+                LevelBadge(level: course.level),
 
                 // 위치 정보 및 참여자수 정보
                 SizedBox(
