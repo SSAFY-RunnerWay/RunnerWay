@@ -134,7 +134,7 @@ class MainView extends StatelessWidget {
                   FilterCondition(),
 
                   // 메인 화면 추천 코스 리스트
-                  SizedBox(height: 20),
+                  SizedBox(height: 25),
                   Expanded(
                     child: Obx(
                       () {
