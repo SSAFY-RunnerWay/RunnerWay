@@ -41,6 +41,46 @@ class MainController extends GetxController {
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
+      // 위치 서비스가 꺼져있는 경우 예외처리
+      if (!serviceEnabled) {
+        print('위치 정보를 가져올 수 없습니다');
+        return;
+      }
+
+      // 위치 정보 요청이 거절된 경우 예외 처리 (사용자가 위치 권한을 거부)
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          print('Location permissions are denied');
+          return;
+        }
+      }
+
+      // 위치 정보 요청이 영구적으로 거절된 경우 예외 처리:
+      if (permission == LocationPermission.deniedForever) {
+        print('Location permissions are permanently denied.');
+        return;
+      }
+
+      // 현재 위치 가져오기
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      currentPosition.value = position;
+
+      // 위치 정보 기반으로 공식 코스 데이터 가져오기
+      _fetchOfficialCourses(position.latitude, position.longitude);
+    } catch (e) {
+      print("Error getting location: $e");
+    }
+  }
+
+  // 위치 정보 업데이트 시 코스 불러오고 필터 적용
+  Future<void> updateCurrentLocation() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
       // 위치 정보를 가져올 수 없는 경우 예외처리
       if (!serviceEnabled) {
         print('위치 정보를 가져올 수 없습니다');
@@ -69,9 +109,12 @@ class MainController extends GetxController {
       currentPosition.value = position;
 
       // 위치 정보 기반으로 공식 코스 데이터 가져오기
-      _fetchOfficialCourses(position.latitude, position.longitude);
+      await _fetchOfficialCourses(position.latitude, position.longitude);
+
+      // 필터 및 정렬을 다시 적용
+      updateCourseList();
     } catch (e) {
-      print("Error getting location: $e");
+      print('위치 정보 갱신 중 문제 발생 : $e');
     }
   }
 
@@ -94,17 +137,11 @@ class MainController extends GetxController {
   void updateCourseList() {
     var filteredList = courses.toList();
 
-    log('update!');
-    log('${courses.toList()}');
-    log('${filterController.selectedDifficulty}');
-
     // 1. 난이도 필터링
     filteredList = filteredList.where((course) {
       return filterController.selectedDifficulty.contains(course.level);
     }).toList();
-    log('${filteredList.toList()}');
 
-    log('${filterController.selectedLength}');
     // 2. 거리 필터링
     filteredList = filteredList.where((course) {
       final selectedLength = filterController.selectedLength;
@@ -119,7 +156,6 @@ class MainController extends GetxController {
         return course.courseLength >= 10;
       }
     }).toList();
-    log('${filteredList.toList()}');
 
     // 정렬 기준에 맞게 정렬
     switch (filterController.sortCondition.value) {

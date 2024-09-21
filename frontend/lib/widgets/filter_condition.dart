@@ -1,3 +1,4 @@
+import 'package:frontend/controllers/main_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../controllers/filter_controller.dart';
@@ -127,8 +128,9 @@ class FilterCondition extends StatelessWidget {
 
       // 현위치 불러오기 버튼
       IconButton(
-        onPressed: () {
-          // TODO : 현위치로 정렬하기
+        onPressed: () async {
+          // 현위치로 위치 정보 갱신
+          await Get.find<MainController>().updateCurrentLocation();
         },
         icon: Image.asset(
           'assets/images/main/gps.png',
