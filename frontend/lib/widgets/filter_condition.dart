@@ -71,7 +71,7 @@ class FilterCondition extends StatelessWidget {
           );
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
           decoration: BoxDecoration(
             color: Color(0xffe8e8e8).withOpacity(0.5),
             borderRadius: BorderRadius.circular(14),

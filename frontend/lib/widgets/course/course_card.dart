@@ -9,7 +9,7 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(bottom: 15),
+      margin: EdgeInsets.only(bottom: 18),
       color: Colors.white,
       elevation: 0,
       child: Row(
@@ -21,7 +21,7 @@ class CourseCard extends StatelessWidget {
             // TODO: 이미지 테스트
             // child: Image.network(src),
             child: Image.asset(
-              'assets/images/temp/course1.png',
+              'assets/images/temp/course4.png',
               width: 90,
               height: 90,
               fit: BoxFit.cover,
