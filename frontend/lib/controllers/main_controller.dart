@@ -94,6 +94,33 @@ class MainController extends GetxController {
   void updateCourseList() {
     var filteredList = courses.toList();
 
+    log('update!');
+    log('${courses.toList()}');
+    log('${filterController.selectedDifficulty}');
+
+    // 1. 난이도 필터링
+    filteredList = filteredList.where((course) {
+      return filterController.selectedDifficulty.contains(course.level);
+    }).toList();
+    log('${filteredList.toList()}');
+
+    log('${filterController.selectedLength}');
+    // 2. 거리 필터링
+    filteredList = filteredList.where((course) {
+      final selectedLength = filterController.selectedLength;
+
+      if (selectedLength.contains(3)) {
+        return course.courseLength <= 3;
+      } else if (selectedLength.contains(5)) {
+        return course.courseLength >= 3 && course.courseLength <= 5;
+      } else if (selectedLength.contains(10)) {
+        return course.courseLength >= 5 && course.courseLength <= 10;
+      } else {
+        return course.courseLength >= 10;
+      }
+    }).toList();
+    log('${filteredList.toList()}');
+
     // 정렬 기준에 맞게 정렬
     switch (filterController.sortCondition.value) {
       case '인기순':

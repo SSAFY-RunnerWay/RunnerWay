@@ -41,7 +41,6 @@ class FilterCondition extends StatelessWidget {
                 ),
                 onChanged: (String? newCondition) {
                   controller.updateSortCondition(newCondition!);
-                  // TODO: 검색 기준 바뀌는 경우, 다시 정렬
                 },
                 dropdownColor: Color(0xff1C1516),
                 underline: Container(),
@@ -148,9 +147,9 @@ class ConditionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> items = conditionType == 'difficulty'
-        ? ['Lv. 1', 'Lv. 2', 'Lv. 3']
-        : ['~ 3km', '3 ~ 5km', '5 ~ 10km', '10km ~'];
+    List<dynamic> items = conditionType == 'difficulty'
+        ? controller.difficultyLabels.keys.toList()
+        : controller.lengthLabels.keys.toList();
 
     return AlertDialog(
       backgroundColor: Colors.white,
@@ -169,11 +168,13 @@ class ConditionDialog extends StatelessWidget {
                 checkboxShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
-                title: Text(item),
+                title: Text(conditionType == 'difficulty'
+                    ? controller.difficultyLabels[item]!
+                    : controller.lengthLabels[item]!),
                 // 정렬 기준에 따라서 현재 value 설정
                 value: conditionType == 'difficulty'
                     ? controller.selectedDifficulty.contains(item)
-                    : controller.selectedDistance.contains(item), // 상태 변화 감지
+                    : controller.selectedLength.contains(item), // 상태 변화 감지
                 onChanged: (bool? isChecked) {
                   if (isChecked == true) {
                     // 리스트에 값이 없는 경우 선택 추가
@@ -182,8 +183,8 @@ class ConditionDialog extends StatelessWidget {
                         controller.selectedDifficulty.add(item);
                       }
                     } else {
-                      if (!controller.selectedDistance.contains(item)) {
-                        controller.selectedDistance.add(item);
+                      if (!controller.selectedLength.contains(item)) {
+                        controller.selectedLength.add(item);
                       }
                     }
                   } else {
@@ -191,7 +192,7 @@ class ConditionDialog extends StatelessWidget {
                     if (conditionType == 'difficulty') {
                       controller.selectedDifficulty.remove(item);
                     } else {
-                      controller.selectedDistance.remove(item);
+                      controller.selectedLength.remove(item);
                     }
                   }
                 },
@@ -207,6 +208,8 @@ class ConditionDialog extends StatelessWidget {
             style: TextStyle(color: Color(0xff1C1516)),
           ),
           onPressed: () {
+            // 확인 버튼 클릭 시 필터 조건 업데이트 및 팝업 닫기
+            controller.updateFilterCondition();
             Navigator.of(context).pop();
           },
         ),
