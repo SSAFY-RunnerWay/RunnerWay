@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/course_controller.dart';
 import 'package:frontend/views/base_view.dart';
 import 'package:frontend/views/course/widget/course_main_info.dart';
+import 'package:frontend/views/course/widget/course_sub_info.dart';
 import 'package:frontend/widgets/line.dart';
 import 'package:frontend/widgets/ranking_card.dart';
+import 'package:get/get.dart';
 
 import '../../widgets/button/back_button.dart';
 
@@ -11,6 +14,8 @@ class CourseDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final CourseController courseController = Get.put(CourseController());
+
     return BaseView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +33,14 @@ class CourseDetailView extends StatelessWidget {
           Line(),
 
           // 코스 랭킹 위젯
-          Text('코스 랭킹 TOP 5'),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              '코스 랭킹 TOP 5',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+          ),
+
           RankingCard(
               name: 'name',
               time: 'time',
@@ -37,6 +49,7 @@ class CourseDetailView extends StatelessWidget {
               isActive: true),
 
           // 코스 상세 정보 위젯
+          CourseSubInfo(),
         ],
       ),
     );

@@ -12,7 +12,8 @@ class CourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed('/course/${course.courseId}');
+        // 코스 카드 클릭 시 상세 페이지로 이동
+        Get.toNamed('/course/${course.courseType}/${course.courseId}');
       },
       child: Card(
         margin: EdgeInsets.only(bottom: 16),

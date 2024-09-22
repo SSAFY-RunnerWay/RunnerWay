@@ -7,7 +7,7 @@ import '../models/course.dart';
 class CourseService {
   final CourseRepository _repository = CourseRepository();
 
-  // 현재 위치와 각 코스의 거리를 계산하고 반환
+  // 공식 러닝 전체 조회 (현위치로부터 거리 포함)
   Future<List<Course>> getCoursesWithDistance(Position currentPosition) async {
     final courses = await _repository.getOfficialCourses(
         currentPosition.latitude, currentPosition.longitude);
@@ -27,6 +27,13 @@ class CourseService {
         return course.copyWith(distance: distance);
       },
     ).toList();
+  }
+
+  // 공식 코스 상세 조회
+  Future<Course> getOfficialCourseDetail(int id) async {
+    final course = await _repository.getOfficialCourseDetail(id);
+
+    return course;
   }
 
   // 두 지점 간의 거리 계산 (단위: 미터)
