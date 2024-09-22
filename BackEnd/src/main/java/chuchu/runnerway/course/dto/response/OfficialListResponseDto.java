@@ -1,6 +1,7 @@
 package chuchu.runnerway.course.dto.response;
 
 import chuchu.runnerway.course.dto.CourseImageDto;
+import chuchu.runnerway.course.entity.CourseType;
 import lombok.Data;
 import lombok.Getter;
 
@@ -14,6 +15,7 @@ public class OfficialListResponseDto {
     private Long count;
     private int level;
     private double courseLength;
+    private CourseType courseType;
     private double lat;
     private double lng;
     private CourseImageDto courseImage;
