@@ -3,7 +3,17 @@ import 'package:flutter/material.dart';
 import '../../../widgets/button/course_running_button.dart';
 
 class CourseMainInfo extends StatelessWidget {
-  const CourseMainInfo({super.key});
+  final String name;
+  final String content;
+  final String address;
+  final int count;
+
+  const CourseMainInfo({
+    required this.name,
+    required this.content,
+    required this.count,
+    required this.address,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +24,7 @@ class CourseMainInfo extends StatelessWidget {
         children: [
           // 코스 제목
           Text(
-            '유성천 옆 산책로',
+            name,
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
           ),
 
@@ -23,7 +33,7 @@ class CourseMainInfo extends StatelessWidget {
             height: 8,
           ),
           Text(
-            '노래 들으면서 유성천을 걸어보세요 !',
+            content,
             style: TextStyle(
               fontSize: 18,
             ),
@@ -43,7 +53,7 @@ class CourseMainInfo extends StatelessWidget {
                 width: 10,
               ),
               Text(
-                '대전광역시 문화원로 80',
+                address,
                 style: TextStyle(fontSize: 14, color: Color(0xffA0A0A0)),
               ),
             ],
@@ -58,7 +68,7 @@ class CourseMainInfo extends StatelessWidget {
             children: [
               //참여자수
               Text(
-                '12명 참여 중',
+                '${count}명 참여 중',
                 style: TextStyle(
                   color: Color(0xff1EA6FC),
                 ),

@@ -26,30 +26,57 @@ class CourseDetailView extends StatelessWidget {
             child: CustomBackButton(),
           ),
 
-          // 코스 메인 정보 위젯
-          CourseMainInfo(),
+          // Course 상태에 따른 렌더링
+          Obx(
+            () {
+              if (courseController.isLoading.value) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xff1C1516),
+                  ),
+                );
+              } else {
+                // API 데이터를 받아 위젯에 정보 표시
+                final course = courseController.course.value!;
 
-          // 구분선
-          Line(),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 코스 메인 정보 위젯
+                    CourseMainInfo(
+                      name: course.name,
+                      content: course.content ?? '설명이 없는 코스입니다.',
+                      address: course.address,
+                      count: course.count,
+                    ),
 
-          // 코스 랭킹 위젯
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              '코스 랭킹 TOP 5',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
+                    // 구분선
+                    Line(),
+
+                    // 코스 랭킹 위젯
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        '코스 랭킹 TOP 5',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+
+                    RankingCard(
+                        name: 'name',
+                        time: 'time',
+                        imageUrl: 'imageUrl',
+                        rank: 2,
+                        isActive: true),
+
+                    // 코스 상세 정보 위젯
+                    CourseSubInfo(),
+                  ],
+                );
+              }
+            },
           ),
-
-          RankingCard(
-              name: 'name',
-              time: 'time',
-              imageUrl: 'imageUrl',
-              rank: 2,
-              isActive: true),
-
-          // 코스 상세 정보 위젯
-          CourseSubInfo(),
         ],
       ),
     );
