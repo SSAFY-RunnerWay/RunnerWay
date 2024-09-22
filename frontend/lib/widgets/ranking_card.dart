@@ -21,7 +21,7 @@ class RankingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -34,7 +34,7 @@ class RankingCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.network(
-                      imageUrl ?? 'assets/images/auth/defaultProfile.png',
+                      imageUrl ?? 'assets/images/auth/default_profile.png',
                       width: 60,
                       height: 60,
                       fit: BoxFit.cover,
@@ -46,7 +46,7 @@ class RankingCard extends StatelessWidget {
                               Border.all(color: Color(0xffE4E4E4), width: 2),
                         ),
                         child: Image.asset(
-                          'assets/images/auth/defaultProfile.png',
+                          'assets/images/auth/default_profile.png',
                           fit: BoxFit.cover,
                         ),
                       ),

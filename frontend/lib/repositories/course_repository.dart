@@ -1,4 +1,5 @@
 import 'package:frontend/models/course.dart';
+import 'package:frontend/models/ranking.dart';
 import 'package:frontend/providers/course_provider.dart';
 
 class CourseRepository {
@@ -9,5 +10,20 @@ class CourseRepository {
       double latitude, double longitude) async {
     final response = await _provider.fetchOfficialCourses(latitude, longitude);
     return response.map((courseData) => Course.fromJson(courseData)).toList();
+  }
+
+  Future<Course> getOfficialCourseDetail(int id) async {
+    final response = await _provider.fetchOfficialCourseDetail(id);
+
+    // response가 JSON 문자열일 경우 파싱
+    return Course.fromJson(response);
+  }
+
+  Future<List<Ranking>> getCourseRanking(int id) async {
+    final response = await _provider.fetchCourseRanking(id);
+
+    return response
+        .map((courseRanking) => Ranking.fromJson(courseRanking))
+        .toList();
   }
 }
