@@ -40,6 +40,7 @@ class CourseProvider {
     }
   }
 
+  // 공식 코스 상세 조회 가져오기
   Future<Map<String, dynamic>> fetchOfficialCourseDetail(int id) async {
     try {
       final response = await dio.get(
