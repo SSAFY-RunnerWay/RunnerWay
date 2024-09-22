@@ -36,7 +36,7 @@ public class UserCourseServiceImpl implements UserCourseService {
             .map(course -> {
                 // Course -> UserListResponseDto 변환
                 UserListResponseDto dto = mapper.map(course, UserListResponseDto.class);
-
+                dto.setNickname(course.getMember().getNickname());
                 // calcDistance 함수를 사용해 사용자와 코스 간의 거리 계산
                 double distance = calcDistance(lat, lng, Double.parseDouble(course.getLat()), Double.parseDouble(course.getLng()));
 
@@ -55,7 +55,9 @@ public class UserCourseServiceImpl implements UserCourseService {
     public UserDetailResponseDto getUserCourse(Long courseId) {
         Course course = userCourseRepository.findById(courseId)
             .orElseThrow(NoSuchElementException::new);
-        return mapper.map(course, UserDetailResponseDto.class);
+        UserDetailResponseDto dto = mapper.map(course, UserDetailResponseDto.class);
+        dto.setNickname(course.getMember().getNickname());
+        return dto;
     }
 
     @Transactional
