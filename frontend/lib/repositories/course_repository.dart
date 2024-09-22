@@ -1,4 +1,5 @@
 import 'package:frontend/models/course.dart';
+import 'package:frontend/models/ranking.dart';
 import 'package:frontend/providers/course_provider.dart';
 
 class CourseRepository {
@@ -16,5 +17,13 @@ class CourseRepository {
 
     // response가 JSON 문자열일 경우 파싱
     return Course.fromJson(response);
+  }
+
+  Future<List<Ranking>> getCourseRanking(int id) async {
+    final response = await _provider.fetchCourseRanking(id);
+
+    return response
+        .map((courseRanking) => Ranking.fromJson(courseRanking))
+        .toList();
   }
 }

@@ -29,7 +29,8 @@ class CourseDetailView extends StatelessWidget {
           // Course 상태에 따른 렌더링
           Obx(
             () {
-              if (courseController.isLoading.value) {
+              if (courseController.isDetailLoading.value &&
+                  courseController.isRankingLoading.value) {
                 return Center(
                   child: CircularProgressIndicator(
                     color: Color(0xff1C1516),

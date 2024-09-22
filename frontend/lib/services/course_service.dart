@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:frontend/repositories/course_repository.dart';
 import 'package:geolocator/geolocator.dart';
 import '../models/course.dart';
+import '../models/ranking.dart';
 
 class CourseService {
   final CourseRepository _repository = CourseRepository();
@@ -34,6 +35,13 @@ class CourseService {
     final course = await _repository.getOfficialCourseDetail(id);
 
     return course;
+  }
+
+  // 코스 랭킹 조회
+  Future<List<Ranking>> getCourseRanking(int id) async {
+    final ranking = await _repository.getCourseRanking(id);
+
+    return ranking;
   }
 
   // 두 지점 간의 거리 계산 (단위: 미터)
