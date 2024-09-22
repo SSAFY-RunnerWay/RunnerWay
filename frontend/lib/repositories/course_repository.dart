@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:frontend/models/course.dart';
 import 'package:frontend/providers/course_provider.dart';
 
