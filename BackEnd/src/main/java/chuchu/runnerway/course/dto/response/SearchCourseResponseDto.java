@@ -22,6 +22,7 @@ public class SearchCourseResponseDto {
     private LocalDateTime averageTime;
     private double courseLength;
     private Long memberId;
+    private String memberNickname;
     private CourseType courseType;
     private LocalDateTime registDate;
     private double averageCalorie;

@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.model.service;
 
+import chuchu.runnerway.course.dto.response.MatchByWordResponseDto;
 import chuchu.runnerway.course.dto.response.SearchCourseResponseDto;
 import chuchu.runnerway.course.dto.response.SelectAllResponseDto;
 import chuchu.runnerway.course.entity.Course;
@@ -16,6 +17,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +31,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
     public SelectAllResponseDto search(String searchWord, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "courseId"));
 
-        Page<ElasticSearchCourse> searchPage = elasticSearchCourseRepository.findByNameOrAddress(searchWord, searchWord, pageable);
+        Page<ElasticSearchCourse> searchPage = elasticSearchCourseRepository.findByNameOrAddressOrMemberNickname(searchWord, searchWord, searchWord, pageable);
 
         List<SearchCourseResponseDto> searchCourseResponseDtoList = searchPage.getContent().stream()
                 .map(domain -> new SearchCourseResponseDto(
@@ -43,6 +46,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
                         domain.getAverageTime(),
                         domain.getCourseLength(),
                         domain.getMemberId(),
+                        domain.getMemberNickname(),
                         domain.getCourseType(),
                         domain.getRegistDate(),
                         domain.getAverageCalorie(),
@@ -58,6 +62,23 @@ public class SearchCourseServiceImpl implements SearchCourseService{
                 .totalElements(searchPage.getTotalElements())
                 .totalPages(searchPage.getTotalPages())
                 .build();
+    }
+
+    // 후보 검색
+    @Override
+    public List<MatchByWordResponseDto> matchByWord(String searchWord) {
+        Pageable pageable = PageRequest.of(0, 10); // 최대 10개 결과만 받아옴
+
+        Page<ElasticSearchCourse> elasticSearchCourseList = elasticSearchCourseRepository.findByNameOrAddressOrMemberNickname(searchWord, searchWord, searchWord, pageable);
+
+        return elasticSearchCourseList.stream()
+                .flatMap(course -> Stream.of(course.getName(), course.getAddress(), course.getMemberNickname()))
+                .filter(Objects::nonNull) // null 아닌 것 중에
+                .filter(value -> value.startsWith(searchWord)) // 입력어로 시작하는 검색어들만
+                .distinct() // 중복제거
+                .limit(10) // 10개만
+                .map(word -> new MatchByWordResponseDto(word)) // Dto로 파싱
+                .toList();
     }
 
     @Override
@@ -81,6 +102,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
                         domain.getAverageTime(),
                         domain.getCourseLength(),
                         domain.getMember().getMemberId(),
+                        domain.getMember().getNickname(),
                         domain.getCourseType(),
                         domain.getRegistDate(),
                         domain.getAverageCalorie(),

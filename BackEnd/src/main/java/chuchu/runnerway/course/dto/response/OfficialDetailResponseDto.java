@@ -23,6 +23,8 @@ public class OfficialDetailResponseDto {
     private double courseLength;
     private double averageCalorie;
     private CourseType courseType;
+    private double lat;
+    private double lng;
     private CourseImageDto courseImage;
 
 
