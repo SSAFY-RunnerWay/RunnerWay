@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:frontend/models/ranking.dart';
 import 'package:frontend/services/course_service.dart';
 import 'package:get/get.dart';
 
@@ -9,6 +10,7 @@ class CourseController extends GetxController {
   var isDetailLoading = true.obs;
   var isRankingLoading = true.obs;
   var course = Rxn<Course>();
+  var ranking = <Ranking>[].obs;
 
   final CourseService _courseService = CourseService();
 
@@ -62,6 +64,9 @@ class CourseController extends GetxController {
 
     try {
       final fetchedCourseRanking = await _courseService.getCourseRanking(id);
+
+      // 랭킹 정보 업데이트
+      ranking.assignAll(fetchedCourseRanking);
     } catch (e) {
       log('코스 랭킹 조회 중 문제 발생 : $e');
     } finally {

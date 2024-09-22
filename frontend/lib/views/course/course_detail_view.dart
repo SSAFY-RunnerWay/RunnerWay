@@ -39,6 +39,7 @@ class CourseDetailView extends StatelessWidget {
               } else {
                 // API 데이터를 받아 위젯에 정보 표시
                 final course = courseController.course.value!;
+                final rankingList = courseController.ranking.value!;
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,20 +57,34 @@ class CourseDetailView extends StatelessWidget {
 
                     // 코스 랭킹 위젯
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        '코스 랭킹 TOP 5',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      child: Column(
+                        children: [
+                          Text(
+                            '코스 랭킹 TOP 5',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
                     ),
-
-                    RankingCard(
-                        name: 'name',
-                        time: 'time',
-                        imageUrl: 'imageUrl',
-                        rank: 2,
-                        isActive: true),
+                    // 코스 랭킹 카드 List
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: rankingList.length,
+                      itemBuilder: (context, index) {
+                        final ranking = rankingList[index];
+                        return RankingCard(
+                          name: ranking.member.nickname,
+                          time: ranking.score,
+                          imageUrl: ranking.member.memberImage?.url,
+                          rank: index + 1,
+                          isActive: true,
+                        );
+                      },
+                    ),
 
                     // 코스 상세 정보 위젯
                     CourseSubInfo(),
