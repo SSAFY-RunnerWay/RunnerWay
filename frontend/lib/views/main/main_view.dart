@@ -5,9 +5,7 @@ import 'package:frontend/widgets/search/search_read_only.dart';
 import 'package:get/get.dart';
 import '../../controllers/filter_controller.dart';
 import '../../controllers/main_controller.dart';
-import '../../controllers/search_controller.dart';
 import '../base_view.dart';
-import 'widget/search_bar.dart';
 
 class MainView extends StatelessWidget {
   // filtercontroller 먼저 등록

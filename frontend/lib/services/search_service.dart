@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import '../repositories/search_repository.dart';
 
 class SearchService {

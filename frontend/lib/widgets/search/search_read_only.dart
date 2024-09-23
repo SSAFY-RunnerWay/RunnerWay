@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/search_controller.dart';
-
 class SearchReadOnly extends StatelessWidget {
   SearchReadOnly({super.key});
 

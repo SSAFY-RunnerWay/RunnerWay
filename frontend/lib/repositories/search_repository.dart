@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:frontend/providers/search_provider.dart';
 
 class SearchRepository {
