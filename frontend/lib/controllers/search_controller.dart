@@ -10,6 +10,7 @@ class SearchBarController extends GetxController {
   FocusNode focusNode = FocusNode();
   TextEditingController textEditingController = TextEditingController();
   var suggestions = <String>[].obs;
+  var searchText = ''.obs;
 
   final SearchService _searchService = SearchService();
 
@@ -18,6 +19,11 @@ class SearchBarController extends GetxController {
     super.onInit();
 
     // 현재 라우트 감지
+    textEditingController.addListener(() {
+      searchText.value = textEditingController.text;
+      fetchSuggestions(textEditingController.text);
+    });
+
     setFocus(true);
   }
 
@@ -37,6 +43,7 @@ class SearchBarController extends GetxController {
   // 검색어 초기화
   void clearSearch() {
     textEditingController.clear();
+    searchText.value = ''; // Also reset the observable variable
     setFocus(false);
     suggestions.clear();
   }

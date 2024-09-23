@@ -44,10 +44,30 @@ class SearchView extends StatelessWidget {
 
             // 검색어 입력 전
             Obx(
-              () => searchController.textEditingController.text.isEmpty
+              () => searchController.searchText.isEmpty
                   ? Center(
-                      child: Text('검색어를 입력하세여'),
-                    )
+                      child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/icons/active_search.png',
+                              height: 22,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '원하는 코스를 검색해보세요',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        )
+                      ],
+                    ))
                   : searchController.suggestions.isNotEmpty
                       ? AutoCompleteList()
                       : Container(),
