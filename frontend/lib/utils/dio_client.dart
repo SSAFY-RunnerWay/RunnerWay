@@ -24,10 +24,10 @@ class DioClient {
           log('Request[${options.method}] => PATH: ${options.path}');
 
           // 주석 부분은 로그인 구현 후 사용
-          // final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
-          // if (accessToken != null && !_isAuthorizationExcluded(options.path)) {
-          //   options.headers['Authorization'] = 'Bearer $accessToken';
-          // }
+          final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+          if (accessToken != null && !_isAuthorizationExcluded(options.path)) {
+            options.headers['Authorization'] = 'Bearer $accessToken';
+          }
           options.headers['Authorization'] =
               'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
           handler.next(options);
