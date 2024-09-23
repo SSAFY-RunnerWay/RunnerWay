@@ -135,27 +135,45 @@ class SignUpView extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10),
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                color: Color(0xFFE3E5E5).withOpacity(0.3),
-                border: Border.all(
-                  color: Color(0xFFE3E5E5).withOpacity(0.8),
-                ),
-                borderRadius: BorderRadius.circular(55),
-              ),
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFE3E5E5).withOpacity(0.3),
+                    border: Border.all(
+                      color: Color(0xFFE3E5E5).withOpacity(0.8),
+                    ),
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                  alignment: Alignment.center,
+                  child: Image.asset(
                     'assets/images/auth/woman_no.png',
                     width: 80,
                     height: 80,
                   ),
-                ],
-              ),
+                ),
+                SizedBox(width: 30),
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFE3E5E5).withOpacity(0.3),
+                    border: Border.all(
+                      color: Color(0xFFE3E5E5).withOpacity(0.8),
+                    ),
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/images/auth/man_no.png',
+                    width: 80,
+                    height: 80,
+                  ),
+                ),
+              ],
             )
           ],
         ),
