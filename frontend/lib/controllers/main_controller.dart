@@ -1,6 +1,7 @@
 // controllers/main_controller.dart
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:frontend/controllers/filter_controller.dart';
 import 'package:frontend/services/course_service.dart';
 import 'package:get/get.dart';

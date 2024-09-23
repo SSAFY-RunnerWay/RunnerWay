@@ -16,6 +16,7 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(SearchBarController());
+
     return BaseView(
       child: Column(
         children: [

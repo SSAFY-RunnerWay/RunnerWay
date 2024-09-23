@@ -36,7 +36,6 @@ class SearchBarController extends GetxController {
   void fetchSuggestions(String query) async {
     log(query);
     if (query.isNotEmpty) {
-      // 검색어 입력 후 0.5초 딜레이 후 매칭 검색어 호출
       final results = await _searchService.getSuggestions(query);
 
       suggestions.assignAll(results);
@@ -48,7 +47,6 @@ class SearchBarController extends GetxController {
   @override
   void onClose() {
     // 페이지를 떠날 때 검색어 초기화
-    setFocus(false);
     focusNode.dispose();
     textEditingController.dispose();
     super.onClose();
