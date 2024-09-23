@@ -4,6 +4,7 @@ import 'package:frontend/widgets/filter_condition.dart';
 import 'package:get/get.dart';
 import '../../controllers/filter_controller.dart';
 import '../../controllers/main_controller.dart';
+import '../../controllers/search_controller.dart';
 import '../base_view.dart';
 import 'widget/search_bar.dart';
 
@@ -14,6 +15,7 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(SearchBarController());
     return BaseView(
       child: Column(
         children: [
