@@ -42,8 +42,18 @@ class SearchView extends StatelessWidget {
               height: 20,
             ),
 
-            // 검색어 자동 완성 리스트
-            AutoCompleteList(),
+            // 검색어 입력 전
+            Obx(
+              () => searchController.textEditingController.text.isEmpty
+                  ? Center(
+                      child: Text('검색어를 입력하세여'),
+                    )
+                  : searchController.suggestions.isNotEmpty
+                      ? AutoCompleteList()
+                      : Container(),
+            ),
+
+            // 검색어가 있는 경우, 검색어 자동 완성 리스트
           ],
         ),
       ),
