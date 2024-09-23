@@ -10,7 +10,7 @@ class SearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchController = Get.find<SearchBarController>();
+    final searchController = Get.put(SearchBarController());
 
     return Scaffold(
       body: Container(

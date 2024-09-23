@@ -22,6 +22,10 @@ class AppRoutes {
         page: () => SearchView(),
         transition: Transition.noTransition),
     GetPage(
+        name: '/search',
+        page: () => SearchView(),
+        transition: Transition.noTransition),
+    GetPage(
         name: '/runner-pick',
         page: () => RunnerPickView(),
         transition: Transition.noTransition),

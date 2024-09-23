@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/course/course_card.dart';
 import 'package:frontend/widgets/filter_condition.dart';
+import 'package:frontend/widgets/search/search_read_only.dart';
 import 'package:get/get.dart';
 import '../../controllers/filter_controller.dart';
 import '../../controllers/main_controller.dart';
@@ -15,7 +16,7 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(SearchBarController());
+    // Get.put(SearchBarController());
 
     return BaseView(
       child: Column(
@@ -25,7 +26,7 @@ class MainView extends StatelessWidget {
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
-                CourseSearchBar(),
+                SearchReadOnly(),
                 SizedBox(height: 5),
               ],
             ),

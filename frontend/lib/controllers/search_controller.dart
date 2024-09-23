@@ -13,6 +13,14 @@ class SearchBarController extends GetxController {
 
   final SearchService _searchService = SearchService();
 
+  @override
+  void onInit() {
+    super.onInit();
+
+    // 현재 라우트 감지
+    setFocus(true);
+  }
+
   // 검색바 focus 상태 전환
   void setFocus(bool value) {
     isFocus.value = value;
@@ -29,7 +37,13 @@ class SearchBarController extends GetxController {
   // 검색어 초기화
   void clearSearch() {
     textEditingController.clear();
+    setFocus(false);
     suggestions.clear();
+  }
+
+  // 포커스 다시 클릭 시 FocusNode 재생성
+  void recreateFocusNode() {
+    focusNode = FocusNode();
   }
 
   // 검색 자동완성 데이터 요청

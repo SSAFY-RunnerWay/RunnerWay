@@ -20,22 +20,27 @@ class CourseSearchBar extends StatelessWidget {
         textInputAction: TextInputAction.search,
         keyboardType: TextInputType.text,
         onSubmitted: (value) {
-          // TODO: enter키 입력 시 결과 페이지로 이동
+          // TODO : enter키 입력 시 결과 페이지로 이동
         },
         onTap: () {
           if (Get.currentRoute != '/search') {
+            // searchController.setFocus(true);
             Get.toNamed('/search');
           }
-          searchController.setFocus(true);
         },
         onChanged: (value) {
           searchController.fetchSuggestions(value);
         },
-        focusNode: searchController.focusNode, // '/search'일 때만 포커스 활성화
+        focusNode: searchController.focusNode,
         decoration: InputDecoration(
           suffixIcon: IconButton(
             onPressed: () {
-              // TODO : 검색 아이콘 클릭 시 검색 결과 페이지로 이동
+              // 검색 아이콘 클릭 시 검색 결과 페이지로 이동
+              final query = searchController.textEditingController.text;
+              if (query.isNotEmpty) {
+                Get.toNamed('/search?query=$query');
+              }
+              ;
             },
             icon: Icon(
               Icons.search,
