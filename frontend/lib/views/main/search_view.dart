@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/views/main/widget/auto_complete.dart';
 import 'package:frontend/views/main/widget/search_bar.dart';
+import 'package:frontend/views/main/widget/search_prompt.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/search_controller.dart';
@@ -45,35 +46,12 @@ class SearchView extends StatelessWidget {
             // 검색어 입력 전
             Obx(
               () => searchController.searchText.isEmpty
-                  ? Center(
-                      child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/icons/active_search.png',
-                              height: 22,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              '원하는 코스를 검색해보세요',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500),
-                            )
-                          ],
-                        )
-                      ],
-                    ))
+                  ? SearchPrompt()
+                  // 검색어가 있는 경우, 검색어 자동 완성 리스트
                   : searchController.suggestions.isNotEmpty
                       ? AutoCompleteList()
                       : Container(),
             ),
-
-            // 검색어가 있는 경우, 검색어 자동 완성 리스트
           ],
         ),
       ),
