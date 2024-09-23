@@ -12,10 +12,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // runApp() 호출 전 Flutter SDK 초기화
-  KakaoSdk.init(nativeAppKey: 'KAKAO_NATIVE_APP_KEY'
-      // nativeAppKey: dotenv.get("KAKAO_NATIVE_APP_KEY"),
-      // javaScriptAppKey: dotenv.get("KAKAO_JAVASCRIPT_APP_KEY"),
-      );
+  KakaoSdk.init(
+    nativeAppKey: dotenv.get("KAKAO_NATIVE_APP_KEY"),
+    // nativeAppKey: 'KAKAO_NATIVE_APP_KEY',
+  );
   runApp(const MyApp());
 }
 
