@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart'; // 카카오 SDK 불러오기 위함
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -70,8 +71,16 @@ class LoginView extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 10),
+              // 카카오 버튼 누르면 로그인
               GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  try {
+                    OAuthToken token =
+                        await UserApi.instance.loginWithKakaoAccount();
+                    print('카카오톡으로 로그인 성공 ${token.accessToken}');
+                  } catch (error) {
+                    print('카카오톡으로 로그인 실패 $error');
+                  }
                   // 카카오 로그인
                   print('카카오 로그인 클릭');
                 },

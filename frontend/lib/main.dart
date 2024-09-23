@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'routes/app_routes.dart';
 import 'controllers/under_bar_controller.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,10 +12,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // runApp() 호출 전 Flutter SDK 초기화
-  KakaoSdk.init(
-    nativeAppKey: dotenv.get("KAKAO_NATIVE_APP_KEY"),
-    javaScriptAppKey: dotenv.get("KAKAO_JAVASCRIPT_APP_KEY"),
-  );
+  KakaoSdk.init(nativeAppKey: 'KAKAO_NATIVE_APP_KEY'
+      // nativeAppKey: dotenv.get("KAKAO_NATIVE_APP_KEY"),
+      // javaScriptAppKey: dotenv.get("KAKAO_JAVASCRIPT_APP_KEY"),
+      );
   runApp(const MyApp());
 }
 
