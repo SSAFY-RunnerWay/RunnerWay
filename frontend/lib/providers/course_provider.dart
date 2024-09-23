@@ -2,8 +2,10 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:frontend/utils/dio_instance.dart';
 
 class CourseProvider {
+  final dioClient = DioClient();
   var dio = Dio();
 
   // 공식 코스 리스트 가져오기
@@ -12,19 +14,25 @@ class CourseProvider {
     double longitude,
   ) async {
     try {
-      final response = await dio.get(
-        'https://j11b304.p.ssafy.io/api/officialCourse/list',
-        queryParameters: {
-          'lat': latitude,
-          'lng': longitude,
-        },
-        options: Options(
-          headers: {
-            'Authorization':
-                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k', // 개별 요청에 헤더 추가
-          },
-        ),
-      );
+      final response =
+          await dioClient.dio.get('officialCourse/list', queryParameters: {
+        'lat': latitude,
+        'lng': longitude,
+      });
+
+      // final response = await dio.get(
+      //   'https://j11b304.p.ssafy.io/api/officialCourse/list',
+      //   queryParameters: {
+      //     'lat': latitude,
+      //     'lng': longitude,
+      //   },
+      //   options: Options(
+      //     headers: {
+      //       'Authorization':
+      //           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k', // 개별 요청에 헤더 추가
+      //     },
+      //   ),
+      // );
       log('$response');
 
       // 응답이 성공적이면 데이터 반환
