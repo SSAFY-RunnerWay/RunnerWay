@@ -50,14 +50,14 @@ class MainView extends StatelessWidget {
                       Row(
                         children: [
                           SizedBox(
-                            width: 24,
+                            width: 20,
                           ),
                           Text(
                             '러너들의 ',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
-                              fontSize: 22,
+                              fontSize: 20,
                             ),
                           ),
                           Text(
@@ -65,7 +65,7 @@ class MainView extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'playball',
-                              fontSize: 32,
+                              fontSize: 30,
                             ),
                           ),
                         ],
@@ -83,7 +83,7 @@ class MainView extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                             ),
                             Text(
@@ -91,7 +91,7 @@ class MainView extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                             )
                           ],
