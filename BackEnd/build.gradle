@@ -52,9 +52,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 	implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.17.0'
 
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-
-
+	// 날짜/시간 파싱
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
 	// mapstruct
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'

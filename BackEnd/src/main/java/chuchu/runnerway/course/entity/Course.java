@@ -3,9 +3,11 @@ package chuchu.runnerway.course.entity;
 import chuchu.runnerway.course.dto.request.UserCourseRegistRequestDto;
 import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.domain.MemberImage;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 public class Course {
 
     public Course() {
@@ -95,6 +98,7 @@ public class Course {
     private String lng;
 
     @OneToOne(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private CourseImage courseImage;
 
     public void updateUserCourse(UserCourseRegistRequestDto userCourseRegistRequestDto, Member member) {
