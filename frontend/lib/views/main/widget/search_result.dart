@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/search_controller.dart';
-import 'package:frontend/models/course.dart';
 import 'package:get/get.dart';
 
 import '../../../widgets/course/course_card.dart';
@@ -15,11 +14,11 @@ class SearchResult extends StatelessWidget {
   Widget build(BuildContext context) {
     final searchController = Get.find<SearchBarController>();
 
-    final officialResults = searchController.searchOfficialResults;
-    final userResults = searchController.searchUserResults;
+    final result = searchController.searchResults;
 
-    return Container(
+    return SingleChildScrollView(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           FilterCondition(),
           SizedBox(
@@ -30,14 +29,14 @@ class SearchResult extends StatelessWidget {
           Row(
             children: [
               Text(
-                '러너웨이 공식',
+                '\'${searchController.searchText}\'으로 검색된',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               Text(
-                ' 코스',
+                ' 코스 결과',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w400,
@@ -45,16 +44,74 @@ class SearchResult extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(
+            height: 15,
+          ),
 
-          // 공식 코스 결과 리스트
-          // Expanded(
-          //   child: ListView.builder(
-          //     itemCount: officialResults.length,
-          //     itemBuilder: (context, index) {
-          //       return CourseCard(course: officialResults[index]);
-          //     },
-          //   ),
-          // ),
+          Obx(
+            () {
+              if (searchController.isLoading.value) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (result.isEmpty) {
+                return Center(
+                  child: Text('검색 결과가 없습니다.'),
+                );
+              }
+
+              return Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: result.length,
+                    itemBuilder: (context, index) {
+                      return CourseCard(course: result[index]);
+                    },
+                  ),
+                  SizedBox(height: 20),
+
+                  // 페이지네이션 버튼
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // 이전 페이지 버튼
+                      if (searchController.currentPage.value > 1)
+                        IconButton(
+                          onPressed: () {
+                            searchController.fetchPreviousPage(
+                                searchController.searchText.value);
+                          },
+                          icon: Icon(Icons.navigate_before_rounded),
+                        ),
+                      SizedBox(width: 10),
+
+                      // 페이지 번호 표시
+                      Text(
+                        '${searchController.currentPage.value} / ${searchController.totalPages.value}',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      SizedBox(width: 10),
+
+                      // 다음 페이지 버튼
+                      if (searchController.currentPage.value <
+                          searchController.totalPages.value)
+                        IconButton(
+                          onPressed: () {
+                            searchController.fetchNextPage(
+                                searchController.searchText.value);
+                          },
+                          icon: Icon(Icons.navigate_next_rounded),
+                        ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );

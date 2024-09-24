@@ -40,12 +40,18 @@ class SearchProvider {
   }
 
   // 공식 코스 검색 결과 요청
-  Future<List<dynamic>> fetchSearchResults(String query) async {
+  Future<List<dynamic>> fetchSearchResults(
+    String query,
+    int page,
+  ) async {
     try {
       // dioClient 요청
       final response = await dioClient.dio.get(
         '/search',
-        queryParameters: {'searchWord': query},
+        queryParameters: {
+          'searchWord': query,
+          'page': page - 1,
+        },
       );
 
       // 요청 성공 시 데이터 반환

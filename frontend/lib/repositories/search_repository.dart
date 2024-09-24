@@ -15,8 +15,14 @@ class SearchRepository {
   }
 
   // 키워드로 공식 코스 검색 결과 리스트 가져오기
-  Future<List<Course>> getCourseResults(String query) async {
-    final response = await _provider.fetchSearchResults(query);
+  Future<List<Course>> getCourseResults(
+    String query,
+    int page,
+  ) async {
+    final response = await _provider.fetchSearchResults(
+      query,
+      page,
+    );
     log('공식 코스 검색 결과 repository :  $response');
 
     return response.map((course) => Course.fromJson(course)).toList();

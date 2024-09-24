@@ -8,19 +8,19 @@ import '../models/search_result.dart';
 import '../services/search_service.dart';
 
 class SearchBarController extends GetxController {
+  var isLoading = false.obs;
+
+  // 검색 상태관리
   var searchText = ''.obs;
   var suggestions = <String>[].obs;
   var isFocus = false.obs;
   FocusNode focusNode = FocusNode();
   TextEditingController textEditingController = TextEditingController();
 
-  // 검색 결과 관련 상태관리
+  // 검색 결과 상태관리
   var searchResults = <Course>[].obs;
-
   var currentPage = 1.obs; // 현재 페이지
   var totalPages = 1.obs; // 전체 페이지 수
-
-  var isLoading = false.obs;
 
   final SearchService _searchService = SearchService();
 
@@ -71,23 +71,49 @@ class SearchBarController extends GetxController {
   }
 
   // 공식 및 유저 검색 결과 가져오기
-  void fetchSearchResults(String query) async {
+  void fetchSearchResults(String query, {int page = 1, int size = 10}) async {
     // 데이터를 가져오기 전까지 로딩 상태
     isLoading.value = true;
 
     try {
       if (query.isNotEmpty) {
         // 서비스로 검색 결과 리스트 요청
-        final results = await _searchService.getCourseResults(query);
+        final results = await _searchService.getCourseResults(
+          query,
+          page: page,
+        );
         log('검색 결과 controller : $results');
-
-        // 공식 검색 결과 가져오기
+        // 검색 결과 가져오기
         searchResults.assignAll(results);
+
+        // 총 페이지수 계산
+        totalPages.value = (results.length / size).ceil();
+        currentPage.value = page;
       } else {
         searchResults.clear();
       }
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  // 검색 결과 다음 페이지로 이동
+  void fetchNextPage(String query) {
+    if (currentPage.value < totalPages.value) {
+      fetchSearchResults(
+        query,
+        page: currentPage.value + 1,
+      );
+    }
+  }
+
+  // 검색 결과 이전 페이지로 이동
+  void fetchPreviousPage(String query) {
+    if (currentPage.value > 1) {
+      fetchSearchResults(
+        query,
+        page: currentPage.value - 1,
+      );
     }
   }
 
