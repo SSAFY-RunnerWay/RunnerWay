@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/network_controller.dart';
 import 'package:frontend/widgets/map/running_map.dart';
 import '../../widgets/map/location.dart'; // location.dart 파일을 import
 import '../../widgets/map/geolocation.dart'; // geolocation.dart 파일을 import
@@ -55,6 +56,9 @@ class RunningView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 네트워크 체크
+    NetworkController.checkInitialConnectivity(context);
+
     return Scaffold(
       // appBar: AppBar(
       //   title: const Text('Running Screen'),

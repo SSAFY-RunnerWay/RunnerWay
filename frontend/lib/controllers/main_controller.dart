@@ -6,6 +6,7 @@ import 'package:frontend/services/course_service.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:frontend/models/course.dart';
+import 'package:app_settings/app_settings.dart';
 
 class MainController extends GetxController {
   var currentPosition = Rxn<Position>(); // 현재 위치 정보를 관리
@@ -44,6 +45,7 @@ class MainController extends GetxController {
       // 위치 서비스가 꺼져있는 경우 예외처리
       if (!serviceEnabled) {
         print('위치 정보를 가져올 수 없습니다');
+        AppSettings.openAppSettings(type: AppSettingsType.location);
         return;
       }
 
