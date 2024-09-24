@@ -11,6 +11,7 @@ public class MemberDto {
     private String nickname;
     private LocalDate birth;
     private JoinType joinType;
+    private Integer gender;
     private Integer height;
     private Integer weight;
     private LocalDate createTime;

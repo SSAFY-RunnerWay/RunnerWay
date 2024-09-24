@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,8 +46,8 @@ public class OAuthController {
             content = @Content(mediaType = "application/json")
         )
     })
-    @PostMapping("/kakao")
-    public ResponseEntity<?> kakaoSignUp(@RequestParam("email") String email) {
+    @PostMapping("/kakao/{email}")
+    public ResponseEntity<?> kakaoSignUp(@PathVariable("email") String email) {
         KakaoMemberResponseDto kakaoMemberResponseDto = kakaoService.getKakaoUser(email);
         return ResponseEntity.status(HttpStatus.OK).body(kakaoMemberResponseDto);
     }

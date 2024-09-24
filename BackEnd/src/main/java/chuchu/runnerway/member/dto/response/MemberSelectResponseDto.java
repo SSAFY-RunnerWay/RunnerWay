@@ -9,6 +9,7 @@ import lombok.Data;
 public class MemberSelectResponseDto {
     private LocalDate birth;
     private JoinType joinType;
+    private Integer gender;
     private Integer height;
     private Integer weight;
     private MemberImageDto memberImage;
