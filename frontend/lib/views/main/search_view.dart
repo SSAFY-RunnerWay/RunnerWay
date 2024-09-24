@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/filter_controller.dart';
 import 'package:frontend/views/main/widget/auto_complete.dart';
 import 'package:frontend/views/main/widget/search_bar.dart';
 import 'package:frontend/views/main/widget/search_prompt.dart';
@@ -13,6 +14,7 @@ class SearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final searchController = Get.put(SearchBarController());
+    final filterController = Get.put(FilterController());
 
     // 쿼리 파라미터 가져오기
     final searchQuery = Get.parameters['query'];

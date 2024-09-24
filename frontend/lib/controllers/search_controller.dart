@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:frontend/controllers/filter_controller.dart';
 import 'package:get/get.dart';
 
 import '../models/course.dart';
@@ -23,6 +24,7 @@ class SearchBarController extends GetxController {
   var totalPages = 1.obs; // 전체 페이지 수
 
   final SearchService _searchService = SearchService();
+  final FilterController filterController = Get.find<FilterController>();
 
   @override
   void onInit() {
@@ -35,6 +37,11 @@ class SearchBarController extends GetxController {
     });
 
     setFocus(true);
+
+    // SearchBarController에만 필터가 적용되도록 콜백 설정
+    filterController.onSearchFilterUpdated = () {
+      fetchSearchResults(searchText.value);
+    };
   }
 
   // 검색바 focus 상태 전환
@@ -83,12 +90,14 @@ class SearchBarController extends GetxController {
           page: page,
         );
         log('검색 결과 controller : $results');
-        // 검색 결과 가져오기
-        searchResults.assignAll(results);
-
         // 총 페이지수 계산
         totalPages.value = (results.length / size).ceil();
         currentPage.value = page;
+
+        // 검색 결과 가져오기
+        // 필터링 적용
+        var filteredResults = _applyFilters(results);
+        searchResults.assignAll(filteredResults);
       } else {
         searchResults.clear();
       }
@@ -115,6 +124,44 @@ class SearchBarController extends GetxController {
         page: currentPage.value - 1,
       );
     }
+  }
+
+  List<Course> _applyFilters(List<Course> results) {
+    var filteredList = results;
+
+    // 난이도 필터 적용
+    filteredList = filteredList.where((course) {
+      return filterController.selectedDifficulty.contains(course.level);
+    }).toList();
+
+    // 거리 필터 적용
+    filteredList = filteredList.where((course) {
+      final selectedLength = filterController.selectedLength;
+
+      if (selectedLength.contains(3)) {
+        return course.courseLength <= 3;
+      } else if (selectedLength.contains(5)) {
+        return course.courseLength >= 3 && course.courseLength <= 5;
+      } else if (selectedLength.contains(10)) {
+        return course.courseLength >= 5 && course.courseLength <= 10;
+      } else {
+        return course.courseLength >= 10;
+      }
+    }).toList();
+
+    // 정렬 조건 적용
+    switch (filterController.sortCondition.value) {
+      case '인기순':
+        filteredList.sort((a, b) => b.count.compareTo(a.count));
+        break;
+      case '거리순':
+        filteredList.sort((a, b) => a.courseLength.compareTo(b.courseLength));
+        break;
+      default:
+        break;
+    }
+
+    return filteredList;
   }
 
   @override

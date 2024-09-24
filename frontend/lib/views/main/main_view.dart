@@ -14,7 +14,10 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(SearchBarController());
+    // 메인 view에서 필터 타겟을 main으로 설정
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      filterController.setFilterTarget('main');
+    });
 
     return BaseView(
       child: Column(

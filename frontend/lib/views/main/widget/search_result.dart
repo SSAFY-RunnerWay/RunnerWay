@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/filter_controller.dart';
 import 'package:frontend/controllers/search_controller.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,13 @@ class SearchResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final searchController = Get.find<SearchBarController>();
+    final filterController = Get.find<FilterController>();
+
+    // 검색 페이지로 들어왔을 때 타겟을 'search'로 설정
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      filterController.resetFilters();
+      filterController.setFilterTarget('search');
+    });
 
     final result = searchController.searchResults;
 
