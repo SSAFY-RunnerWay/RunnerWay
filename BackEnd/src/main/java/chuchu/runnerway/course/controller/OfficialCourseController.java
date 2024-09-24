@@ -1,9 +1,8 @@
 package chuchu.runnerway.course.controller;
 
-import chuchu.runnerway.course.dto.request.OfficialCoordRequestDto;
 import chuchu.runnerway.course.dto.response.OfficialDetailResponseDto;
 import chuchu.runnerway.course.dto.response.OfficialListResponseDto;
-import chuchu.runnerway.course.entity.Course;
+import chuchu.runnerway.course.model.service.IncrementCountService;
 import chuchu.runnerway.course.model.service.OfficialCourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,12 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/officialCourse")
+@RequestMapping("/official-course")
 @RequiredArgsConstructor
 @Slf4j
 public class OfficialCourseController {
 
     private final OfficialCourseService officialCourseService;
+    private final IncrementCountService incrementCourseCount;
 
     
     @GetMapping("/list")
@@ -59,13 +59,13 @@ public class OfficialCourseController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "공식코스 참여자 수 갱신",
+                    description = "공식 코스 참여자 수 갱신",
                     content = @Content(mediaType = "application/json")
             ),
     })
     public ResponseEntity<?> incrementCourseCount(@PathVariable("courseId") Long courseId) {
-        officialCourseService.incrementCourseCount(courseId);
+        incrementCourseCount.incrementOfficalCourseCount(courseId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("코스 참여가 등록되었습니다.");
     }
 }

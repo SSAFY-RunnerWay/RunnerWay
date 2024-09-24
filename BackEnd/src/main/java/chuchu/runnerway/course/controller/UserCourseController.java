@@ -3,6 +3,7 @@ package chuchu.runnerway.course.controller;
 import chuchu.runnerway.course.dto.request.UserCourseRegistRequestDto;
 import chuchu.runnerway.course.dto.response.UserDetailResponseDto;
 import chuchu.runnerway.course.dto.response.UserListResponseDto;
+import chuchu.runnerway.course.model.service.IncrementCountService;
 import chuchu.runnerway.course.model.service.UserCourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,13 +13,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/user-course")
 @RestController
@@ -26,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserCourseController {
 
     private final UserCourseService userCourseService;
+    private final IncrementCountService incrementCountService;
 
     @GetMapping("/list")
     @Operation(summary = "유저 코스 목록 조회", description = "유저 코스 목록 조회시 사용하는 API")
@@ -97,5 +93,20 @@ public class UserCourseController {
     ) {
         userCourseService.registUserCourse(userCourseRegistRequestDto);
         return ResponseEntity.ok("유저 코스 등록 성공");
+    }
+
+    @PatchMapping("/{courseId}")
+    @Operation(summary = "유저 코스 참여자 수 갱신", description = "유저 코스 참여자 수 갱신 때 사용하는 API")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "유저 코스 참여자 수 갱신",
+                    content = @Content(mediaType = "application/json")
+            ),
+    })
+    public ResponseEntity<?> incrementCourseCount(@PathVariable("courseId") Long courseId) {
+        incrementCountService.incrementUserCourseCount(courseId);
+
+        return ResponseEntity.ok("코스 참여가 등록되었습니다.");
     }
 }
