@@ -32,7 +32,7 @@ public class OAuthController {
 
     @Operation(
         summary = "카카오 회원가입 요청",
-        description = "카카오 회원가입 할 때 사용하는 API, 인가 코드를 넘겨줘야함")
+        description = "카카오 회원가입 할 때 사용하는 API, 이메일을 넘겨줘야함")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",
@@ -46,8 +46,8 @@ public class OAuthController {
         )
     })
     @PostMapping("/kakao")
-    public ResponseEntity<?> kakaoSignUp(@RequestParam("code") String code) {
-        KakaoMemberResponseDto kakaoMemberResponseDto = kakaoService.getKakaoUser(code);
+    public ResponseEntity<?> kakaoSignUp(@RequestParam("email") String email) {
+        KakaoMemberResponseDto kakaoMemberResponseDto = kakaoService.getKakaoUser(email);
         return ResponseEntity.status(HttpStatus.OK).body(kakaoMemberResponseDto);
     }
 
