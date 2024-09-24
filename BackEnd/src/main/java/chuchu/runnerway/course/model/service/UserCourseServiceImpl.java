@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +53,7 @@ public class UserCourseServiceImpl implements UserCourseService {
 
     @Transactional
     @Override
+    @Cacheable(value = "courseCache", key = "#courseId", unless = "#result == null")
     public UserDetailResponseDto getUserCourse(Long courseId) {
         Course course = userCourseRepository.findById(courseId)
             .orElseThrow(NoSuchElementException::new);
