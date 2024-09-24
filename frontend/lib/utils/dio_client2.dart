@@ -1,10 +1,13 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 class DioClient {
   late final Dio _dio;
   final _storage = FlutterSecureStorage();
+  bool _isRefreshing = false; // 토큰 갱신 중인지 확인
+  Future<void>? _refreshTokenFuture; // 토큰 갱신이 중복되지 않도록 Future 저장
 
   DioClient() {
     _dio = Dio(
@@ -22,32 +25,44 @@ class DioClient {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           log('Request[${options.method}] => PATH: ${options.path}');
-
-          // 주석 부분은 로그인 구현 후 사용
-          final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
-          if (accessToken != null && !_isAuthorizationExcluded(options.path)) {
-            options.headers['Authorization'] = 'Bearer $accessToken';
-          }
-          // 토큰 일부러 둔건가?
-          // options.headers['Authorization'] =
-          //     'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
+          // final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+          // if (accessToken != null && !_isAuthorizationExcluded(options.path)) {
+          //   options.headers['Authorization'] = 'Bearer $accessToken';
+          // }
           handler.next(options);
         },
-        onResponse: (response, handler) {
-          log('Response[${response.statusCode}] => DATA: ${response.data}');
-
-          // 특정 응답에서 Authorization 헤더 추출 및 저장
-          if (response.headers['authorization'] != null) {
-            String? newToken = response.headers['authorization']?.first;
-            // Secure Storage를 활용한 토큰 저장 로직
-            _saveToken(newToken);
-          }
-
-          handler.next(response);
-        },
-        onError: (DioException e, handler) {
-          log('Error[${e.response?.statusCode}] => MESSAGE: ${e.message}');
-          handler.next(e);
+        onError: (DioException e, handler) async {
+          // if (e.response?.statusCode == 401 && !_isRefreshing) {
+          //   // 이미 토큰 갱신 중인 경우 기다리도록 설정
+          //   if (_refreshTokenFuture == null) {
+          //     _isRefreshing = true;
+          //     _refreshTokenFuture = _refreshToken();
+          //     await _refreshTokenFuture;
+          //     _isRefreshing = false;
+          //   } else {
+          //     await _refreshTokenFuture;
+          //   }
+          //
+          //   final newAccessToken = await _storage.read(key: 'ACCESS_TOKEN');
+          //   if (newAccessToken != null) {
+          //     e.requestOptions.headers['Authorization'] =
+          //         'Bearer $newAccessToken';
+          //     final clonedRequest = await _dio.request(
+          //       e.requestOptions.path,
+          //       options: Options(
+          //         method: e.requestOptions.method,
+          //         headers: e.requestOptions.headers,
+          //       ),
+          //       data: e.requestOptions.data,
+          //       queryParameters: e.requestOptions.queryParameters,
+          //     );
+          //     handler.resolve(clonedRequest); // 재시도된 요청 처리
+          //   } else {
+          //     handler.next(e); // 갱신 실패 시 에러 그대로 처리
+          //   }
+          // } else {
+          //   handler.next(e); // 다른 에러는 그대로 처리
+          // }
         },
       ),
     );
@@ -55,37 +70,20 @@ class DioClient {
 
   Dio get dio => _dio;
 
-  // 카카오 액세스 토큰을 서버로 전송하는 메서드
-  Future<void> sendKakaoAccessToken(String kakaoAccessToken) async {
+  // 카카오 토큰 갱신 처리
+  Future<void> _refreshToken() async {
     try {
-      // 카카오 토큰을 서버로 보내는 요청
-      final response = await _dio.get(
-        '/oauth/callback',
-        queryParameters: {"accessToken": kakaoAccessToken},
-      );
+      OAuthToken newToken = await AuthApi.instance.refreshToken();
+      log('새로운 토큰: ${newToken.accessToken}');
 
-      // 서버로부터 자체 액세스 토큰 응답 받음
-      final blogAccessToken = response.headers['Authorization']?.first;
-      if (blogAccessToken != null) {
-        await _storage.write(key: 'ACCESS_TOKEN', value: blogAccessToken);
-        log('서버로부터 받은 토큰 저장: $blogAccessToken');
-      } else {
-        log('서버로부터 토큰을 받지 못했습니다.');
-      }
+      await _storage.write(key: 'ACCESS_TOKEN', value: newToken.accessToken);
+      await _storage.write(key: 'REFRESH_TOKEN', value: newToken.refreshToken);
     } catch (e) {
-      log('서버에 카카오 토큰 전송 실패: $e');
+      log('토큰 갱신 실패: $e');
     }
   }
 
-  // Authorization 토큰을 저장하는 함수
-  Future<void> _saveToken(String? token) async {
-    if (token != null && token.isNotEmpty) {
-      await _storage.write(key: 'ACCESS_TOKEN', value: token);
-      log('토큰 저장: $token');
-    }
-  }
-
-  // 토큰 필요 없는 path 확인
+  // 토큰 필요 없는 경로 확인
   bool _isAuthorizationExcluded(String path) {
     const excludedPaths = [
       '/oauth/kakao',
@@ -94,5 +92,24 @@ class DioClient {
       '/members/duplication-nickname'
     ];
     return excludedPaths.any((excluded) => path.contains(excluded));
+  }
+
+// 서버로 이메일 전송하여 회원 여부 확인
+  Future<Map<String, dynamic>> sendEmailForVerification(String email) async {
+    try {
+      final response = await DioClient().dio.post(
+            'oauth/kakao/${email}', // 서버의 이메일 확인 API 엔드포인트
+          );
+      if (response.statusCode == 200) {
+        return response.data; // 서버에서 회원 존재 여부 반환
+        log('서버 로그인 확인');
+      } else {
+        throw Exception('서버 응답 오류: ${response.statusCode}');
+      }
+    } catch (e) {
+      log('오류 떠?');
+      print('서버 통신 중 오류 발생: $e');
+      throw e;
+    }
   }
 }

@@ -27,7 +27,7 @@ class MypageView extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginView()),
+                  MaterialPageRoute(builder: (context) => LoginView()),
                 );
               },
               child: const Text('Go to login Page'),
