@@ -65,8 +65,23 @@ class SearchResult extends StatelessWidget {
               }
 
               if (result.isEmpty) {
-                return Center(
-                  child: Text('검색 결과가 없습니다.'),
+                return Container(
+                  height: 500,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/empty.png',
+                        height: 150,
+                        width: 150,
+                      ),
+                      Text(
+                        '검색 결과가 없습니다',
+                        style: TextStyle(fontSize: 16),
+                      )
+                    ],
+                  ),
                 );
               }
 
