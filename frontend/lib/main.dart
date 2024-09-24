@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'routes/app_routes.dart';
 import 'controllers/under_bar_controller.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'controllers/network_controller.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
