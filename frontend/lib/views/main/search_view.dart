@@ -18,8 +18,10 @@ class SearchView extends StatelessWidget {
     final searchQuery = Get.parameters['query'];
 
     if (searchQuery != null && searchQuery.isNotEmpty) {
-      // controller를 통해 검색 결과 API 요청
-      searchController.fetchSearchResults(searchQuery);
+      // 빌드가 완료된 후에 검색 결과 API 요청
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        searchController.fetchSearchResults(searchQuery);
+      });
     }
 
     return Scaffold(
@@ -64,9 +66,7 @@ class SearchView extends StatelessWidget {
                             : Container(),
                   )
                 // 검색 결과 화면
-                : Container(
-                    child: SearchResult(),
-                  )
+                : SearchResult()
           ],
         ),
       ),
