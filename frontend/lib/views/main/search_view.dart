@@ -13,6 +13,14 @@ class SearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     final searchController = Get.put(SearchBarController());
 
+    // 쿼리 파라미터 가져오기
+    final searchQuery = Get.parameters['query'];
+
+    if (searchQuery != null && searchQuery.isNotEmpty) {
+      // controller를 통해 검색 결과 API 요청
+      searchController.fetchSearchResults(searchQuery);
+    }
+
     return Scaffold(
       body: Container(
         margin: EdgeInsets.all(20),
@@ -43,15 +51,21 @@ class SearchView extends StatelessWidget {
               height: 20,
             ),
 
-            // 검색어 입력 전
-            Obx(
-              () => searchController.searchText.isEmpty
-                  ? SearchPrompt()
-                  // 검색어가 있는 경우, 검색어 자동 완성 리스트
-                  : searchController.suggestions.isNotEmpty
-                      ? AutoCompleteList()
-                      : Container(),
-            ),
+            // 검색 쿼리 인식 전 (사용자가 검색 중인 상태)
+            searchQuery == null || searchQuery.isEmpty
+                ? Obx(
+                    () => searchController.searchText.isEmpty
+                        // 검색어 입력 전
+                        ? SearchPrompt()
+                        // 검색어가 있는 경우, 검색어 자동 완성 리스트
+                        : searchController.suggestions.isNotEmpty
+                            ? AutoCompleteList()
+                            : Container(),
+                  )
+                // 검색 결과 화면
+                : Container(
+                    child: Text('result'),
+                  )
           ],
         ),
       ),

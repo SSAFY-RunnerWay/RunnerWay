@@ -65,6 +65,9 @@ class SearchBarController extends GetxController {
     }
   }
 
+  // 검색 결과
+  void fetchSearchResults(String searchQuery) {}
+
   @override
   void onClose() {
     // 페이지를 떠날 때 검색어 초기화
