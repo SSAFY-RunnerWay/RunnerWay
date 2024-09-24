@@ -27,7 +27,7 @@ class CourseSearchBar extends StatelessWidget {
         onTap: () {
           if (Get.currentRoute != '/search') {
             // searchController.setFocus(true);
-            searchController.searchText == null;
+            searchController.searchText.value = '';
             searchController.searchResults.clear();
             Get.toNamed('/search');
           }

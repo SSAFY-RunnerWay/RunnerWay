@@ -5,7 +5,6 @@ import 'package:frontend/controllers/filter_controller.dart';
 import 'package:get/get.dart';
 
 import '../models/course.dart';
-import '../models/search_result.dart';
 import '../services/search_service.dart';
 
 class SearchBarController extends GetxController {
