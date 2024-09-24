@@ -63,9 +63,9 @@ public class ElasticSearchCourse {
     @Field(type = FieldType.Double, name = "average_calorie")
     private double averageCalorie;
 
-    @Field(type = FieldType.Text, name = "lat")
+    @Field(type = FieldType.Double, name = "lat")
     private double lat;
 
-    @Field(type = FieldType.Text, name = "lng")
+    @Field(type = FieldType.Double, name = "lng")
     private double lng;
 }
