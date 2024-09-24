@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/views/base_view.dart';
 import 'package:frontend/views/auth/signup_view.dart';
+import 'package:frontend/views/auth/login_view.dart';
 
 class MypageView extends StatelessWidget {
   const MypageView({super.key});
@@ -21,6 +22,15 @@ class MypageView extends StatelessWidget {
                 );
               },
               child: const Text('Go to Signup Page'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginView()),
+                );
+              },
+              child: const Text('Go to login Page'),
             ),
           ],
         ),
