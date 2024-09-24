@@ -29,6 +29,7 @@ class CourseSearchBar extends StatelessWidget {
             // searchController.setFocus(true);
             Get.toNamed('/search');
           }
+          searchController.setFocus(true);
         },
         onChanged: (value) {
           searchController.fetchSuggestions(value);

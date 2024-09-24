@@ -3,14 +3,17 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../models/course.dart';
 import '../services/search_service.dart';
 
 class SearchBarController extends GetxController {
+  var searchText = ''.obs;
+  var suggestions = <String>[].obs;
+  var searchResults = <Course>[].obs;
+
   var isFocus = false.obs;
   FocusNode focusNode = FocusNode();
   TextEditingController textEditingController = TextEditingController();
-  var suggestions = <String>[].obs;
-  var searchText = ''.obs;
 
   final SearchService _searchService = SearchService();
 
@@ -48,11 +51,6 @@ class SearchBarController extends GetxController {
     suggestions.clear();
   }
 
-  // 포커스 다시 클릭 시 FocusNode 재생성
-  void recreateFocusNode() {
-    focusNode = FocusNode();
-  }
-
   // 검색 자동완성 데이터 요청
   void fetchSuggestions(String query) async {
     log(query);
@@ -65,8 +63,21 @@ class SearchBarController extends GetxController {
     }
   }
 
-  // 검색 결과
-  void fetchSearchResults(String searchQuery) {}
+  // 공식 및 유저 검색 결과 가져오기
+  void fetchSearchResults(String query) async {
+    // 공식 검색 결과 가져오기
+    if (query.isNotEmpty) {
+      // 서비스로 검색 결과 리스트 요청
+      final results = await _searchService.getOfficialCourseResults(query);
+      log('검색 결과 controller : $results');
+
+      searchResults.assignAll(results);
+    } else {
+      searchResults.clear();
+    }
+
+    // 유저 검색 결과 가져오기
+  }
 
   @override
   void onClose() {

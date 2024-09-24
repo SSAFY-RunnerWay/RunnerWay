@@ -12,6 +12,7 @@ class CourseRepository {
     return response.map((courseData) => Course.fromJson(courseData)).toList();
   }
 
+  // 공식 코스 상세 정보 조회
   Future<Course> getOfficialCourseDetail(int id) async {
     final response = await _provider.fetchOfficialCourseDetail(id);
 
@@ -19,6 +20,7 @@ class CourseRepository {
     return Course.fromJson(response);
   }
 
+  // 코스 랭킹 정보 조회
   Future<List<Ranking>> getCourseRanking(int id) async {
     final response = await _provider.fetchCourseRanking(id);
 

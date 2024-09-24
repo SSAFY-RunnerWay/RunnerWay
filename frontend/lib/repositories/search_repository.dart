@@ -1,5 +1,7 @@
 import 'package:frontend/providers/search_provider.dart';
 
+import '../models/course.dart';
+
 class SearchRepository {
   final SearchProvider _provider = SearchProvider();
 
@@ -8,5 +10,12 @@ class SearchRepository {
     final response = await _provider.fetchWords(query);
 
     return List<String>.from(response.map((item) => item['word'] as String));
+  }
+
+  // 키워드로 공식 코스 검색 결과 리스트 가져오기
+  Future<List<Course>> getOfficialCourseResults(String query) async {
+    final response = await _provider.fetchOfficialResults(query);
+
+    return response.map((course) => Course.fromJson(course)).toList();
   }
 }
