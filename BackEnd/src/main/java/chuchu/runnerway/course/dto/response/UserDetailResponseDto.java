@@ -24,4 +24,5 @@ public class UserDetailResponseDto {
     private double lng;
     private CourseImageDto courseImage;
     private String nickname;
+    private Long memberId;
 }

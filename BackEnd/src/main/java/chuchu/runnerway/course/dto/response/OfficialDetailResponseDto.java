@@ -34,6 +34,7 @@ public class OfficialDetailResponseDto {
     private double lat;
     private double lng;
     private CourseImageDto courseImage;
+    private Long memberId;
 
 
 }

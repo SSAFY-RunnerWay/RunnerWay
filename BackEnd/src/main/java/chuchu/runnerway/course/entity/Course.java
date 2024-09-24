@@ -21,7 +21,7 @@ public class Course {
     }
 
     @Builder
-    public Course(Long courseId, CourseImage courseImage, String name, String address, String content, Long count, int level, int averageSlope, int averageDownhill, LocalDateTime averageTime, double courseLength, CourseType courseType, LocalDateTime registDate, double averageCalorie, double lat, double lng) {
+    public Course(Long courseId, CourseImage courseImage, String name, String address, String content, Long count, int level, int averageSlope, int averageDownhill, LocalDateTime averageTime, double courseLength, CourseType courseType, LocalDateTime registDate, double averageCalorie, double lat, double lng, Member member) {
         this.courseId = courseId;
         this.courseImage = courseImage;
         this.name = name;
@@ -38,6 +38,7 @@ public class Course {
         this.averageCalorie = averageCalorie;
         this.lat = lat;
         this.lng = lng;
+        this.member = member;
     }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
