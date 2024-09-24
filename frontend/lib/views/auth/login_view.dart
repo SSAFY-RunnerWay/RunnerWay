@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart'; // 카카오 SDK 불러오기 위함
-import 'package:frontend/utils/dio_client.dart';
+import 'package:frontend/utils/dio_client2.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});

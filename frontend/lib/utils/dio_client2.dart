@@ -28,8 +28,9 @@ class DioClient {
           if (accessToken != null && !_isAuthorizationExcluded(options.path)) {
             options.headers['Authorization'] = 'Bearer $accessToken';
           }
-          options.headers['Authorization'] =
-              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
+          // 토큰 일부러 둔건가?
+          // options.headers['Authorization'] =
+          //     'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k';
           handler.next(options);
         },
         onResponse: (response, handler) {
@@ -53,6 +54,28 @@ class DioClient {
   }
 
   Dio get dio => _dio;
+
+  // 카카오 액세스 토큰을 서버로 전송하는 메서드
+  Future<void> sendKakaoAccessToken(String kakaoAccessToken) async {
+    try {
+      // 카카오 토큰을 서버로 보내는 요청
+      final response = await _dio.get(
+        '/oauth/callback',
+        queryParameters: {"accessToken": kakaoAccessToken},
+      );
+
+      // 서버로부터 자체 액세스 토큰 응답 받음
+      final blogAccessToken = response.headers['Authorization']?.first;
+      if (blogAccessToken != null) {
+        await _storage.write(key: 'ACCESS_TOKEN', value: blogAccessToken);
+        log('서버로부터 받은 토큰 저장: $blogAccessToken');
+      } else {
+        log('서버로부터 토큰을 받지 못했습니다.');
+      }
+    } catch (e) {
+      log('서버에 카카오 토큰 전송 실패: $e');
+    }
+  }
 
   // Authorization 토큰을 저장하는 함수
   Future<void> _saveToken(String? token) async {
