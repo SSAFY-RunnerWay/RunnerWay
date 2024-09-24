@@ -60,7 +60,8 @@ class SearchBarController extends GetxController {
   // 검색어 초기화
   void clearSearch() {
     textEditingController.clear();
-    searchText.value = ''; // Also reset the observable variable
+    searchText.value = '';
+    searchResults.clear();
     setFocus(false);
     suggestions.clear();
   }
