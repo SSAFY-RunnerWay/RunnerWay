@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/views/main/widget/auto_complete.dart';
 import 'package:frontend/views/main/widget/search_bar.dart';
 import 'package:frontend/views/main/widget/search_prompt.dart';
+import 'package:frontend/views/main/widget/search_result.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/search_controller.dart';
@@ -32,7 +33,7 @@ class SearchView extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     searchController.clearSearch();
-                    Get.back();
+                    Get.toNamed('/main');
                   },
                   child: Image.asset(
                     'assets/icons/back2.png',
@@ -64,7 +65,7 @@ class SearchView extends StatelessWidget {
                   )
                 // 검색 결과 화면
                 : Container(
-                    child: Text('result'),
+                    child: SearchResult(),
                   )
           ],
         ),

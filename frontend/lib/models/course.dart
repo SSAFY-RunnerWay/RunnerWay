@@ -1,3 +1,5 @@
+import 'course_image.dart';
+
 class Course {
   final int courseId;
   final String name;
@@ -122,25 +124,15 @@ class Course {
       registDate: registDate ?? this.registDate,
     );
   }
-}
 
-class CourseImage {
-  final int courseId;
-  final String url;
-  final String path;
-
-  CourseImage({
-    required this.courseId,
-    required this.url,
-    required this.path,
-  });
-
-  // JSON 데이터를 파싱하여 CourseImage 객체 생성
-  factory CourseImage.fromJson(Map<String, dynamic> json) {
-    return CourseImage(
-      courseId: json['courseId'] as int,
-      url: json['url'] as String,
-      path: json['path'] as String,
-    );
+  // toString 메서드 오버라이드
+  @override
+  String toString() {
+    return 'Course(courseId: $courseId, name: $name, address: $address, '
+        'content: $content, count: $count, level: $level, courseLength: $courseLength, '
+        'lat: $lat, lng: $lng, distance: $distance, averageSlope: $averageSlope, '
+        'averageTime: $averageTime, averageCalorie: $averageCalorie, courseType: $courseType, '
+        'averageDownhill: $averageDownhill, memberId: $memberId, memberNickname: $memberNickname, '
+        'registDate: $registDate)';
   }
 }

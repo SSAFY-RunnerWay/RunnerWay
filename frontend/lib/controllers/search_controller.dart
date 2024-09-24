@@ -4,16 +4,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../models/course.dart';
+import '../models/search_result.dart';
 import '../services/search_service.dart';
 
 class SearchBarController extends GetxController {
   var searchText = ''.obs;
   var suggestions = <String>[].obs;
-  var searchResults = <Course>[].obs;
-
   var isFocus = false.obs;
   FocusNode focusNode = FocusNode();
   TextEditingController textEditingController = TextEditingController();
+
+  // 검색 결과 관련 상태관리
+  var searchResults = <Course>[].obs;
+
+  var currentPage = 1.obs; // 현재 페이지
+  var totalPages = 1.obs; // 전체 페이지 수
+
+  var isLoading = false.obs;
 
   final SearchService _searchService = SearchService();
 
@@ -65,18 +72,23 @@ class SearchBarController extends GetxController {
 
   // 공식 및 유저 검색 결과 가져오기
   void fetchSearchResults(String query) async {
-    // 공식 검색 결과 가져오기
-    if (query.isNotEmpty) {
-      // 서비스로 검색 결과 리스트 요청
-      final results = await _searchService.getOfficialCourseResults(query);
-      log('검색 결과 controller : $results');
+    // 데이터를 가져오기 전까지 로딩 상태
+    isLoading.value = true;
 
-      searchResults.assignAll(results);
-    } else {
-      searchResults.clear();
+    try {
+      if (query.isNotEmpty) {
+        // 서비스로 검색 결과 리스트 요청
+        final results = await _searchService.getCourseResults(query);
+        log('검색 결과 controller : $results');
+
+        // 공식 검색 결과 가져오기
+        searchResults.assignAll(results);
+      } else {
+        searchResults.clear();
+      }
+    } finally {
+      isLoading.value = false;
     }
-
-    // 유저 검색 결과 가져오기
   }
 
   @override

@@ -40,7 +40,7 @@ class SearchProvider {
   }
 
   // 공식 코스 검색 결과 요청
-  Future<List<dynamic>> fetchOfficialResults(String query) async {
+  Future<List<dynamic>> fetchSearchResults(String query) async {
     try {
       // dioClient 요청
       final response = await dioClient.dio.get(
@@ -50,8 +50,8 @@ class SearchProvider {
 
       // 요청 성공 시 데이터 반환
       if (response.statusCode == 200) {
-        log('검색 결과 provider : $response');
-        return response.data.searchCourseList;
+        log('검색 결과 provider : ${response}');
+        return response.data['searchCourseList'];
       } else {
         throw Exception('검색 결과 조회 실패');
       }

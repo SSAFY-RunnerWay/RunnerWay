@@ -14,8 +14,8 @@ class SearchService {
   }
 
   // 키워드로 공식 코스 검색 결과 리스트 가져오기
-  Future<List<Course>> getOfficialCourseResults(String query) async {
-    final results = await _repository.getOfficialCourseResults(query);
+  Future<List<Course>> getCourseResults(String query) async {
+    final results = await _repository.getCourseResults(query);
     log('검색 결과 service: $results');
 
     return results;
