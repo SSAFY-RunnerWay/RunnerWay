@@ -4,11 +4,13 @@ import chuchu.runnerway.course.entity.CourseType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
+@Setter
 @EqualsAndHashCode
 public class SearchCourseResponseDto {
     private Long courseId;
