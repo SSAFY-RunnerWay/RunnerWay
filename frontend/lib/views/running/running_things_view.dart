@@ -11,8 +11,8 @@ import 'review_detail_view.dart'; // result_map.dart 파일을 import
 import 'review_write_view.dart'; // result_map.dart 파일을 import
 import 'package:get/get.dart'; // result_map.dart 파일을 import
 
-class RunningView extends StatelessWidget {
-  const RunningView({super.key});
+class RunningThingsView extends StatelessWidget {
+  const RunningThingsView({super.key});
 
   // location.dart 파일의 GeolocatorWidget 페이지로 이동하는 메소드
   void _navigateToLocation() {
