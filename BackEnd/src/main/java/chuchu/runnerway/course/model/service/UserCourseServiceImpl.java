@@ -38,7 +38,7 @@ public class UserCourseServiceImpl implements UserCourseService {
                 UserListResponseDto dto = mapper.map(course, UserListResponseDto.class);
                 dto.setNickname(course.getMember().getNickname());
                 // calcDistance 함수를 사용해 사용자와 코스 간의 거리 계산
-                double distance = calcDistance(lat, lng, Double.parseDouble(course.getLat()), Double.parseDouble(course.getLng()));
+                double distance = calcDistance(lat, lng, course.getLat(), course.getLng());
 
                 // 계산된 거리 값을 UserListResponseDto의 distance 변수에 설정
                 dto.setDistance(distance);
@@ -84,7 +84,7 @@ public class UserCourseServiceImpl implements UserCourseService {
                 UserListResponseDto dto = mapper.map(course, UserListResponseDto.class);
 
                 // calcDistance 함수를 사용해 사용자와 코스 간의 거리 계산
-                double distance = calcDistance(lat, lng, Double.parseDouble(course.getLat()), Double.parseDouble(course.getLng()));
+                double distance = calcDistance(lat, lng, course.getLat(), course.getLng());
 
                 // 계산된 거리 값을 UserListResponseDto의 distance 변수에 설정
                 dto.setDistance(distance);
@@ -104,7 +104,7 @@ public class UserCourseServiceImpl implements UserCourseService {
                 UserListResponseDto dto = mapper.map(course, UserListResponseDto.class);
 
                 // calcDistance 함수를 사용해 사용자와 코스 간의 거리 계산
-                double distance = calcDistance(lat, lng, Double.parseDouble(course.getLat()), Double.parseDouble(course.getLng()));
+                double distance = calcDistance(lat, lng, course.getLat(), course.getLng());
 
                 // 계산된 거리 값을 UserListResponseDto의 distance 변수에 설정
                 dto.setDistance(distance);

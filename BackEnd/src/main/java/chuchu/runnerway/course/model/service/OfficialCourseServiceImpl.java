@@ -6,16 +6,17 @@ import chuchu.runnerway.course.dto.response.OfficialListResponseDto;
 import chuchu.runnerway.course.entity.Course;
 import chuchu.runnerway.course.mapper.CourseMapper;
 import chuchu.runnerway.course.model.repository.OfficialCourseRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,15 +42,33 @@ public class OfficialCourseServiceImpl implements OfficialCourseService{
         return courseMapper.toOfficialDetailResponseDto(course);
     }
 
-    // 참여자 수 갱신
+    // 참여자 수 갱신(미완성)
     @Override
     @CachePut(value = "courseCache", key="#courseId")
     public OfficialDetailResponseDto incrementCourseCount(Long courseId) {
         // 지금 한 번 갱신밖에 안됨. 아마도, 원본 DB 기반 update를 진행중인듯? 캐싱 데이터에 먼저 접근해보자
-        OfficialDetailResponseDto courseDto = getOfficialCourse(courseId);
-        System.out.println("이건: "+courseDto.getCount());
+        OfficialDetailResponseDto courseDto = null;
 
-        courseDto.setCount(courseDto.getCount() + 1);
+//        Object cachedValue = redisTemplate.opsForValue().get("courseCache::" + courseId.toString());
+//
+//        if(cachedValue != null) {
+//            try {
+//                System.out.println(cachedValue);
+//
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                JsonNode rootNode = objectMapper.readTree(cachedValue.toString());
+//
+//                // 1단계: 첫 번째 리스트의 클래스 정보를 제거하고 두 번째 요소만 추출
+//                JsonNode actualDataNode = rootNode.get(1); // 첫 번째 요소는 클래스명, 두 번째 요소는 실제 데이터
+//
+//                // 파싱된 결과를 확인하기 위해 출력
+//                System.out.println("1단계 파싱 결과: " + actualDataNode.toString());
+//            }
+//        }
+
+//        System.out.println("이건: "+courseDto.getCount());
+
+//        courseDto.setCount(courseDto.getCount() + 1);
 
         return courseDto;
     }
@@ -57,6 +76,7 @@ public class OfficialCourseServiceImpl implements OfficialCourseService{
     // 내일 아침에 잘 되는지 확인ㄱㄱ
     @Override
     @Scheduled(cron = "0 0 3 * * *")
+    @Transactional
     public void updateAllCacheCountsToDB() {
         Set<String> keys = redisTemplate.keys("courseCache::*");
 
@@ -68,6 +88,9 @@ public class OfficialCourseServiceImpl implements OfficialCourseService{
                     .collect(Collectors.toList());
 
             officialCourseRepository.saveAll(courseList);
+
+            // 캐시 삭제
+            redisTemplate.delete(keys);
         }
 
     }

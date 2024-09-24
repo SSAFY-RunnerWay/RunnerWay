@@ -2,7 +2,6 @@ package chuchu.runnerway.course.entity;
 
 import chuchu.runnerway.course.dto.request.UserCourseRegistRequestDto;
 import chuchu.runnerway.member.domain.Member;
-import chuchu.runnerway.member.domain.MemberImage;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -11,8 +10,6 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,7 +21,7 @@ public class Course {
     }
 
     @Builder
-    public Course(Long courseId, CourseImage courseImage, String name, String address, String content, Long count, int level, int averageSlope, int averageDownhill, LocalDateTime averageTime, double courseLength, CourseType courseType, LocalDateTime registDate, double averageCalorie, String lat, String lng) {
+    public Course(Long courseId, CourseImage courseImage, String name, String address, String content, Long count, int level, int averageSlope, int averageDownhill, LocalDateTime averageTime, double courseLength, CourseType courseType, LocalDateTime registDate, double averageCalorie, double lat, double lng) {
         this.courseId = courseId;
         this.courseImage = courseImage;
         this.name = name;
@@ -92,10 +89,10 @@ public class Course {
     private double averageCalorie;
 
     @Column(name = "lat", nullable = false)
-    private String lat;
+    private double lat;
 
     @Column(name = "lng", nullable = false)
-    private String lng;
+    private double lng;
 
     @OneToOne(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference

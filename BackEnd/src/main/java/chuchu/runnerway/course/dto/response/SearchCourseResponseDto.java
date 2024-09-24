@@ -26,6 +26,6 @@ public class SearchCourseResponseDto {
     private CourseType courseType;
     private LocalDateTime registDate;
     private double averageCalorie;
-    private String lat;
-    private String lng;
+    private double lat;
+    private double lng;
 }

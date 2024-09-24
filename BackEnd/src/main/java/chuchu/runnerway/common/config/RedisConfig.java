@@ -2,9 +2,11 @@ package chuchu.runnerway.common.config;
 
 import chuchu.runnerway.course.dto.response.OfficialDetailResponseDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
@@ -91,7 +93,7 @@ public class RedisConfig {
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer)) // Value Serializer 변경
                 .disableCachingNullValues()
-                .entryTtl(Duration.ofMinutes(30L));
+                .entryTtl(Duration.ofHours(24).plusMinutes(30));
 
         builder.cacheDefaults(configuration);
 
