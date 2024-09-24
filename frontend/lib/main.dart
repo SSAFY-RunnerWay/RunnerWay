@@ -28,7 +28,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(UnderBarController());
-    log("@@@@@@@@@@@");
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       NetworkController.checkInitialConnectivity(context);
