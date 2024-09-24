@@ -68,4 +68,11 @@ public class OfficialCourseController {
 
         return ResponseEntity.ok("코스 참여가 등록되었습니다.");
     }
+
+    @PostMapping
+    public ResponseEntity<?> regist() {
+        incrementCourseCount.updateAllCacheCountsToDB();
+
+        return ResponseEntity.ok("등록 성공");
+    }
 }

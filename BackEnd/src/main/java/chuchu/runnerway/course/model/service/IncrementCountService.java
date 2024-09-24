@@ -7,4 +7,6 @@ public interface IncrementCountService {
     OfficialDetailResponseDto incrementOfficalCourseCount(Long courseId);
 
     UserDetailResponseDto incrementUserCourseCount(Long courseId);
+
+    void updateAllCacheCountsToDB();
 }

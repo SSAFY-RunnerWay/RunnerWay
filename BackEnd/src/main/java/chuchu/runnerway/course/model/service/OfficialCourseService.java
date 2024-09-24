@@ -11,5 +11,5 @@ public interface OfficialCourseService {
 
     OfficialDetailResponseDto getOfficialCourse(Long courseId);
 
-    void updateAllCacheCountsToDB();
+//    void updateAllCacheCountsToDB();
 }
