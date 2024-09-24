@@ -34,6 +34,8 @@ spring:
       host: ${serverhost}
       port: ${redisport}
       password: ${redispassword}
+  cache:
+    type: redis
 
 springdoc:
   swagger-ui:

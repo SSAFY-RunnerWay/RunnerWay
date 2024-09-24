@@ -20,7 +20,7 @@ public class UserCourseRegistRequestDto {
     private double courseLength;            //코스 전체 길이
     private CourseType courseType;          //코스 타입
     private double averageCalorie;          //예상 평균 소모 칼로리
-    private String lat;                     //위도
-    private String lng;                     //경도
+    private double lat;                     //위도
+    private double lng;                     //경도
     private CourseImageDto courseImage;     //코스이미지
 }

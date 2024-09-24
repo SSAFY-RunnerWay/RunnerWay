@@ -3,6 +3,7 @@ package chuchu.runnerway.course.entity;
 import static jakarta.persistence.FetchType.LAZY;
 
 import chuchu.runnerway.course.dto.CourseImageDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ public class CourseImage {
     @OneToOne(optional = false, fetch = LAZY)
     @MapsId
     @JoinColumn(name = "course_id")
+    @JsonBackReference
     private Course course;
 
     @Column(name = "url")

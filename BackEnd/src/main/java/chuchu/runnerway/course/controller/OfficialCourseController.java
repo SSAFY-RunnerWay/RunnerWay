@@ -53,4 +53,19 @@ public class OfficialCourseController {
 
       return ResponseEntity.ok(course);
     }
+
+    @PatchMapping("/{courseId}")
+    @Operation(summary = "공식 코스 참여자 수 갱신", description = "공식 코스 참여자 수 갱신 때 사용하는 API")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "공식코스 참여자 수 갱신",
+                    content = @Content(mediaType = "application/json")
+            ),
+    })
+    public ResponseEntity<?> incrementCourseCount(@PathVariable("courseId") Long courseId) {
+        officialCourseService.incrementCourseCount(courseId);
+
+        return ResponseEntity.ok().build();
+    }
 }

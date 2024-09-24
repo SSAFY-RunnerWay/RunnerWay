@@ -12,4 +12,8 @@ public interface OfficialCourseService {
     List<OfficialListResponseDto> findAllOfiicialCourse(double lat, double lng);
 
     OfficialDetailResponseDto getOfficialCourse(Long courseId);
+
+    OfficialDetailResponseDto incrementCourseCount(Long courseId);
+
+    void updateAllCacheCountsToDB();
 }
