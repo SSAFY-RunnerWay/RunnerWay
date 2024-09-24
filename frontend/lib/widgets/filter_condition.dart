@@ -17,9 +17,9 @@ class FilterCondition extends StatelessWidget {
             borderRadius: BorderRadius.circular(14),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
             child: ButtonTheme(
-              padding: EdgeInsets.symmetric(vertical: 0),
+              // padding: EdgeInsets.symmetric(vertical: 0),
               child: DropdownButton<String>(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 value: controller.sortCondition.value,
@@ -31,7 +31,7 @@ class FilterCondition extends StatelessWidget {
                       child: Text(
                         value,
                         style:
-                            TextStyle(color: Color(0xffE8E8E8), fontSize: 16),
+                            TextStyle(color: Color(0xffE8E8E8), fontSize: 14),
                       ),
                     );
                   },
@@ -54,7 +54,7 @@ class FilterCondition extends StatelessWidget {
       ),
 
       SizedBox(
-        width: 14,
+        width: 10,
       ),
 
       // 난이도 필터 버튼
@@ -71,7 +71,7 @@ class FilterCondition extends StatelessWidget {
           );
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             color: Color(0xffe8e8e8).withOpacity(0.5),
             borderRadius: BorderRadius.circular(14),
@@ -80,7 +80,7 @@ class FilterCondition extends StatelessWidget {
             children: [
               Text(
                 '난이도',
-                style: TextStyle(color: Colors.black, fontSize: 16),
+                style: TextStyle(color: Colors.black, fontSize: 14),
               ),
               Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black),
             ],
@@ -89,7 +89,7 @@ class FilterCondition extends StatelessWidget {
       ),
 
       SizedBox(
-        width: 14,
+        width: 10,
       ),
 
       // 코스 거리 필터 버튼
@@ -106,7 +106,7 @@ class FilterCondition extends StatelessWidget {
           );
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             color: Color(0xffe8e8e8).withOpacity(0.5),
             borderRadius: BorderRadius.circular(14),
@@ -115,7 +115,7 @@ class FilterCondition extends StatelessWidget {
             children: [
               Text(
                 '코스 거리',
-                style: TextStyle(color: Colors.black, fontSize: 16),
+                style: TextStyle(color: Colors.black, fontSize: 14),
               ),
               Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black),
             ],

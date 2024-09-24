@@ -1,25 +1,31 @@
+import 'course_image.dart';
+
 class Course {
   final int courseId;
   final String name;
   final String address;
-  final String? content; // content nullable 설정
+  final String? content;
   final int count;
   final int level;
   final double courseLength;
   final double lat;
   final double lng;
   final double? distance;
-  final double? averageSlope; // averageSlope nullable 설정
-  final String? averageTime; // averageTime nullable 설정
-  final double? averageCalorie; // averageCalorie nullable 설정
-  final String? courseType; // courseType nullable 설정
+  final double? averageSlope;
+  final String? averageTime;
+  final double? averageCalorie;
+  final String? courseType;
   final CourseImage? courseImage;
+  final double? averageDownhill;
+  final int? memberId;
+  final String? memberNickname;
+  final DateTime? registDate;
 
   Course({
     required this.courseId,
     required this.name,
     required this.address,
-    this.content, // nullable 설정
+    this.content,
     required this.level,
     required this.count,
     required this.courseLength,
@@ -27,10 +33,14 @@ class Course {
     required this.lng,
     this.courseImage,
     this.distance,
-    this.averageSlope, // nullable 설정
-    this.averageTime, // nullable 설정
-    this.averageCalorie, // nullable 설정
-    this.courseType, // nullable 설정
+    this.averageSlope,
+    this.averageTime,
+    this.averageCalorie,
+    this.courseType,
+    this.averageDownhill,
+    this.memberId,
+    this.memberNickname,
+    this.registDate,
   });
 
   // JSON 데이터를 파싱하여 Course 객체 생성
@@ -39,7 +49,7 @@ class Course {
       courseId: json['courseId'],
       name: json['name'],
       address: json['address'],
-      content: json['content'], // nullable field
+      content: json['content'],
       level: json['level'],
       count: json['count'],
       courseLength: (json['courseLength'] as num).toDouble(),
@@ -47,18 +57,26 @@ class Course {
       lng: (json['lng'] as num).toDouble(),
       courseImage: json['courseImage'] != null
           ? CourseImage.fromJson(json['courseImage'])
-          : null, // courseImage가 null일 경우 null 할당
+          : null,
       distance: json['distance'] != null
           ? (json['distance'] as num).toDouble()
-          : null, // distance도 json에서 변환 가능
+          : null,
       averageSlope: json['averageSlope'] != null
           ? (json['averageSlope'] as num).toDouble()
-          : null, // averageSlope nullable 설정
-      averageTime: json['averageTime'], // nullable 설정
+          : null,
+      averageTime: json['averageTime'],
       averageCalorie: json['averageCalorie'] != null
           ? (json['averageCalorie'] as num).toDouble()
-          : null, // nullable 설정
-      courseType: json['courseType'], // nullable 설정
+          : null,
+      courseType: json['courseType'],
+      averageDownhill: json['averageDownhill'] != null
+          ? (json['averageDownhill'] as num).toDouble()
+          : null,
+      memberId: json['memberId'],
+      memberNickname: json['memberNickname'],
+      registDate: json['registDate'] != null
+          ? DateTime.parse(json['registDate'])
+          : null,
     );
   }
 
@@ -79,6 +97,10 @@ class Course {
     double? averageCalorie,
     String? courseType,
     CourseImage? courseImage,
+    double? averageDownhill,
+    int? memberId,
+    String? memberNickname,
+    DateTime? registDate,
   }) {
     return Course(
       courseId: courseId ?? this.courseId,
@@ -96,27 +118,21 @@ class Course {
       averageCalorie: averageCalorie ?? this.averageCalorie,
       courseType: courseType ?? this.courseType,
       courseImage: courseImage ?? this.courseImage,
+      averageDownhill: averageDownhill ?? this.averageDownhill,
+      memberId: memberId ?? this.memberId,
+      memberNickname: memberNickname ?? this.memberNickname,
+      registDate: registDate ?? this.registDate,
     );
   }
-}
 
-class CourseImage {
-  final int courseId;
-  final String url;
-  final String path;
-
-  CourseImage({
-    required this.courseId,
-    required this.url,
-    required this.path,
-  });
-
-  // JSON 데이터를 파싱하여 CourseImage 객체 생성
-  factory CourseImage.fromJson(Map<String, dynamic> json) {
-    return CourseImage(
-      courseId: json['courseId'] as int,
-      url: json['url'] as String,
-      path: json['path'] as String,
-    );
+  // toString 메서드 오버라이드
+  @override
+  String toString() {
+    return 'Course(courseId: $courseId, name: $name, address: $address, '
+        'content: $content, count: $count, level: $level, courseLength: $courseLength, '
+        'lat: $lat, lng: $lng, distance: $distance, averageSlope: $averageSlope, '
+        'averageTime: $averageTime, averageCalorie: $averageCalorie, courseType: $courseType, '
+        'averageDownhill: $averageDownhill, memberId: $memberId, memberNickname: $memberNickname, '
+        'registDate: $registDate)';
   }
 }

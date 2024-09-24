@@ -15,7 +15,7 @@ class CourseProvider {
   ) async {
     try {
       final response =
-          await dioClient.dio.get('officialCourse/list', queryParameters: {
+          await dioClient.dio.get('official-course/list', queryParameters: {
         'lat': latitude,
         'lng': longitude,
       });
@@ -52,7 +52,7 @@ class CourseProvider {
   Future<Map<String, dynamic>> fetchOfficialCourseDetail(int id) async {
     try {
       final response = await dio.get(
-        'https://j11b304.p.ssafy.io/api/officialCourse/detail/${id}',
+        'https://j11b304.p.ssafy.io/api/official-course/detail/${id}',
         options: Options(
           headers: {
             'Authorization':

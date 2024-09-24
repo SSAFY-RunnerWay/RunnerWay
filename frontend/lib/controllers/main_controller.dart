@@ -35,6 +35,9 @@ class MainController extends GetxController {
         log("Position not available");
       }
     });
+
+    // MainController에만 필터가 적용되도록 콜백 설정
+    filterController.onMainFilterUpdated = _applyFiltersToCourses;
   }
 
   // 위치 정보를 가져오고 코스를 불러오는 함수
@@ -114,7 +117,7 @@ class MainController extends GetxController {
       await _fetchOfficialCourses(position.latitude, position.longitude);
 
       // 필터 및 정렬을 다시 적용
-      updateCourseList();
+      _applyFiltersToCourses();
     } catch (e) {
       print('위치 정보 갱신 중 문제 발생 : $e');
     }
@@ -136,7 +139,7 @@ class MainController extends GetxController {
   }
 
   // 코스 리스트 업데이트 함수
-  void updateCourseList() {
+  void _applyFiltersToCourses() {
     var filteredList = courses.toList();
 
     // 1. 난이도 필터링
