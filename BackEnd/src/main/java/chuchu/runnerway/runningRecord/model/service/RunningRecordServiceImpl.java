@@ -6,7 +6,6 @@ import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.repository.MemberRepository;
 import chuchu.runnerway.ranking.entity.Ranking;
 import chuchu.runnerway.ranking.model.repository.RankingRepository;
-import chuchu.runnerway.ranking.model.service.RankingService;
 import chuchu.runnerway.runningRecord.dto.request.RecordRegistRequestDto;
 import chuchu.runnerway.runningRecord.dto.request.RecordUpdateCommentRequestDto;
 import chuchu.runnerway.runningRecord.dto.request.RecordUpdatePictureRequestDto;
@@ -20,7 +19,7 @@ import chuchu.runnerway.runningRecord.model.repository.PersonalImageRepository;
 import chuchu.runnerway.runningRecord.model.repository.RunningRecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.webmvc.ui.SwaggerConfigResource;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,8 +40,8 @@ public class RunningRecordServiceImpl implements RunningRecordService{
     private final PersonalImageRepository personalImageRepository;
 
     private final RankingRepository rankingRepository;
-    private final SwaggerConfigResource swaggerConfigResource;
 
+    private final CacheManager cacheManager;
 
     @Override
     public List<RecordResponseDto> getRecords(int year, int month, Integer day) {
@@ -119,6 +118,7 @@ public class RunningRecordServiceImpl implements RunningRecordService{
 
     @Transactional
     @Override
+//    @CacheEvict(value = "rankCache", key = "#course.courseId", condition = "#result == true")
     public boolean registRanking(Course course, RunningRecord runningRecord, String logPath) {
         // 1. 코스에 대한 랭킹 조회
         List<Ranking> rankings = rankingRepository.findByCourse_CourseIdOrderByScore(course.getCourseId());
@@ -144,6 +144,7 @@ public class RunningRecordServiceImpl implements RunningRecordService{
             Ranking ranking = new Ranking();
             ranking.createRanking(course, member, score, logPath);
             rankingRepository.save(ranking);
+            Objects.requireNonNull(cacheManager.getCache("rankCache")).evict(course.getCourseId());
             return true;
         }
 
@@ -159,6 +160,7 @@ public class RunningRecordServiceImpl implements RunningRecordService{
                     Ranking ranking = new Ranking();
                     ranking.createRanking(course, member, score, logPath);
                     rankingRepository.save(ranking);
+                    Objects.requireNonNull(cacheManager.getCache("rankCache")).evict(course.getCourseId());
                     return true;
                 }
                 else return false;
@@ -171,6 +173,7 @@ public class RunningRecordServiceImpl implements RunningRecordService{
                 ranking.createRanking(course, member, score, logPath);
                 log.info("path: {}", ranking.getPath());
                 rankingRepository.save(ranking);
+                Objects.requireNonNull(cacheManager.getCache("rankCache")).evict(course.getCourseId());
                 return true;
             }
             return false;
