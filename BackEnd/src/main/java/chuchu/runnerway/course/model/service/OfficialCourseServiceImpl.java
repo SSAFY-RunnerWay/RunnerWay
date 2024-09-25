@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.model.service;
 
+import chuchu.runnerway.common.util.MemberInfo;
 import chuchu.runnerway.course.dto.RecommendationDto;
 import chuchu.runnerway.course.dto.response.OfficialDetailResponseDto;
 import chuchu.runnerway.course.dto.response.OfficialListResponseDto;
