@@ -53,12 +53,13 @@ public class UserCourseServiceImpl implements UserCourseService {
 
     @Transactional
     @Override
-    @Cacheable(value = "courseCache", key = "#courseId", unless = "#result == null")
+    @Cacheable(value = "userCourseCache", key = "#courseId", unless = "#result == null")
     public UserDetailResponseDto getUserCourse(Long courseId) {
         Course course = userCourseRepository.findById(courseId)
             .orElseThrow(NoSuchElementException::new);
         UserDetailResponseDto dto = mapper.map(course, UserDetailResponseDto.class);
         dto.setNickname(course.getMember().getNickname());
+        dto.setMemberId(course.getMember().getMemberId());
         return dto;
     }
 

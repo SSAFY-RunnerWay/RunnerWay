@@ -55,6 +55,9 @@ public class Member {
     @Column(name = "resign_time", columnDefinition = "TIMESTAMP")
     private LocalDateTime resignTime;
 
+    @Column(name = "gender")
+    private Integer gender;
+
     @Column(name = "is_resign")
     @ColumnDefault("0")
     private Integer isResign;

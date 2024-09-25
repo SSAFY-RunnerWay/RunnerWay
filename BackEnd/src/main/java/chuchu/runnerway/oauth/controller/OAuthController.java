@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +33,7 @@ public class OAuthController {
 
     @Operation(
         summary = "카카오 회원가입 요청",
-        description = "카카오 회원가입 할 때 사용하는 API, 인가 코드를 넘겨줘야함")
+        description = "카카오 회원가입 할 때 사용하는 API, 이메일을 넘겨줘야함")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",
@@ -45,9 +46,9 @@ public class OAuthController {
             content = @Content(mediaType = "application/json")
         )
     })
-    @PostMapping("/kakao")
-    public ResponseEntity<?> kakaoSignUp(@RequestParam("code") String code) {
-        KakaoMemberResponseDto kakaoMemberResponseDto = kakaoService.getKakaoUser(code);
+    @PostMapping("/kakao/{email}")
+    public ResponseEntity<?> kakaoSignUp(@PathVariable("email") String email) {
+        KakaoMemberResponseDto kakaoMemberResponseDto = kakaoService.getKakaoUser(email);
         return ResponseEntity.status(HttpStatus.OK).body(kakaoMemberResponseDto);
     }
 
