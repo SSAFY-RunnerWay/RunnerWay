@@ -58,10 +58,11 @@ public class OfficialCourseServiceImpl implements OfficialCourseService{
     }
 
     public List<RecommendationDto> getRecommendation (double lat, double lng) {
-         Flux<RecommendationDto> dto = webClient.get()
+        Long memberId = MemberInfo.getId();
+        Flux<RecommendationDto> dto = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/recommendation")
-                        .queryParam("member_id", 13)
+                        .queryParam("member_id", memberId)
                         .queryParam("lat", lat)
                         .queryParam("lng", lng)
                         .build())
