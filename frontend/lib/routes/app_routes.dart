@@ -1,5 +1,5 @@
 import 'package:frontend/views/course/course_detail_view.dart';
-import 'package:frontend/views/main/search_view.dart';
+import 'package:frontend/views/search/search_view.dart';
 import 'package:frontend/views/mypage/mypage_view.dart';
 import 'package:frontend/views/record/record_view.dart';
 import 'package:get/get.dart';
