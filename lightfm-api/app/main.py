@@ -17,5 +17,6 @@ def test(
     lng: float = Query(...),
     db: Session = Depends(get_db)
 ):
-    log_path = "C:/Users/SSAFY/Desktop/Project/runnerway/lightFM/lightfm-api/app/running_logs4.csv"
+    # log_path = "C:/Users/SSAFY/Desktop/Project/runnerway/lightFM/lightfm-api/app/running_logs4.csv"
+    log_path = "./running_logs4.csv"
     return load_data(db, log_path, member_id, lat, lng)
