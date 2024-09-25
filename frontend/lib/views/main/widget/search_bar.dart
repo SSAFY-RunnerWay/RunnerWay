@@ -27,7 +27,7 @@ class CourseSearchBar extends StatelessWidget {
         onTap: () {
           if (Get.currentRoute != '/search') {
             // searchController.setFocus(true);
-            searchController.searchText.value = '';
+            // searchController.searchText.value = '';
             searchController.searchResults.clear();
             Get.toNamed('/search');
           }
@@ -40,12 +40,17 @@ class CourseSearchBar extends StatelessWidget {
         decoration: InputDecoration(
           suffixIcon: IconButton(
             onPressed: () {
+              searchController.setFocus(false);
+
+              // 키보드 숨기기
+              FocusScope.of(context).unfocus();
+              searchController.searchResults.clear();
+
               // 검색 아이콘 클릭 시 검색 결과 페이지로 이동
               final query = searchController.textEditingController.text;
               if (query.isNotEmpty) {
                 Get.toNamed('/search?query=$query');
               }
-              ;
             },
             icon: Icon(
               Icons.search,

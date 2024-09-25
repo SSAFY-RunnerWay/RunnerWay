@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/controllers/filter_controller.dart';
 import 'package:frontend/controllers/search_controller.dart';
 import 'package:get/get.dart';
 
 import '../../../widgets/course/course_card.dart';
-import '../../../widgets/filter_condition.dart';
 
 class SearchResult extends StatelessWidget {
   const SearchResult({
@@ -14,88 +12,55 @@ class SearchResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final searchController = Get.find<SearchBarController>();
-    final filterController = Get.find<FilterController>();
-
-    // 검색 페이지로 들어왔을 때 타겟을 'search'로 설정
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      filterController.resetFilters();
-      filterController.setFilterTarget('search');
-    });
 
     final result = searchController.searchResults;
 
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FilterCondition(),
-          SizedBox(
-            height: 15,
-          ),
+    return Obx(
+      () {
+        if (searchController.isLoading.value) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-          // 공식 코스 검색 결과
-          Row(
+        if (result.isEmpty) {
+          return Container(
+            height: 500,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/empty.png',
+                  height: 150,
+                  width: 150,
+                ),
+                Text(
+                  '검색 결과가 없습니다',
+                  style: TextStyle(fontSize: 16),
+                )
+              ],
+            ),
+          );
+        }
+
+        return Expanded(
+          child: Column(
             children: [
-              Text(
-                '\'${searchController.searchText}\'으로 검색된',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Text(
-                ' 코스 결과',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 15,
-          ),
-
-          Obx(
-            () {
-              if (searchController.isLoading.value) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              if (result.isEmpty) {
-                return Container(
-                  height: 500,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
                     children: [
-                      Image.asset(
-                        'assets/images/empty.png',
-                        height: 150,
-                        width: 150,
-                      ),
                       Text(
-                        '검색 결과가 없습니다',
-                        style: TextStyle(fontSize: 16),
-                      )
+                        '코스 검색 결과',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                     ],
                   ),
-                );
-              }
-
-              return Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: result.length,
-                    itemBuilder: (context, index) {
-                      return CourseCard(course: result[index]);
-                    },
-                  ),
-                  SizedBox(height: 20),
 
                   // 페이지네이션 버튼
                   Row(
@@ -132,11 +97,30 @@ class SearchResult extends StatelessWidget {
                     ],
                   ),
                 ],
-              );
-            },
+              ),
+              SizedBox(height: 15),
+
+              // ListView.builder without SingleChildScrollView
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  itemCount: result.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == result.length) {
+                      // SizedBox 추가
+                      return SizedBox(
+                        height: 100,
+                      );
+                    }
+                    return CourseCard(course: result[index]);
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
