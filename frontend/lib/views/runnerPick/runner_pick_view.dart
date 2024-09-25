@@ -3,8 +3,6 @@ import 'package:frontend/views/base_view.dart';
 import 'package:frontend/widgets/filter_condition.dart';
 import 'package:frontend/widgets/search/search_read_only.dart';
 
-import '../search/widget/search_bar.dart';
-
 class RunnerPickView extends StatelessWidget {
   const RunnerPickView({super.key});
 
@@ -39,10 +37,11 @@ class RunnerPickView extends StatelessWidget {
                 ),
               ],
             ),
-
             SizedBox(
               height: 20,
             ),
+
+            // 필터 불러오기
             FilterCondition(),
           ],
         ),
