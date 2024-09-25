@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/network_controller.dart';
+import 'package:frontend/views/running/free_course_running_view.dart';
 import 'package:frontend/widgets/map/running_map.dart';
 import '../../widgets/map/location.dart'; // location.dart 파일을 import
 import '../../widgets/map/geolocation.dart'; // geolocation.dart 파일을 import
@@ -107,6 +108,11 @@ class RunningThingsView extends StatelessWidget {
               onPressed: () => _navigateToReviewWriteView(),
               // Navigates to the RunningDetail page
               child: const Text('Go to ReviewWrite'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.to(() => FreeCourseRunningView()),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to Free Course Running'),
             ),
           ],
         ),
