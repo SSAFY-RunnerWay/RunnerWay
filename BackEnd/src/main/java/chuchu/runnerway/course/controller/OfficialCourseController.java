@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.controller;
 
+import chuchu.runnerway.course.dto.RecommendationDto;
 import chuchu.runnerway.course.dto.response.OfficialDetailResponseDto;
 import chuchu.runnerway.course.dto.response.OfficialListResponseDto;
 import chuchu.runnerway.course.model.service.IncrementCountService;
@@ -35,7 +36,7 @@ public class OfficialCourseController {
             ),
     })
     public ResponseEntity<?> findAllOfficialCourses(@RequestParam double lat, @RequestParam double lng) {
-        List<OfficialListResponseDto> courses = officialCourseService.findAllOfiicialCourse(lat, lng);
+        List<RecommendationDto> courses = officialCourseService.findAllOfiicialCourse(lat, lng);
         return ResponseEntity.ok(courses);
     }
 
