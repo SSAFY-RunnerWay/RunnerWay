@@ -102,28 +102,31 @@ public class OfficialCourseServiceImpl implements OfficialCourseService{
 
 
     public void getRecommendation () {
-        Flux<RecommendationDto> dto = webClient.get()
+         Flux<RecommendationDto> dto = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/recommendation")
                         .queryParam("member_id", 13)
                         .build())
                 .retrieve()
                 .bodyToFlux(RecommendationDto.class);
-
-        dto.subscribe(
-                recommendationDto -> {
-                    // 추천 DTO의 필드를 출력
-                    System.out.println("Course ID: " + recommendationDto.getCourseId());
-                    System.out.println("Recommendation Score: " + recommendationDto.getRecommendationScore());
-                },
-                error -> {
-                    // 에러 처리
-                    System.err.println("Error occurred: " + error.getMessage());
-                },
-                () -> {
-                    // 완료 시 호출되는 메소드
-                    System.out.println("Recommendation retrieval completed.");
-                }
-        );
+        List<RecommendationDto> recommendations = dto.collectList().block();
+        for(RecommendationDto recommendationDto : recommendations) {
+            log.info("recommendationDto: {}, {}", recommendationDto.getCourseId(), recommendationDto.getRecommendationScore());
+        }
+//        dto.subscribe(
+//                recommendationDto -> {
+//                    // 추천 DTO의 필드를 출력
+//                    log.info("Course ID: {}", recommendationDto.getCourseId());
+//                    log.info("Recommendation Score: {}", + recommendationDto.getRecommendationScore());
+//                },
+//                error -> {
+//                    // 에러 처리
+//                    System.err.println("Error occurred: " + error.getMessage());
+//                },
+//                () -> {
+//                    // 완료 시 호출되는 메소드
+//                    log.info("Recommendation retrieval completed.");
+//                }
+//        );
     }
 }
