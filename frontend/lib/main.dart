@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'routes/app_routes.dart';
 import 'controllers/under_bar_controller.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'controllers/network_controller.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 Future<void> main() async {
-  log("start");
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   // 웹 환경에서 카카오 로그인을 정상적으로 완료하려면 runApp() 호출 전 아래 메서드 호출 필요
@@ -19,7 +19,6 @@ Future<void> main() async {
     nativeAppKey: dotenv.get("KAKAO_NATIVE_APP_KEY"),
     // nativeAppKey: 'KAKAO_NATIVE_APP_KEY',
   );
-  log(await KakaoSdk.origin);
   runApp(const MyApp());
 }
 
@@ -28,6 +27,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      NetworkController.checkInitialConnectivity(context);
+    });
     // 앱 시작 시 전역 상태로 UnderBarController 등록
     final AuthController authController = Get.put(AuthController());
     Get.put(UnderBarController());
