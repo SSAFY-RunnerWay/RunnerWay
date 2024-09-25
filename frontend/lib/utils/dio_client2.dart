@@ -25,44 +25,48 @@ class DioClient {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           log('Request[${options.method}] => PATH: ${options.path}');
-          // final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
-          // if (accessToken != null && !_isAuthorizationExcluded(options.path)) {
-          //   options.headers['Authorization'] = 'Bearer $accessToken';
-          // }
-          handler.next(options);
+
+          // 저장된 액세스 토큰 읽기
+          final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+          if (accessToken != null && !_isAuthorizationExcluded(options.path)) {
+            // 토큰을 Authorization 헤더에 추가
+            options.headers['Authorization'] = 'Bearer $accessToken';
+          }
+          handler.next(options); // 요청 계속 진행
         },
         onError: (DioException e, handler) async {
-          // if (e.response?.statusCode == 401 && !_isRefreshing) {
-          //   // 이미 토큰 갱신 중인 경우 기다리도록 설정
-          //   if (_refreshTokenFuture == null) {
-          //     _isRefreshing = true;
-          //     _refreshTokenFuture = _refreshToken();
-          //     await _refreshTokenFuture;
-          //     _isRefreshing = false;
-          //   } else {
-          //     await _refreshTokenFuture;
-          //   }
-          //
-          //   final newAccessToken = await _storage.read(key: 'ACCESS_TOKEN');
-          //   if (newAccessToken != null) {
-          //     e.requestOptions.headers['Authorization'] =
-          //         'Bearer $newAccessToken';
-          //     final clonedRequest = await _dio.request(
-          //       e.requestOptions.path,
-          //       options: Options(
-          //         method: e.requestOptions.method,
-          //         headers: e.requestOptions.headers,
-          //       ),
-          //       data: e.requestOptions.data,
-          //       queryParameters: e.requestOptions.queryParameters,
-          //     );
-          //     handler.resolve(clonedRequest); // 재시도된 요청 처리
-          //   } else {
-          //     handler.next(e); // 갱신 실패 시 에러 그대로 처리
-          //   }
-          // } else {
-          //   handler.next(e); // 다른 에러는 그대로 처리
-          // }
+          if (e.response?.statusCode == 401 && !_isRefreshing) {
+            // 401 에러가 발생하면 토큰 갱신 시도
+            if (_refreshTokenFuture == null) {
+              _isRefreshing = true;
+              _refreshTokenFuture = _refreshToken();
+              await _refreshTokenFuture;
+              _isRefreshing = false;
+            } else {
+              await _refreshTokenFuture;
+            }
+
+            final newAccessToken = await _storage.read(key: 'ACCESS_TOKEN');
+            if (newAccessToken != null) {
+              e.requestOptions.headers['Authorization'] =
+                  'Bearer $newAccessToken';
+              // 요청을 다시 시도
+              final clonedRequest = await _dio.request(
+                e.requestOptions.path,
+                options: Options(
+                  method: e.requestOptions.method,
+                  headers: e.requestOptions.headers,
+                ),
+                data: e.requestOptions.data,
+                queryParameters: e.requestOptions.queryParameters,
+              );
+              handler.resolve(clonedRequest); // 성공적으로 재시도된 요청 처리
+            } else {
+              handler.next(e); // 갱신 실패 시 에러 처리
+            }
+          } else {
+            handler.next(e); // 다른 에러는 그대로 처리
+          }
         },
       ),
     );
@@ -83,7 +87,7 @@ class DioClient {
     }
   }
 
-  // 토큰 필요 없는 경로 확인
+  // 토큰이 필요 없는 경로 확인
   bool _isAuthorizationExcluded(String path) {
     const excludedPaths = [
       '/oauth/kakao',
@@ -94,21 +98,24 @@ class DioClient {
     return excludedPaths.any((excluded) => path.contains(excluded));
   }
 
-// 서버로 이메일 전송하여 회원 여부 확인
+  // 서버로 이메일 전송하여 회원 여부 확인
   Future<Map<String, dynamic>> sendEmailForVerification(String email) async {
     try {
-      final response = await DioClient().dio.post(
-            'oauth/kakao/${email}', // 서버의 이메일 확인 API 엔드포인트
-          );
+      log('서버로 이메일 전송: $email');
+
+      // 이메일을 포함한 POST 요청
+      final response = await _dio.post(
+        'oauth/kakao/$email', // 서버의 이메일 확인 API 엔드포인트
+      );
+
       if (response.statusCode == 200) {
-        return response.data; // 서버에서 회원 존재 여부 반환
-        log('서버 로그인 확인');
+        log('서버 응답 성공: ${response.data}');
+        return response.data; // 서버에서 받은 데이터 반환
       } else {
         throw Exception('서버 응답 오류: ${response.statusCode}');
       }
     } catch (e) {
-      log('오류 떠?');
-      print('서버 통신 중 오류 발생: $e');
+      log('서버 통신 중 오류 발생: $e');
       throw e;
     }
   }

@@ -77,7 +77,7 @@ class LoginView extends StatelessWidget {
               GestureDetector(
                 onTap: () async {
                   // 카카오 로그인
-                  authController.requestUserInfo();
+                  authController.loginWithKakao();
                   print('카카오 로그인 클릭');
                 },
                 child: Container(
