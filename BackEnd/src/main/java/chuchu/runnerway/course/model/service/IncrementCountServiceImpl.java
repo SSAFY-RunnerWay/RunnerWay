@@ -9,6 +9,8 @@ import chuchu.runnerway.course.model.repository.UserCourseRepository;
 import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,6 +26,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class IncrementCountServiceImpl implements IncrementCountService {
 
+    private static final Logger log = LoggerFactory.getLogger(IncrementCountServiceImpl.class);
     private final OfficialCourseService officialCourseService;
     private final UserCourseService userCourseService;
     private final RedisTemplate<String, Object> redisTemplate;
@@ -150,5 +153,7 @@ public class IncrementCountServiceImpl implements IncrementCountService {
 
         userCourseRepository.saveAll(courseList);
         redisTemplate.delete(keys);
+        
+        log.info("캐싱 스케줄링 완료");
     }
 }

@@ -6,6 +6,7 @@ services:
     image: spring
     environment:
       - TZ=Asia/Seoul
+    privileged: true
     networks:
       - runnerway
 

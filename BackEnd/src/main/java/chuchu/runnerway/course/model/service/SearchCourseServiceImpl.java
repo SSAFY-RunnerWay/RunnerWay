@@ -9,6 +9,8 @@ import chuchu.runnerway.course.model.repository.OfficialCourseRepository;
 import chuchu.runnerway.course.model.repository.UserCourseRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,7 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class SearchCourseServiceImpl implements SearchCourseService{
+    private static final Logger log = LoggerFactory.getLogger(SearchCourseServiceImpl.class);
     private final ElasticSearchCourseRepository elasticSearchCourseRepository;
     private final OfficialCourseRepository officialCourseRepository;
     private final OfficialCourseService officialCourseService;
@@ -125,5 +128,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
                 )).toList();
 
         elasticSearchCourseRepository.saveAll(elasticSearchCourseList);
+
+        log.info("elastic 스케줄링 완료");
     }
 }
