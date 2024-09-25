@@ -13,8 +13,9 @@ class SearchService {
     return List<String>.from(words);
   }
 
-  // 키워드로 공식 코스 검색 결과 리스트 가져오기
-  Future<List<Course>> getCourseResults(String query, {int page = 0}) async {
+  // 키워드로 코스 검색 결과 리스트 가져오기
+  Future<Map<String, dynamic>> getCourseResults(String query,
+      {int page = 0}) async {
     final results = await _repository.getCourseResults(
       query,
       page,
