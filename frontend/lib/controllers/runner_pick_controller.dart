@@ -73,6 +73,7 @@ class RunnerPickController extends GetxController {
 
   // 유저 러너 코스 전체 가져오기
   Future<void> _fetchRunnerCourse() async {
+    log('$currentPosition');
     isLoading.value = true;
 
     try {
@@ -211,6 +212,8 @@ class RunnerPickController extends GetxController {
           desiredAccuracy: LocationAccuracy.high);
 
       currentPosition.value = position;
+      log('장소 업데이트, position : $position');
+      log('장소 업데이트, currentPosition : ${currentPosition.value}');
 
       // 위치 정보 기반으로 공식 코스 데이터 가져오기
       await _fetchRunnerCourse();

@@ -80,7 +80,8 @@ class RunnerPickView extends StatelessWidget {
                     );
                   }
 
-                  if (runnerPickController.runnerCourses.isEmpty) {
+                  if (!runnerPickController.isLoading.value &&
+                      runnerPickController.runnerCourses.isEmpty) {
                     return Center(
                       child: Text('추천 코스가 없습니다.'),
                     );
