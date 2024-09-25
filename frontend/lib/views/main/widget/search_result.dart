@@ -59,13 +59,6 @@ class SearchResult extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      // Text(
-                      //   ' 코스 결과',
-                      //   style: TextStyle(
-                      //     fontSize: 20,
-                      //     fontWeight: FontWeight.w400,
-                      //   ),
-                      // ),
                     ],
                   ),
 
