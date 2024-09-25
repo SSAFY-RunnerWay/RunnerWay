@@ -132,7 +132,7 @@ class MainController extends GetxController {
 
       courses.assignAll(fetchedCourses); // 코스 데이터 업데이트
     } catch (e) {
-      print('Error fetching courses: $e');
+      print('코스를 가져오는 중 오류 발생: $e');
     } finally {
       isLoading(false);
     }

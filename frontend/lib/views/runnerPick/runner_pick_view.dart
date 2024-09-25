@@ -20,10 +20,13 @@ class RunnerPickView extends StatelessWidget {
     filterController.setFilterTarget('runner');
 
     _scrollController.addListener(() {
+      // 스크롤 끝에 도달하면 데이터를 로드
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        // 스크롤이 끝에 도달하면 더 많은 데이터를 로드
-        runnerPickController.loadMoreData();
+        // 스크롤 끝에 도달했을 때 추가 데이터를 로드
+        if (!runnerPickController.isLoading.value) {
+          runnerPickController.loadMoreData();
+        }
       }
     });
   }
@@ -77,17 +80,19 @@ class RunnerPickView extends StatelessWidget {
                     );
                   }
 
-                  if (runnerPickController.filteredCourses.isEmpty) {
+                  if (runnerPickController.runnerCourses.isEmpty) {
                     return Center(
                       child: Text('추천 코스가 없습니다.'),
                     );
                   }
 
                   return ListView.builder(
-                    itemCount: runnerPickController.filteredCourses.length,
+                    controller: _scrollController,
+                    itemCount: runnerPickController.runnerCourses.length,
                     itemBuilder: (context, index) {
                       return CourseCard(
-                          course: runnerPickController.filteredCourses[index]);
+                        course: runnerPickController.runnerCourses[index],
+                      );
                     },
                   );
                 },

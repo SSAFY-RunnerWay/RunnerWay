@@ -19,7 +19,7 @@ class RunnerPickController extends GetxController {
   final int pageSize = 15;
 
   final CourseService _courseService = CourseService();
-  final FilterController filterController = FilterController();
+  final FilterController filterController = Get.find<FilterController>();
 
   @override
   void onInit() {
@@ -91,13 +91,16 @@ class RunnerPickController extends GetxController {
   }
 
   // 현재 페이지 데이터만 가져오는 함수
-  void _loadPageData() {
+  Future<void> _loadPageData() async {
     final int startIndex = (page.value - 1) * pageSize;
     final int endIndex = startIndex + pageSize;
 
+    log('$startIndex 부터 $endIndex까지 데이터 로딩');
+
     // 전체 코스 중 일부만 보여줌
-    if (startIndex < allCourses.length) {
-      log('startIndex < allCourses.lenth');
+    if (startIndex < filteredCourses.length) {
+      log('startIndex < filteredCourses.lenth');
+      log('데이터 더 가져옴');
 
       runnerCourses.addAll(
         filteredCourses.sublist(
@@ -111,10 +114,14 @@ class RunnerPickController extends GetxController {
   }
 
   // 추가 데이터를 로드하는 함수 (스크롤 끝에서 호출)
-  void loadMoreData() {
-    if (!isLoading.value && runnerCourses.length < allCourses.length) {
-      _loadPageData(); // 다음 페이지 데이터 로드
-    }
+  Future<void> loadMoreData() async {
+    // 이미 로딩 중인 경우 더 많은 데이터를 불러오지 않음
+    if (isLoading.value || runnerCourses.length >= filteredCourses.length)
+      return;
+
+    isLoading.value = true;
+    await _loadPageData();
+    isLoading.value = false; // 데이터 로드 완료 후 로딩 상태 해제
   }
 
   // 현재 필터 조건을 적용하여 필터링된 코스 목록을 업데이트하는 함수
@@ -171,5 +178,44 @@ class RunnerPickController extends GetxController {
     runnerCourses.clear(); // 페이지네이션을 위해 현재 페이지의 데이터를 초기화
     page.value = 1; // 페이지를 처음부터 다시 시작
     _loadPageData(); // 첫 페이지 데이터 로드
+  }
+
+  // 위치 정보 업데이트 시 코스 불러오고 필터 적용
+  Future<void> updateCurrentLocation() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+      // 위치 정보를 가져올 수 없는 경우 예외처리
+      if (!serviceEnabled) {
+        print('위치 정보를 가져올 수 없습니다');
+        return;
+      }
+
+      // 위치 정보 요청이 거절된 경우 예외처리
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          print('Location permissions are denied');
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        print('Location permissions are permanently denied.');
+        return;
+      }
+
+      // 현재 위치 가져오기
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      currentPosition.value = position;
+
+      // 위치 정보 기반으로 공식 코스 데이터 가져오기
+      await _fetchRunnerCourse();
+    } catch (e) {
+      print('위치 정보 갱신 중 문제 발생 : $e');
+    }
   }
 }
