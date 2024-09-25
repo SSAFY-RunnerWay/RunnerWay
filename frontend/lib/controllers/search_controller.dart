@@ -81,6 +81,7 @@ class SearchBarController extends GetxController {
   void fetchSearchResults(String query, {int page = 1, int size = 10}) async {
     // 데이터를 가져오기 전까지 로딩 상태
     isLoading.value = true;
+    searchText.value = query;
 
     try {
       if (query.isNotEmpty) {
@@ -91,13 +92,16 @@ class SearchBarController extends GetxController {
         );
         log('검색 결과 controller : $results');
         // 총 페이지수 계산
-        totalPages.value = (results.length / size).ceil();
+        totalPages.value = results['totalPages'];
         currentPage.value = page;
+
+        log('검색 결과 개수 : ${results['courses'].length}');
+        log('현재 페이지 검색 결과 : ${results['courses']}');
 
         // 검색 결과 가져오기
         // 필터링 적용
-        var filteredResults = _applyFilters(results);
-        searchResults.assignAll(filteredResults);
+        final pagedResults = results['courses'].toList();
+        searchResults.assignAll(pagedResults);
       } else {
         searchResults.clear();
       }
@@ -124,44 +128,6 @@ class SearchBarController extends GetxController {
         page: currentPage.value - 1,
       );
     }
-  }
-
-  List<Course> _applyFilters(List<Course> results) {
-    var filteredList = results;
-
-    // 난이도 필터 적용
-    filteredList = filteredList.where((course) {
-      return filterController.selectedDifficulty.contains(course.level);
-    }).toList();
-
-    // 거리 필터 적용
-    filteredList = filteredList.where((course) {
-      final selectedLength = filterController.selectedLength;
-
-      if (selectedLength.contains(3)) {
-        return course.courseLength <= 3;
-      } else if (selectedLength.contains(5)) {
-        return course.courseLength >= 3 && course.courseLength <= 5;
-      } else if (selectedLength.contains(10)) {
-        return course.courseLength >= 5 && course.courseLength <= 10;
-      } else {
-        return course.courseLength >= 10;
-      }
-    }).toList();
-
-    // 정렬 조건 적용
-    switch (filterController.sortCondition.value) {
-      case '인기순':
-        filteredList.sort((a, b) => b.count.compareTo(a.count));
-        break;
-      case '거리순':
-        filteredList.sort((a, b) => a.courseLength.compareTo(b.courseLength));
-        break;
-      default:
-        break;
-    }
-
-    return filteredList;
   }
 
   @override
