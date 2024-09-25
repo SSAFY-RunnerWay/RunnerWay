@@ -37,6 +37,28 @@ class CourseService {
     return course;
   }
 
+  // 러너 코스 전체 조회
+  Future<List<Course>> getRunnerCourse(Position currentPosition) async {
+    final courses = await _repository.getRunnerCourse(
+        currentPosition.latitude, currentPosition.longitude);
+    log('러너 코스 조회 service: $courses');
+
+    return courses.map(
+      (course) {
+        double distance = _calculateDistance(
+          currentPosition.latitude,
+          currentPosition.longitude,
+          course.lat,
+          course.lng,
+        );
+
+        log('courseName : ${course.name}, distance : $distance');
+
+        return course.copyWith(distance: distance);
+      },
+    ).toList();
+  }
+
   // 코스 랭킹 조회
   Future<List<Ranking>> getCourseRanking(int id) async {
     final ranking = await _repository.getCourseRanking(id);

@@ -75,7 +75,7 @@ class MainController extends GetxController {
       currentPosition.value = position;
 
       // 위치 정보 기반으로 공식 코스 데이터 가져오기
-      _fetchOfficialCourses(position.latitude, position.longitude);
+      _fetchOfficialCourses();
     } catch (e) {
       print("Error getting location: $e");
     }
@@ -114,7 +114,7 @@ class MainController extends GetxController {
       currentPosition.value = position;
 
       // 위치 정보 기반으로 공식 코스 데이터 가져오기
-      await _fetchOfficialCourses(position.latitude, position.longitude);
+      await _fetchOfficialCourses();
 
       // 필터 및 정렬을 다시 적용
       _applyFiltersToCourses();
@@ -124,7 +124,7 @@ class MainController extends GetxController {
   }
 
   // 코스를 불러오는 함수
-  Future<void> _fetchOfficialCourses(double latitude, double longitude) async {
+  Future<void> _fetchOfficialCourses() async {
     isLoading(true);
     try {
       final fetchedCourses =
