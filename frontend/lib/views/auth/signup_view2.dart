@@ -4,8 +4,6 @@ import 'package:frontend/widgets/button/wide_button.dart';
 class SignUpView2 extends StatelessWidget {
   const SignUpView2({super.key});
 
-  get setState => null;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,13 +65,25 @@ class SignUpView2 extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                )
-              ],
+            // Expanded로 아래 내용을 화면 크기에 맞게 조정
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      // 버튼이나 다른 위젯의 크기를 적절하게 조정 가능
+                      width: 100,
+                      height: 50,
+                      color: Colors.blue,
+                      child: Center(
+                        child: Text('Button'),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             )
           ],
         ),
