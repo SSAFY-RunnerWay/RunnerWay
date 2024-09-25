@@ -1,8 +1,10 @@
 package chuchu.runnerway.course.mapper;
 
+import chuchu.runnerway.course.dto.CourseImageDto;
 import chuchu.runnerway.course.dto.response.OfficialDetailResponseDto;
 import chuchu.runnerway.course.dto.response.OfficialListResponseDto;
 import chuchu.runnerway.course.entity.Course;
+import chuchu.runnerway.course.entity.CourseImage;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -14,6 +16,8 @@ public interface CourseMapper {
 
     @Mapping(source = "course.courseImage.url", target = "courseImage.url")
     OfficialDetailResponseDto toOfficialDetailResponseDto(Course course);
+
+    CourseImageDto toCourseImageDto(CourseImage courseImage);
 
     @Mapping(source = "course.courseImage.url", target = "courseImage.url")
     @Named("OfficialList")
