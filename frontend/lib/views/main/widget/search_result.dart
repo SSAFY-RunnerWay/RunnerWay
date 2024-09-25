@@ -53,19 +53,19 @@ class SearchResult extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '\'${searchController.searchText}\'으로 검색된',
+                        '코스 검색 결과',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Text(
-                        ' 코스 결과',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                      // Text(
+                      //   ' 코스 결과',
+                      //   style: TextStyle(
+                      //     fontSize: 20,
+                      //     fontWeight: FontWeight.w400,
+                      //   ),
+                      // ),
                     ],
                   ),
 

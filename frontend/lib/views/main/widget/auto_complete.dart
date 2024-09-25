@@ -7,29 +7,41 @@ class AutoCompleteList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchBarController = Get.find<SearchBarController>();
+    final searchController = Get.find<SearchBarController>();
 
     return Obx(() {
       // 자동 완성 리스트가 있는 경우
       return Flexible(
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: searchBarController.suggestions.length,
+          itemCount: searchController.suggestions.length,
           itemBuilder: (context, index) {
             return Column(
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5),
                   child: ListTile(
-                    title: Text(searchBarController.suggestions[index]),
+                    title: Text(searchController.suggestions[index]),
                     onTap: () {
-                      // TODO : 클릭 시 검색 결과 페이지로 이동 처리
+                      searchController.setFocus(false);
+                      searchController.textEditingController.text =
+                          searchController.suggestions[index];
+
+                      // 키보드 숨기기
+                      FocusScope.of(context).unfocus();
+                      searchController.searchResults.clear();
+
+                      // 검색 아이콘 클릭 시 검색 결과 페이지로 이동
+                      if (searchController.suggestions[index].isNotEmpty) {
+                        Get.toNamed(
+                            '/search?query=${searchController.suggestions[index]}');
+                      }
                     },
                   ),
                 ),
 
                 // 마지막 항목이 아닌 경우 구분선 추가
-                if (index != searchBarController.suggestions.length - 1)
+                if (index != searchController.suggestions.length - 1)
                   const Divider(
                     thickness: 1,
                     height: 1,
