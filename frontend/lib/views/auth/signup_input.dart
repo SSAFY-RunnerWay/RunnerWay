@@ -32,11 +32,11 @@ class SignupInput extends StatelessWidget {
             text,
             style: TextStyle(
               color: Color(0xFF1C1516),
-              fontSize: 15,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 8),
           Row(
             children: [
               Expanded(

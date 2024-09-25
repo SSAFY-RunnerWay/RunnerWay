@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart'; // 카카오 SDK 불러오기 위함
-import 'package:frontend/utils/dio_client2.dart';
+// import 'package:frontend/utils/dio_client2.dart';
+import 'package:frontend/controllers/auth_controller.dart';
+import 'package:get/get.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+  final AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class LoginView extends StatelessWidget {
       padding: const EdgeInsets.all(50),
       child: Column(
         children: [
-          SizedBox(height: 106), // 회원가입 페이지 유저 이미지 위치
+          SizedBox(height: 56), // 회원가입 페이지 유저 이미지 위치
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -53,8 +54,8 @@ class LoginView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 380,
-                height: 450,
+                width: 280,
+                height: 250,
                 child: Image.asset('assets/images/auth/login_image.png'),
               )
             ],
@@ -75,18 +76,8 @@ class LoginView extends StatelessWidget {
               // 카카오 버튼 누르면 로그인
               GestureDetector(
                 onTap: () async {
-                  try {
-                    OAuthToken token = await UserApi.instance
-                        .loginWithKakaoAccount(); // 카카오 계정으로 로그인
-                    // loginWithKakaoTalk 카카오톡으로 한다면 변경
-                    print('카카오톡으로 로그인 성공 ${token.accessToken}');
-                    //서버로 카카오 액세스 토큰 전달
-                    DioClient dioClient = DioClient();
-                    await dioClient.sendKakaoAccessToken(token.accessToken);
-                  } catch (error) {
-                    print('카카오톡으로 로그인 실패 $error');
-                  }
                   // 카카오 로그인
+                  authController.loginWithKakao();
                   print('카카오 로그인 클릭');
                 },
                 child: Container(
