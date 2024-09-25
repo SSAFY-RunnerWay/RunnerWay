@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/course.dart';
 import 'package:frontend/widgets/course/level_badge.dart';
+
+import '../../../models/course_image.dart';
 
 class CourseSubInfo extends StatelessWidget {
   final int level;

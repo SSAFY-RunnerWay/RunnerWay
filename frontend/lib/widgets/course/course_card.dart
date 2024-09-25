@@ -16,7 +16,7 @@ class CourseCard extends StatelessWidget {
         Get.toNamed('/course/${course.courseType}/${course.courseId}');
       },
       child: Card(
-        margin: EdgeInsets.only(bottom: 16),
+        margin: EdgeInsets.only(bottom: 18),
         color: Colors.white,
         elevation: 0,
         child: Row(
@@ -73,7 +73,25 @@ class CourseCard extends StatelessWidget {
                   ),
 
                   // level 뱃지
-                  LevelBadge(level: course.level),
+                  Row(
+                    children: [
+                      LevelBadge(level: course.level),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      if (course.courseType == 'user')
+                        Row(
+                          children: [
+                            Text(
+                              'course by. ',
+                              style: TextStyle(
+                                  fontFamily: 'playball', fontSize: 18),
+                            ),
+                            Text('${course.memberNickname}'),
+                          ],
+                        )
+                    ],
+                  ),
 
                   // 위치 정보 및 참여자수 정보
                   SizedBox(

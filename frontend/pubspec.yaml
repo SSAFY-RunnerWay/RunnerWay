@@ -84,9 +84,9 @@ flutter:
           weight: 100
         - asset: assets/fonts/notosans/NotoSans-ExtraLight.ttf
           weight: 200
-        - asset: assets/fonts/notosans/NotoSans-light.ttf
+        - asset: assets/fonts/notosans/NotoSans-Light.ttf
           weight: 300
-        - asset: assets/fonts/notosans/NotoSans-regular.ttf
+        - asset: assets/fonts/notosans/NotoSans-Regular.ttf
           weight: 400
         - asset: assets/fonts/notosans/NotoSans-Medium.ttf
           weight: 500

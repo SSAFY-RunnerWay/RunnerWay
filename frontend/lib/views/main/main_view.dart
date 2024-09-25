@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/course/course_card.dart';
 import 'package:frontend/widgets/filter_condition.dart';
+import 'package:frontend/widgets/search/search_read_only.dart';
 import 'package:get/get.dart';
 import '../../controllers/filter_controller.dart';
 import '../../controllers/main_controller.dart';
 import '../base_view.dart';
-import 'widget/search_bar.dart';
 
 class MainView extends StatelessWidget {
   // filtercontroller 먼저 등록
@@ -14,6 +14,11 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 메인 view에서 필터 타겟을 main으로 설정
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      filterController.setFilterTarget('main');
+    });
+
     return BaseView(
       child: Column(
         children: [
@@ -22,7 +27,7 @@ class MainView extends StatelessWidget {
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
-                CourseSearchBar(),
+                SearchReadOnly(),
                 SizedBox(height: 5),
               ],
             ),
@@ -48,14 +53,14 @@ class MainView extends StatelessWidget {
                       Row(
                         children: [
                           SizedBox(
-                            width: 24,
+                            width: 20,
                           ),
                           Text(
                             '러너들의 ',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
-                              fontSize: 22,
+                              fontSize: 20,
                             ),
                           ),
                           Text(
@@ -63,7 +68,7 @@ class MainView extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'playball',
-                              fontSize: 32,
+                              fontSize: 30,
                             ),
                           ),
                         ],
@@ -81,7 +86,7 @@ class MainView extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                             ),
                             Text(
@@ -89,7 +94,7 @@ class MainView extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                             )
                           ],

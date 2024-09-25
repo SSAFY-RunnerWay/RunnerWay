@@ -12,7 +12,7 @@ class LevelBadge extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       decoration: BoxDecoration(
         color: level == 1
-            ? Color(0xffFEE500).withOpacity(0.05)
+            ? Color(0xff0AC800).withOpacity(0.05)
             : level == 2
                 ? Color(0xff1EA6FC).withOpacity(0.05)
                 : Color(0xffFFF7F7),
@@ -22,7 +22,7 @@ class LevelBadge extends StatelessWidget {
         'Lv. ${level}',
         style: TextStyle(
           color: level == 1
-              ? Color(0xffFEE500)
+              ? Color(0xff0AC800)
               : level == 2
                   ? Color(0xff1EA6FC)
                   : Color(0xffF44237),
