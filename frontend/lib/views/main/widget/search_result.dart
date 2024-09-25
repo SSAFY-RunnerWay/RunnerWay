@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/controllers/filter_controller.dart';
 import 'package:frontend/controllers/search_controller.dart';
 import 'package:get/get.dart';
 
 import '../../../widgets/course/course_card.dart';
-import '../../../widgets/filter_condition.dart';
 
 class SearchResult extends StatelessWidget {
   const SearchResult({

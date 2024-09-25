@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import '../models/course.dart';
 import '../repositories/search_repository.dart';
 
 class SearchService {
