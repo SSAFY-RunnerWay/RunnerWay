@@ -1,7 +1,3 @@
-import 'dart:developer';
-import 'package:flutter/cupertino.dart';
-
-import '../models/auth.dart';
 import '../repositories/auth_repository.dart';
 
 class AuthService {

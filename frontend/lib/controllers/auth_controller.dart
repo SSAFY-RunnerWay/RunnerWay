@@ -5,8 +5,6 @@ import 'package:frontend/views/auth/signup_view.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:get/get.dart';
 
-import '../models/auth.dart';
-
 class AuthController extends GetxController {
   var email = ''.obs;
   var isLoggedIn = false.obs;

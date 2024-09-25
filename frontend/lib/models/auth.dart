@@ -1,5 +1,3 @@
-import 'package:frontend/models/ranking.dart';
-
 class Auth {
   final String email;
   final String nickname;
