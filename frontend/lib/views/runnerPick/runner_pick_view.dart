@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/filter_controller.dart';
 import 'package:frontend/controllers/runner_pick_controller.dart';
 import 'package:frontend/views/base_view.dart';
 import 'package:frontend/widgets/filter_condition.dart';
@@ -11,6 +12,21 @@ class RunnerPickView extends StatelessWidget {
   // 컨트롤러 인스턴스 생성
   final RunnerPickController runnerPickController =
       Get.put(RunnerPickController());
+  final FilterController filterController = Get.find<FilterController>();
+  final ScrollController _scrollController = ScrollController();
+
+  RunnerPickView() {
+    // filterTarget을 'runner'로 설정
+    filterController.setFilterTarget('runner');
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        // 스크롤이 끝에 도달하면 더 많은 데이터를 로드
+        runnerPickController.loadMoreData();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,17 +77,17 @@ class RunnerPickView extends StatelessWidget {
                     );
                   }
 
-                  if (runnerPickController.runnerCourses.isEmpty) {
+                  if (runnerPickController.filteredCourses.isEmpty) {
                     return Center(
                       child: Text('추천 코스가 없습니다.'),
                     );
                   }
 
                   return ListView.builder(
-                    itemCount: runnerPickController.runnerCourses.length,
+                    itemCount: runnerPickController.filteredCourses.length,
                     itemBuilder: (context, index) {
                       return CourseCard(
-                          course: runnerPickController.runnerCourses[index]);
+                          course: runnerPickController.filteredCourses[index]);
                     },
                   );
                 },

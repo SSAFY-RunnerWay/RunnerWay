@@ -151,15 +151,19 @@ class MainController extends GetxController {
     filteredList = filteredList.where((course) {
       final selectedLength = filterController.selectedLength;
 
-      if (selectedLength.contains(3)) {
-        return course.courseLength <= 3;
-      } else if (selectedLength.contains(5)) {
-        return course.courseLength >= 3 && course.courseLength <= 5;
-      } else if (selectedLength.contains(10)) {
-        return course.courseLength >= 5 && course.courseLength <= 10;
-      } else {
-        return course.courseLength >= 10;
-      }
+      return selectedLength.any((length) {
+        if (length == 3) {
+          return course.courseLength <= 3;
+        } else if (length == 5) {
+          return course.courseLength > 3 && course.courseLength <= 5;
+        } else if (length == 10) {
+          return course.courseLength > 5 && course.courseLength <= 10;
+        } else if (length == 'over') {
+          return course.courseLength > 10;
+        }
+
+        return false;
+      });
     }).toList();
 
     // 정렬 기준에 맞게 정렬
