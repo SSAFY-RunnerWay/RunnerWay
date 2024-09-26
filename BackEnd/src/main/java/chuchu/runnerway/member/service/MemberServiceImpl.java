@@ -9,6 +9,7 @@ import chuchu.runnerway.member.dto.request.MemberFavoriteCourseRequestDto;
 import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
 import chuchu.runnerway.member.dto.request.MemberUpdateRequestDto;
 import chuchu.runnerway.member.dto.response.DuplicateNicknameResponseDto;
+import chuchu.runnerway.member.dto.response.MemberIsFavoriteCourseResponseDto;
 import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
@@ -77,6 +78,16 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(member);
         memberImageRepository.save(memberImage);
+    }
+
+    @Transactional
+    @Override
+    public MemberIsFavoriteCourseResponseDto isFavoriteCourses(Long memberId) {
+        Integer favoriteCourseCount = favoriteCourseRepository.findReportCountById(memberId);
+        if (favoriteCourseCount == null || favoriteCourseCount.compareTo(0) <= 0) {
+            return new MemberIsFavoriteCourseResponseDto(false);
+        }
+        return new MemberIsFavoriteCourseResponseDto(true);
     }
 
     @Override
