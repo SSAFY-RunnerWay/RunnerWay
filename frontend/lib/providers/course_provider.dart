@@ -102,4 +102,46 @@ class CourseProvider {
       throw Exception('러너 코스 조회 중 문제 발생 : ${e.message}');
     }
   }
+
+  // 전체 인기 유저 코스 조회
+  Future<List<dynamic>> fetchMostPickCourse(
+      double latitude, double longitude) async {
+    try {
+      final response = await dioClient.dio.get(
+        '/user-course/popularity/all',
+        queryParameters: {'lat': latitude, 'lng': longitude},
+      );
+      log('전체 인기 유저 코스 API 통신 결과 : $response');
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('전체 인기 유저 코스 조회 중 문제 발생');
+      }
+    } on DioException catch (e) {
+      log('전체 인기 유저 코스 조회 중 문제 발생 : ${e.message}');
+      throw Exception('전체 인기 유저 코스 조회 중 문제 발생 : ${e.message}');
+    }
+  }
+
+  // 최근 인기 유저 코스 조회
+  Future<List<dynamic>> fetchRecentPickCourse(
+      double latitude, double longitude) async {
+    try {
+      final response = await dioClient.dio.get(
+        '/user-course/popularity/lately',
+        queryParameters: {'lat': latitude, 'lng': longitude},
+      );
+      log('최근 인기 유저 코스 API 통신 결과 : $response');
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('최근 인기 유저 코스 조회 중 문제 발생');
+      }
+    } on DioException catch (e) {
+      log('최근 인기 유저 코스 조회 : ${e.message}');
+      throw Exception('최근 인기 유저 코스 조회 : ${e.message}');
+    }
+  }
 }
