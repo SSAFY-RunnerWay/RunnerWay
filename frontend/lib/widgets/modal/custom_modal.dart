@@ -15,12 +15,16 @@ class CustomModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
-        height: 200,
-        padding: EdgeInsets.all(16),
+        height: 180,
+        padding: EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 16,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -32,7 +36,7 @@ class CustomModal extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             Text(
               content,
@@ -41,17 +45,21 @@ class CustomModal extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 30,
+              height: 20,
             ),
             ElevatedButton(
               onPressed: onConfirm,
               style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xff1C1516),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(30.0),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 90, vertical: 12),
               ),
-              child: Text('확인'),
+              child: Text(
+                '확인',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
