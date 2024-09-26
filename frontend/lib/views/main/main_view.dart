@@ -39,12 +39,20 @@ class MainView extends StatelessWidget {
           Container(
             child: Stack(
               children: [
-                // Stack을 Expanded로 감싸 남은 공간을 차지하게 함
+                // 클릭시 러너픽 페이지로 이동
                 Positioned(
-                  child: Image.asset(
-                    'assets/images/main/running.png',
+                  child: GestureDetector(
+                    onTap: () {
+                      // 클릭 시 동작할 코드를 여기에 작성
+                      print('이미지가 클릭되었습니다.');
+                      Get.toNamed('/runner-pick');
+                    },
+                    child: Image.asset(
+                      'assets/images/main/running.png',
+                    ),
                   ),
                 ),
+
                 Positioned(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
