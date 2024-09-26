@@ -19,6 +19,8 @@ class MainView extends StatelessWidget {
       filterController.setFilterTarget('main');
     });
 
+    final results = mainController.filteredCourses;
+
     return BaseView(
       child: Column(
         children: [
@@ -156,16 +158,21 @@ class MainView extends StatelessWidget {
                         }
 
                         return ListView.builder(
-                          itemCount: mainController.filteredCourses.length,
+                          itemCount: results.length + 1,
                           itemBuilder: (context, index) {
-                            return CourseCard(
-                                course: mainController.filteredCourses[index]);
+                            if (index == results.length) {
+                              // SizedBox 추가
+                              return SizedBox(
+                                height: 100,
+                              );
+                            }
+                            return CourseCard(course: results[index]);
                           },
                         );
                       },
                     ),
                   ),
-                  SizedBox(height: 50),
+                  // SizedBox(height: 50),
                 ],
               ),
             ),

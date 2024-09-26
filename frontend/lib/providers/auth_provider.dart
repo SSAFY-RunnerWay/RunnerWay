@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:dio/dio.dart';
 import 'package:frontend/utils/dio_client2.dart';
 
 class AuthProvider {

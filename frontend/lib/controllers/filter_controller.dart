@@ -61,7 +61,7 @@ class FilterController extends GetxController {
     if (filterTarget == 'main' && onMainFilterUpdated != null) {
       // 메인 컨트롤러에만 필터 적용
       onMainFilterUpdated!();
-    } else if (filterTarget == 'search' && onSearchFilterUpdated != null) {
+    } else if (filterTarget == 'runner' && onSearchFilterUpdated != null) {
       // 검색 컨트롤러에만 필터 적용
       onSearchFilterUpdated!();
     }

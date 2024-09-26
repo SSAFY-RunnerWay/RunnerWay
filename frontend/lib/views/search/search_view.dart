@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/views/main/widget/auto_complete.dart';
-import 'package:frontend/views/main/widget/search_bar.dart';
-import 'package:frontend/views/main/widget/search_prompt.dart';
-import 'package:frontend/views/main/widget/search_result.dart';
+import 'package:frontend/views/search/widget/search_bar.dart';
+import 'package:frontend/views/search/widget/search_prompt.dart';
+import 'package:frontend/views/search/widget/search_result.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/search_controller.dart';
