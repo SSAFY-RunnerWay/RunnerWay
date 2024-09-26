@@ -6,6 +6,7 @@ import chuchu.runnerway.member.dto.request.MemberFavoriteCourseRequestDto;
 import chuchu.runnerway.member.dto.request.MemberSignUpRequestDto;
 import chuchu.runnerway.member.dto.request.MemberUpdateRequestDto;
 import chuchu.runnerway.member.dto.response.DuplicateNicknameResponseDto;
+import chuchu.runnerway.member.dto.response.MemberIsFavoriteCourseResponseDto;
 import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
@@ -56,6 +57,26 @@ public class MemberController {
     ) {
         String accessToken = memberService.signUp(memberSignUpRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(accessToken);
+    }
+
+    @GetMapping("/tags")
+    @Operation(summary = "회원 선호 정보 등록 여부 조회", description = "회원 선호 정보 등록 여부 조회 API 입니다.")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "true: 등록 했음, false: 등록 안했음",
+            content = @Content(mediaType = "application/json")
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Error Message 로 전달함",
+            content = @Content(mediaType = "application/json")
+        ),
+    })
+    public ResponseEntity<?> selectIsFavoriteCourse() {
+        Long memberId = MemberInfo.getId();
+        MemberIsFavoriteCourseResponseDto responseDto = memberService.isFavoriteCourses(memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @PostMapping("/tags")
