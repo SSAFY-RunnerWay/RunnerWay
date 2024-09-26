@@ -1,6 +1,6 @@
+import 'package:frontend/providers/auth_provider.dart';
 import 'dart:developer';
 import 'package:frontend/models/auth.dart';
-import 'package:frontend/providers/auth_provider.dart';
 
 class AuthRepository {
   final AuthProvider _provider = AuthProvider();

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:frontend/models/course.dart';
 import 'package:frontend/models/ranking.dart';
 import 'package:frontend/providers/course_provider.dart';
@@ -27,5 +29,31 @@ class CourseRepository {
     return response
         .map((courseRanking) => Ranking.fromJson(courseRanking))
         .toList();
+  }
+
+  // 유저 코스 전체 조회
+  Future<List<Course>> getRunnerCourse(
+      double latitude, double longitude) async {
+    final response = await _provider.fetchRunnerCourse(latitude, longitude);
+    log('repository: $response');
+
+    return response.map((course) => Course.fromJson(course)).toList();
+  }
+
+  // 전체 인기 유저 코스 조회
+  Future<List<Course>> getMostPickCourse(
+      double latitude, double longitude) async {
+    final response = await _provider.fetchMostPickCourse(latitude, longitude);
+    log('전체 인기 유저 코스 조회 repository: $response');
+
+    return response.map((course) => Course.fromJson(course)).toList();
+  }
+
+  // 최근 인기 유저 코스 조회
+  Future<List<Course>> getRecentPickCours(
+      double latitude, double longitude) async {
+    final response = await _provider.fetchRecentPickCourse(latitude, longitude);
+
+    return response.map((course) => Course.fromJson(course)).toList();
   }
 }

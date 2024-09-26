@@ -19,6 +19,8 @@ class MainView extends StatelessWidget {
       filterController.setFilterTarget('main');
     });
 
+    final results = mainController.filteredCourses;
+
     return BaseView(
       child: Column(
         children: [
@@ -35,14 +37,19 @@ class MainView extends StatelessWidget {
 
           // Runner들의 Pick
           Container(
+              child: GestureDetector(
+            onTap: () {
+              Get.toNamed('/runner-pick');
+            },
             child: Stack(
               children: [
-                // Stack을 Expanded로 감싸 남은 공간을 차지하게 함
+                // 클릭시 러너픽 페이지로 이동
                 Positioned(
                   child: Image.asset(
                     'assets/images/main/running.png',
                   ),
                 ),
+
                 Positioned(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +112,7 @@ class MainView extends StatelessWidget {
                 )
               ],
             ),
-          ),
+          )),
 
           // 오늘의 추천 코스 container
           Expanded(
@@ -120,7 +127,7 @@ class MainView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '오늘의 ',
+                        '러너웨이 공식 ',
                         style: TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 22),
                       ),
@@ -156,16 +163,21 @@ class MainView extends StatelessWidget {
                         }
 
                         return ListView.builder(
-                          itemCount: mainController.filteredCourses.length,
+                          itemCount: results.length + 1,
                           itemBuilder: (context, index) {
-                            return CourseCard(
-                                course: mainController.filteredCourses[index]);
+                            if (index == results.length) {
+                              // SizedBox 추가
+                              return SizedBox(
+                                height: 100,
+                              );
+                            }
+                            return CourseCard(course: results[index]);
                           },
                         );
                       },
                     ),
                   ),
-                  SizedBox(height: 50),
+                  // SizedBox(height: 50),
                 ],
               ),
             ),

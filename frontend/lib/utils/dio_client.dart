@@ -10,8 +10,8 @@ class DioClient {
     _dio = Dio(
       BaseOptions(
         baseUrl: 'https://j11b304.p.ssafy.io/api/',
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
+        connectTimeout: const Duration(seconds: 20),
+        receiveTimeout: const Duration(seconds: 20),
         headers: {
           'Accept': 'application/json',
         },

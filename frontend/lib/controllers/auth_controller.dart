@@ -28,8 +28,18 @@ class AuthController extends GetxController {
       // 토큰을 스토리지에 저장
       await _saveToken(token.accessToken);
 
+      // 저장된 토큰을 바로 불러와서 확인
+      String? accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+      if (accessToken != null) {
+        log('카카오톡으로 로그인 성공: ${token.accessToken}');
+      } else {
+        log('토큰 저장 실패: 불러올 수 없습니다.');
+      }
       // 사용자 정보 요청
       await requestUserInfo();
+
+      // 로그인 성공 상태
+      isLoggedIn.value = true;
     } catch (error) {
       log('카카오톡 로그인 실패: $error');
       Get.snackbar('오류', '카카오톡 로그인에 실패했습니다.');
@@ -52,7 +62,6 @@ class AuthController extends GetxController {
 // 서버로 이메일을 보내 회원 여부 확인
   Future<void> checkUserEmailOnServer(String userEmail) async {
     try {
-      // provider에서 응답 받기
       final response = await _authService.getOuathKakao(userEmail);
 
       // 서버에서 받은 응답이 accessToken인 경우
