@@ -1,107 +1,136 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/controllers/filter_controller.dart';
 import 'package:frontend/controllers/runner_pick_controller.dart';
 import 'package:frontend/views/base_view.dart';
-import 'package:frontend/widgets/filter_condition.dart';
-import 'package:frontend/widgets/search/search_read_only.dart';
+import 'package:frontend/widgets/button/back_button.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/course/course_card.dart';
 
 class RunnerPickView extends StatelessWidget {
-  // 컨트롤러 인스턴스 생성
-  final RunnerPickController runnerPickController =
-      Get.put(RunnerPickController());
-  final FilterController filterController = Get.find<FilterController>();
-  final ScrollController _scrollController = ScrollController();
-
-  RunnerPickView() {
-    // filterTarget을 'runner'로 설정
-    filterController.setFilterTarget('runner');
-
-    _scrollController.addListener(() {
-      // 스크롤 끝에 도달하면 데이터를 로드
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        // 스크롤 끝에 도달했을 때 추가 데이터를 로드
-        if (!runnerPickController.isLoading.value) {
-          runnerPickController.loadMoreData();
-        }
-      }
-    });
-  }
+  const RunnerPickView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final RunnerPickController runnerPickController =
+        Get.put(RunnerPickController());
+
     return BaseView(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 검색바
-            SearchReadOnly(),
-            SizedBox(height: 20),
-
-            // '러너들의 추천 코스' 제목
+            // 러너들의 Pick AppBar
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  width: 5,
+                // 뒤로가기
+                CustomBackButton(),
+
+                // title
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '러너들의 ',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    ),
+                    Text(
+                      'Pick',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontFamily: 'playball',
+                      ),
+                    )
+                  ],
                 ),
-                Text(
-                  '러너들의 ',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 22),
-                ),
-                Text(
-                  '추천코스',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 22,
+
+                // 현위치 불러오기 버튼
+                IconButton(
+                  onPressed: () async {
+                    // 현위치로 위치 정보 갱신
+                    runnerPickController.onInit();
+                  },
+                  icon: Image.asset(
+                    'assets/images/main/gps.png',
+                    width: 24,
                   ),
                 ),
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 15,
             ),
 
-            // 필터
-            FilterCondition(),
-            SizedBox(height: 25),
-
-            // 러너 코스 리스트
-            Expanded(
-              child: Obx(
-                () {
-                  if (runnerPickController.isLoading.value) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  if (!runnerPickController.isLoading.value &&
-                      runnerPickController.runnerCourses.isEmpty) {
-                    return Center(
-                      child: Text('추천 코스가 없습니다.'),
-                    );
-                  }
-
-                  return ListView.builder(
-                    controller: _scrollController,
-                    itemCount: runnerPickController.runnerCourses.length,
-                    itemBuilder: (context, index) {
-                      return CourseCard(
-                        course: runnerPickController.runnerCourses[index],
-                      );
-                    },
-                  );
-                },
+            // 러너픽 페이지 content
+            // 가장 인기 많은 코스
+            Text(
+              '가장 인기 많은 코스',
+              style: TextStyle(
+                fontSize: 16,
               ),
             ),
-            SizedBox(
-              height: 80,
+            SizedBox(height: 20),
+            Obx(() {
+              // 로딩 상태일 때
+              if (runnerPickController.isMostPickLoading.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              // 결과가 없을 때
+              if (runnerPickController.mostPickCourses.isEmpty) {
+                return Text("가장 인기 많은 코스를 불러올 수 없습니다.");
+              }
+
+              // 코스가 있을 때 ListView.builder로 출력
+              return ListView.builder(
+                shrinkWrap: true, // SingleChildScrollView 안에서 스크롤 설정
+                physics: NeverScrollableScrollPhysics(), // 충돌 방지
+                itemCount: runnerPickController.mostPickCourses.length,
+                itemBuilder: (context, index) {
+                  final course = runnerPickController.mostPickCourses[index];
+                  return CourseCard(course: course); // CourseCard를 보여줌
+                },
+              );
+            }),
+
+            // 최근 인기 많은 코스
+            Text(
+              '최근 인기 많은 코스',
+              style: TextStyle(
+                fontSize: 16,
+              ),
             ),
+            SizedBox(height: 20),
+            Obx(() {
+              // 로딩 상태일 때
+              if (runnerPickController.isRecentPickLoading.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              // 결과가 없을 때
+              if (runnerPickController.recentPickCourses.isEmpty) {
+                return Text("최근 인기 많은 코스를 불러올 수 없습니다.");
+              }
+
+              // 코스가 있을 때 ListView.builder로 출력
+              return ListView.builder(
+                shrinkWrap: true, // SingleChildScrollView 안에서 스크롤 설정
+                physics: NeverScrollableScrollPhysics(), // 충돌 방지
+                itemCount: runnerPickController.recentPickCourses.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == runnerPickController.recentPickCourses.length) {
+                    // SizedBox 추가 (끝에 공간 추가)
+                    return SizedBox(
+                      height: 100,
+                    );
+                  }
+                  final course = runnerPickController.recentPickCourses[index];
+                  return CourseCard(course: course); // CourseCard를 보여줌
+                },
+              );
+            })
           ],
         ),
       ),

@@ -71,4 +71,20 @@ class CourseService {
       double startLat, double startLng, double endLat, double endLng) {
     return Geolocator.distanceBetween(startLat, startLng, endLat, endLng);
   }
+
+  // 전체 인기 유저 코스 조회
+  Future<List<Course>> getMostPickCourse(Position currentPosition) async {
+    final courses = await _repository.getMostPickCourse(
+        currentPosition.latitude, currentPosition.longitude);
+
+    return courses;
+  }
+
+  // 최근 인기 유저 코스 조회
+  Future<List<Course>> getRecentPickCourse(Position currentPosition) async {
+    final courses = await _repository.getRecentPickCours(
+        currentPosition.latitude, currentPosition.longitude);
+
+    return courses;
+  }
 }

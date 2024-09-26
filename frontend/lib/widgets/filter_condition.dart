@@ -1,5 +1,5 @@
 import 'package:frontend/controllers/main_controller.dart';
-import 'package:frontend/controllers/runner_pick_controller.dart';
+import 'package:frontend/controllers/runner_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../controllers/filter_controller.dart';
@@ -134,7 +134,7 @@ class FilterCondition extends StatelessWidget {
           if (Get.currentRoute == '/main')
             await Get.find<MainController>().updateCurrentLocation();
           else
-            await Get.find<RunnerPickController>().updateCurrentLocation();
+            await Get.find<RunnerController>().updateCurrentLocation();
         },
         icon: Image.asset(
           'assets/images/main/gps.png',
