@@ -4,7 +4,7 @@ import 'package:frontend/views/mypage/mypage_view.dart';
 import 'package:frontend/views/record/record_view.dart';
 import 'package:get/get.dart';
 import 'package:frontend/views/main/main_view.dart';
-import 'package:frontend/views/runnerPick/runner_pick_view.dart';
+import 'package:frontend/views/runner/runner_view.dart';
 import 'package:frontend/views/auth/signup_view.dart';
 
 class AppRoutes {
@@ -27,7 +27,7 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: '/runner-pick',
-        page: () => RunnerPickView(),
+        page: () => RunnerView(),
         transition: Transition.noTransition),
     GetPage(
         name: '/record',

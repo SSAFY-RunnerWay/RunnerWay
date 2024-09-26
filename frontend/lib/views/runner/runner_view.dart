@@ -8,14 +8,14 @@ import 'package:get/get.dart';
 
 import '../../widgets/course/course_card.dart';
 
-class RunnerPickView extends StatelessWidget {
+class RunnerView extends StatelessWidget {
   // 컨트롤러 인스턴스 생성
   final RunnerPickController runnerPickController =
       Get.put(RunnerPickController());
   final FilterController filterController = Get.find<FilterController>();
   final ScrollController _scrollController = ScrollController();
 
-  RunnerPickView() {
+  RunnerView() {
     // filterTarget을 'runner'로 설정
     filterController.setFilterTarget('runner');
 
