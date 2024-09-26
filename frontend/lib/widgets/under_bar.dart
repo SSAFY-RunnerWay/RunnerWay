@@ -50,7 +50,7 @@ class UnderBar extends StatelessWidget {
                       Positioned(
                         left: screenWidth / 5,
                         top: 7,
-                        child: _buildNavItem(1, '러너픽', MyFlutterApp.road_1,
+                        child: _buildNavItem(1, '러너', MyFlutterApp.road_1,
                             screenWidth / 4, controller,
                             hasSizedBox: true),
                       ),

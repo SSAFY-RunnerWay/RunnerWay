@@ -122,7 +122,7 @@ class MainView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '오늘의 ',
+                        '러너웨이 공식 ',
                         style: TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 22),
                       ),
