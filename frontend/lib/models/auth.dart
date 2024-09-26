@@ -1,5 +1,3 @@
-import 'package:frontend/models/ranking.dart';
-
 class Auth {
   final String email;
   final String nickname;
@@ -7,10 +5,9 @@ class Auth {
   final int? gender; // 0 또는 1로 구분
   final int? height;
   final int? weight;
-  final MemberImage? memberImage; // memberImage는 별도의 클래스에서 관리
+  final MemberImage? memberImage; // memberImage는 nullable 가능
   final String joinType; // "kakao" 같은 회원가입 타입
 
-  //required 여부 확인
   Auth({
     required this.email,
     required this.nickname,
@@ -18,7 +15,7 @@ class Auth {
     this.gender,
     this.height,
     this.weight,
-    this.memberImage,
+    this.memberImage, // nullable 처리
     required this.joinType,
   });
 
@@ -36,7 +33,7 @@ class Auth {
       joinType: json['joinType'],
       memberImage: json['memberImage'] != null
           ? MemberImage.fromJson(json['memberImage'])
-          : null, // memberImage 처리
+          : null, // memberImage가 nullable
     );
   }
 
@@ -45,28 +42,29 @@ class Auth {
     return {
       'email': email,
       'nickname': nickname,
-      'birth': birth != null
-          ? birth!.toIso8601String()
-          : null, // DateTime을 string으로 변환
+      'birth': birth?.toIso8601String(),
       'gender': gender,
       'height': height,
       'weight': weight,
       'joinType': joinType,
-      'memberImage': memberImage != null ? memberImage!.toJson() : null,
+      // 'memberImage': memberImage?.toJson(),
+      'memberImage': memberImage != null
+          ? memberImage!.toJson()
+          : null, // nullable memberImage 처리
     };
   }
 }
 
 // MemberImage 모델
 class MemberImage {
-  final int memberId;
-  final String url;
-  final String path;
+  final int? memberId; // nullable 처리
+  final String? url; // nullable 처리
+  final String? path; // nullable 처리
 
   MemberImage({
-    required this.memberId,
-    required this.url,
-    required this.path,
+    this.memberId, // nullable
+    this.url, // nullable
+    this.path, // nullable
   });
 
   factory MemberImage.fromJson(Map<String, dynamic> json) {

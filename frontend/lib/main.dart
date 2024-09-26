@@ -1,5 +1,3 @@
-import 'dart:developer';
-import 'package:frontend/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'routes/app_routes.dart';
@@ -31,7 +29,6 @@ class MyApp extends StatelessWidget {
       NetworkController.checkInitialConnectivity(context);
     });
     // 앱 시작 시 전역 상태로 UnderBarController 등록
-    final AuthController authController = Get.put(AuthController());
     Get.put(UnderBarController());
     return SafeArea(
       child: GetMaterialApp(

@@ -39,7 +39,9 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: '/signup',
-        page: () => SignUpView(),
+        page: () => SignUpView(
+              email: '',
+            ),
         transition: Transition.noTransition),
   ];
 }

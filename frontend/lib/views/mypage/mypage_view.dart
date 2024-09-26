@@ -18,7 +18,10 @@ class MypageView extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SignUpView()),
+                  MaterialPageRoute(
+                      builder: (context) => SignUpView(
+                            email: '',
+                          )),
                 );
               },
               child: const Text('Go to Signup Page'),

@@ -1,27 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/button/wide_button.dart';
 import 'package:frontend/widgets/modal/birth_modal.dart';
-import 'package:frontend/views/auth/signup_input.dart';
+import 'package:frontend/views/auth/widget/signup_input.dart';
 import 'package:frontend/views/auth/signup_view2.dart';
+import 'package:frontend/controllers/auth_controller.dart';
+import 'package:get/get.dart';
+import 'package:frontend/models/auth.dart';
 
 class SignUpView extends StatefulWidget {
-  const SignUpView({super.key});
+  final String email;
+
+  const SignUpView({super.key, required this.email});
 
   @override
   _SignUpViewState createState() => _SignUpViewState();
 }
 
 class _SignUpViewState extends State<SignUpView> {
+  final TextEditingController _nicknameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-
-  // 상태를 관리할 변수
+  final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
+  final AuthController _authController = Get.put(AuthController());
   String selectedGender = ''; // "woman", "man"으로 구분
+  bool isButtonActive = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nicknameController.addListener(_onNicknameChanged);
+  }
+
+  void _onNicknameChanged() {
+    // 닉네임 입력하면 버튼 활성화
+    setState(() {
+      isButtonActive = _nicknameController.text.trim().isNotEmpty;
+    });
+  }
+
+  @override
+  void dispose() {
+    _nicknameController.dispose();
+    _dateController.dispose();
+    _heightController.dispose();
+    _weightController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      resizeToAvoidBottomInset: true, // 이 부분을 추가하거나 확인하세요
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         scrolledUnderElevation: 0,
         centerTitle: true,
@@ -80,6 +110,7 @@ class _SignUpViewState extends State<SignUpView> {
                 children: [
                   Expanded(
                     child: TextField(
+                      controller: _nicknameController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         enabledBorder: OutlineInputBorder(
@@ -117,7 +148,6 @@ class _SignUpViewState extends State<SignUpView> {
                 ],
               ),
               SizedBox(height: 7),
-              // 생년월일 달력 modal
               BirthModal(birthController: _dateController),
               // 키 몸무게 input
               Row(
@@ -243,7 +273,29 @@ class _SignUpViewState extends State<SignUpView> {
         padding: const EdgeInsets.all(20),
         child: WideButton(
           text: '다음',
-          isActive: true,
+          isActive: isButtonActive,
+          onTap: isButtonActive
+              ? () async {
+                  await _authController.signup(
+                    Auth(
+                      email: widget.email,
+                      nickname: _nicknameController.text,
+                      birth: DateTime.tryParse(_dateController.text),
+                      height: int.tryParse(_heightController.text),
+                      weight: int.tryParse(_weightController.text),
+                      gender: selectedGender == 'man' ? 1 : 0, // 성별 설정
+                      joinType: 'kakao',
+                      memberImage: MemberImage(
+                        memberId: null,
+                        url: "",
+                        path: "",
+                      ),
+                    ),
+                  );
+
+                  Get.to(SignUpView2());
+                }
+              : null, // '다음' 버튼 클릭 시 동작
         ),
       ),
     );
