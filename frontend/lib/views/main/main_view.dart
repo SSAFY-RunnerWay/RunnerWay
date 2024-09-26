@@ -5,6 +5,7 @@ import 'package:frontend/widgets/search/search_read_only.dart';
 import 'package:get/get.dart';
 import '../../controllers/filter_controller.dart';
 import '../../controllers/main_controller.dart';
+import '../../controllers/under_bar_controller.dart';
 import '../base_view.dart';
 
 class MainView extends StatelessWidget {
@@ -14,6 +15,13 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 페이지 진입 시 언더바 인덱스를 업데이트
+    final UnderBarController underBarController =
+        Get.find<UnderBarController>();
+
+    // 메인 뷰 빌드 후 언더바 탭 활성화
+    Future.microtask(() => underBarController.changeTabIndex(0));
+
     // 메인 view에서 필터 타겟을 main으로 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
       filterController.setFilterTarget('main');
