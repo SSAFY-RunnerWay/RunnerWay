@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 import '../models/course.dart';
 
-class RunnerPickController extends GetxController {
+class RunnerController extends GetxController {
   var isLoading = false.obs;
   var runnerCourses = <Course>[].obs;
   var currentPosition = Rxn<Position>();

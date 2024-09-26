@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/filter_controller.dart';
-import 'package:frontend/controllers/runner_pick_controller.dart';
+import 'package:frontend/controllers/runner_controller.dart';
 import 'package:frontend/views/base_view.dart';
 import 'package:frontend/widgets/filter_condition.dart';
 import 'package:frontend/widgets/search/search_read_only.dart';
@@ -10,8 +10,7 @@ import '../../widgets/course/course_card.dart';
 
 class RunnerView extends StatelessWidget {
   // 컨트롤러 인스턴스 생성
-  final RunnerPickController runnerPickController =
-      Get.put(RunnerPickController());
+  final RunnerController runnerController = Get.put(RunnerController());
   final FilterController filterController = Get.find<FilterController>();
   final ScrollController _scrollController = ScrollController();
 
@@ -24,8 +23,8 @@ class RunnerView extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         // 스크롤 끝에 도달했을 때 추가 데이터를 로드
-        if (!runnerPickController.isLoading.value) {
-          runnerPickController.loadMoreData();
+        if (!runnerController.isLoading.value) {
+          runnerController.loadMoreData();
         }
       }
     });
@@ -74,14 +73,14 @@ class RunnerView extends StatelessWidget {
             Expanded(
               child: Obx(
                 () {
-                  if (runnerPickController.isLoading.value) {
+                  if (runnerController.isLoading.value) {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
                   }
 
-                  if (!runnerPickController.isLoading.value &&
-                      runnerPickController.runnerCourses.isEmpty) {
+                  if (!runnerController.isLoading.value &&
+                      runnerController.runnerCourses.isEmpty) {
                     return Center(
                       child: Text('추천 코스가 없습니다.'),
                     );
@@ -89,10 +88,10 @@ class RunnerView extends StatelessWidget {
 
                   return ListView.builder(
                     controller: _scrollController,
-                    itemCount: runnerPickController.runnerCourses.length,
+                    itemCount: runnerController.runnerCourses.length,
                     itemBuilder: (context, index) {
                       return CourseCard(
-                        course: runnerPickController.runnerCourses[index],
+                        course: runnerController.runnerCourses[index],
                       );
                     },
                   );

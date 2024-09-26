@@ -161,7 +161,7 @@ class UnderBar extends StatelessWidget {
             Get.toNamed('/main');
             break;
           case 1:
-            Get.toNamed('/runner-pick');
+            Get.toNamed('/runner');
             break;
           case 2:
             Get.toNamed('/record');
