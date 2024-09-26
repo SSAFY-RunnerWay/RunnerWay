@@ -80,6 +80,7 @@ public class Member {
     public Member(MemberSignUpRequestDto memberSignUpRequestDto) {
         this.email = memberSignUpRequestDto.getEmail();
         this.joinType = memberSignUpRequestDto.getJoinType();
+        this.gender = memberSignUpRequestDto.getGender();
         this.nickname = memberSignUpRequestDto.getNickname();
         this.birth = memberSignUpRequestDto.getBirth();
         this.height = memberSignUpRequestDto.getHeight();
