@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -29,6 +30,9 @@ class CompetitionCourseRunningView extends StatelessWidget {
                   onMapCreated: (GoogleMapController mapController) {
                     controller.onMapCreated(mapController);
                     controller.startRun(isOfficial: true, isCompetition: true);
+                    Timer.periodic(Duration(milliseconds: 100), (_) {
+                      controller.updateCompetitionMarker();
+                    });
                   },
                   initialCameraPosition: CameraPosition(
                     target:
@@ -62,8 +66,8 @@ class CompetitionCourseRunningView extends StatelessWidget {
                       children: [
                         _buildTimerColumn('현재 기록', Colors.blue,
                             controller.value.value.elapsedTime),
-                        _buildTimerColumn(
-                            '상대 기록', Colors.red, _getCompetitionTime()),
+                        _buildTimerColumn('상대 기록', Colors.red,
+                            controller.currentCompetitionTime),
                       ],
                     ),
                     const SizedBox(height: 10),
@@ -164,15 +168,5 @@ class CompetitionCourseRunningView extends StatelessWidget {
         style: TextStyle(color: Colors.white, fontSize: 16),
       ),
     );
-  }
-
-  Duration _getCompetitionTime() {
-    if (controller.competitionRecords.isEmpty ||
-        controller.competitionRecordIndex >=
-            controller.competitionRecords.length) {
-      return Duration.zero;
-    }
-    return controller
-        .competitionRecords[controller.competitionRecordIndex].elapsedTime;
   }
 }

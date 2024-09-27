@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:developer' as dev;
+import 'dart:math';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,6 +27,9 @@ class RunningController extends GetxController {
   int competitionRecordIndex = 0;
   Timer? competitionTimer;
 
+  RunningRecord? _lastCompetitionRecord;
+  int _lastCompetitionIndex = 0;
+
   RunningController() {
     _runningService = RunningService();
     _fileService = FileService();
@@ -38,7 +42,7 @@ class RunningController extends GetxController {
   }
 
   Future<void> initialize() async {
-    log('초기화 시작');
+    dev.log('초기화 시작');
     isLoading(true);
     await _setInitialLocation();
     isLoading(false);
@@ -131,7 +135,7 @@ class RunningController extends GetxController {
           '총 거리: ${val?.totalDistance.toStringAsFixed(2)} m, '
           '페이스: ${val?.currentPace} '
           '속도: ${val?.currentSpeed}';
-      log(logs);
+      dev.log(logs);
     });
   }
 
@@ -173,19 +177,58 @@ class RunningController extends GetxController {
   }
 
   void updateCompetitionMarker() {
-    RunningRecord record = competitionRecords[competitionRecordIndex];
+    if (competitionRecords.isEmpty || value.value.elapsedTime == Duration.zero)
+      return;
+
+    int currentTimeSeconds = value.value.elapsedTime.inSeconds;
+
+    // Find the next record that matches or exceeds the current time
+    while (_lastCompetitionIndex < competitionRecords.length - 1 &&
+        competitionRecords[_lastCompetitionIndex + 1].elapsedTime.inSeconds <=
+            currentTimeSeconds) {
+      _lastCompetitionIndex++;
+    }
+
+    RunningRecord currentRecord = competitionRecords[_lastCompetitionIndex];
+    RunningRecord? nextRecord =
+        _lastCompetitionIndex < competitionRecords.length - 1
+            ? competitionRecords[_lastCompetitionIndex + 1]
+            : null;
+
+    LatLng interpolatedPosition;
+    if (nextRecord != null) {
+      double progress =
+          (currentTimeSeconds - currentRecord.elapsedTime.inSeconds) /
+              (nextRecord.elapsedTime.inSeconds -
+                  currentRecord.elapsedTime.inSeconds);
+      progress =
+          min(1.0, max(0.0, progress)); // Ensure progress is between 0 and 1
+
+      interpolatedPosition = LatLng(
+        currentRecord.latitude +
+            (nextRecord.latitude - currentRecord.latitude) * progress,
+        currentRecord.longitude +
+            (nextRecord.longitude - currentRecord.longitude) * progress,
+      );
+    } else {
+      interpolatedPosition =
+          LatLng(currentRecord.latitude, currentRecord.longitude);
+    }
+
     value.update((val) {
       val?.markers
           .removeWhere((marker) => marker.markerId.value == 'competition');
       val?.markers.add(
         Marker(
           markerId: MarkerId('competition'),
-          position: LatLng(record.latitude, record.longitude),
+          position: interpolatedPosition,
           icon:
               BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
         ),
       );
     });
+
+    _lastCompetitionRecord = currentRecord;
   }
 
   void _saveRunningRecord(LatLng location) {
@@ -240,11 +283,7 @@ class RunningController extends GetxController {
   }
 
   Duration get currentCompetitionTime {
-    if (competitionRecords.isEmpty ||
-        competitionRecordIndex >= competitionRecords.length) {
-      return Duration.zero;
-    }
-    return competitionRecords[competitionRecordIndex].elapsedTime;
+    return _lastCompetitionRecord?.elapsedTime ?? Duration.zero;
   }
 
   @override
