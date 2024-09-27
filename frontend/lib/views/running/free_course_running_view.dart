@@ -26,7 +26,10 @@ class FreeCourseRunningView extends StatelessWidget {
                 child: GoogleMap(
                   polylines: controller.value.value.polyline,
                   myLocationEnabled: true,
-                  onMapCreated: controller.onMapCreated,
+                  onMapCreated: (GoogleMapController mapController) {
+                    controller.onMapCreated(mapController);
+                    controller.startRun();
+                  },
                   initialCameraPosition: CameraPosition(
                     target: controller.value.value.mapCenter ?? LatLng(0, 0),
                     zoom: 17,

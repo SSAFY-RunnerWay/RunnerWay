@@ -148,7 +148,7 @@ class CompetitionCourseRunningView extends StatelessWidget {
   Widget _buildEndRunningButton() {
     return ElevatedButton(
       onPressed: () async {
-        await controller.endRunning();
+        await controller.endRunning2();
         await Future.delayed(const Duration(seconds: 6));
         Get.back();
       },

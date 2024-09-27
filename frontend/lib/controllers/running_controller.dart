@@ -148,7 +148,7 @@ class RunningController extends GetxController {
   Future<void> loadSavedPath() async {
     if (isOfficialRun) {
       Polyline savedPathPolyline =
-          await _runningService.createSavedPathPolyline('tmp_1727402730962');
+          await _runningService.createSavedPathPolyline('tmp_1727419952201');
       value.update((val) {
         val?.polyline.add(savedPathPolyline);
       });
@@ -157,7 +157,7 @@ class RunningController extends GetxController {
 
   Future<void> loadCompetitionRecords() async {
     competitionRecords =
-        await _fileService.readSavedRunningRecords('tmp_1727402730962');
+        await _fileService.readSavedRunningRecords('tmp_1727419952201');
     competitionRecordIndex = 0;
   }
 
@@ -189,10 +189,12 @@ class RunningController extends GetxController {
   }
 
   void _saveRunningRecord(LatLng location) {
+    if (_startTime == null) return; // 시작 시간이 없으면 저장하지 않음
+
     RunningRecord record = RunningRecord(
       latitude: location.latitude,
       longitude: location.longitude,
-      elapsedTime: value.value.elapsedTime,
+      elapsedTime: DateTime.now().difference(_startTime!),
     );
     _fileService.appendRunningRecord(record, 'currentRun');
   }

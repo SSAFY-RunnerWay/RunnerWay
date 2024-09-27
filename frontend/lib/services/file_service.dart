@@ -90,7 +90,32 @@ class FileService {
       if (await file.exists()) {
         String contents = await file.readAsString();
         List<dynamic> jsonList = jsonDecode(contents);
-        return jsonList.map((json) => RunningRecord.fromJson(json)).toList();
+
+        // 시작 시간을 첫 번째 기록의 시간으로 설정
+        DateTime? startTime;
+        if (jsonList.isNotEmpty && jsonList[0]['timestamp'] != null) {
+          startTime = DateTime.parse(jsonList[0]['timestamp']);
+        }
+
+        return jsonList.map((json) {
+          if (json['elapsedTime'] != null) {
+            return RunningRecord.fromJson(json);
+          } else if (json['timestamp'] != null && startTime != null) {
+            return RunningRecord.fromTimestamp(
+              latitude: json['latitude'],
+              longitude: json['longitude'],
+              timestamp: DateTime.parse(json['timestamp']),
+              startTime: startTime,
+            );
+          } else {
+            // 필요한 데이터가 없는 경우 기본값 사용
+            return RunningRecord(
+              latitude: json['latitude'] ?? 0,
+              longitude: json['longitude'] ?? 0,
+              elapsedTime: Duration.zero,
+            );
+          }
+        }).toList();
       } else {
         print('File $fileName.json does not exist.');
         return [];
@@ -141,7 +166,7 @@ class FileService {
   Future<void> renameFile2(String newFileName) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final File tmpFile = File('${directory.path}/tmp.json');
+      final File tmpFile = File('${directory.path}/currentRun.json');
       if (await tmpFile.exists()) {
         final String newPath = '${directory.path}/$newFileName.json';
         await tmpFile.rename(newPath);
