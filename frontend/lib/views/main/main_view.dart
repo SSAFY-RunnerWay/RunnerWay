@@ -11,16 +11,14 @@ import '../base_view.dart';
 
 class MainView extends StatelessWidget {
   // filtercontroller 먼저 등록
-  final LocationController locationController = Get.put(LocationController());
+  final LocationController locationController = Get.find<LocationController>();
   final FilterController filterController = Get.put(FilterController());
   final MainController mainController = Get.put(MainController());
+  // 페이지 진입 시 언더바 인덱스를 업데이트
+  final UnderBarController underBarController = Get.find<UnderBarController>();
 
   @override
   Widget build(BuildContext context) {
-    // 페이지 진입 시 언더바 인덱스를 업데이트
-    final UnderBarController underBarController =
-        Get.find<UnderBarController>();
-
     // 메인 뷰 빌드 후 언더바 탭 활성화
     Future.microtask(() => underBarController.changeTabIndex(0));
 
