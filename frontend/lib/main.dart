@@ -1,5 +1,6 @@
 import 'package:frontend/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/location_controller.dart';
 import 'package:get/get.dart';
 import 'routes/app_routes.dart';
 import 'controllers/under_bar_controller.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
     Get.put(UnderBarController());
     final AuthController authController = Get.put(AuthController());
     final NetworkController networkController = Get.put(NetworkController());
+    final LocationController locationController = Get.put(LocationController());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       networkController.checkInitialConnectivity(context);

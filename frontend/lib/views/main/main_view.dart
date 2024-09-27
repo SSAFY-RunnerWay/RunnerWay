@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/location_controller.dart';
 import 'package:frontend/widgets/course/course_card.dart';
 import 'package:frontend/widgets/filter_condition.dart';
 import 'package:frontend/widgets/search/search_read_only.dart';
@@ -10,6 +11,7 @@ import '../base_view.dart';
 
 class MainView extends StatelessWidget {
   // filtercontroller 먼저 등록
+  final LocationController locationController = Get.put(LocationController());
   final FilterController filterController = Get.put(FilterController());
   final MainController mainController = Get.put(MainController());
 
