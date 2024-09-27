@@ -6,10 +6,12 @@ import 'package:frontend/views/search/widget/search_prompt.dart';
 import 'package:frontend/views/search/widget/search_result.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/location_controller.dart';
 import '../../controllers/search_controller.dart';
 import '../base_view.dart';
 
 class SearchView extends StatelessWidget {
+  final LocationController locationController = Get.find<LocationController>();
   final UnderBarController underBarController = Get.find<UnderBarController>();
 
   @override
