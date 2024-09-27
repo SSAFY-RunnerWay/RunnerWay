@@ -30,7 +30,9 @@ class CompetitionCourseRunningView extends StatelessWidget {
                   onMapCreated: (GoogleMapController mapController) {
                     controller.onMapCreated(mapController);
                     controller.startRun(isOfficial: true, isCompetition: true);
-                    Timer.periodic(Duration(milliseconds: 100), (_) {
+                    // 더 자주 업데이트하도록 변경
+                    Timer.periodic(Duration(milliseconds: 16), (_) {
+                      // 약 60fps
                       controller.updateCompetitionMarker();
                     });
                   },

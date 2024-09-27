@@ -30,6 +30,10 @@ class RunningController extends GetxController {
   RunningRecord? _lastCompetitionRecord;
   int _lastCompetitionIndex = 0;
 
+  RunningRecord? _currentRecord;
+  RunningRecord? _nextRecord;
+  int _currentRecordIndex = 0;
+
   RunningController() {
     _runningService = RunningService();
     _fileService = FileService();
@@ -182,37 +186,36 @@ class RunningController extends GetxController {
 
     int currentTimeSeconds = value.value.elapsedTime.inSeconds;
 
-    // Find the next record that matches or exceeds the current time
-    while (_lastCompetitionIndex < competitionRecords.length - 1 &&
-        competitionRecords[_lastCompetitionIndex + 1].elapsedTime.inSeconds <=
+    // Find the current and next records
+    while (_currentRecordIndex < competitionRecords.length - 1 &&
+        competitionRecords[_currentRecordIndex + 1].elapsedTime.inSeconds <=
             currentTimeSeconds) {
-      _lastCompetitionIndex++;
+      _currentRecordIndex++;
     }
 
-    RunningRecord currentRecord = competitionRecords[_lastCompetitionIndex];
-    RunningRecord? nextRecord =
-        _lastCompetitionIndex < competitionRecords.length - 1
-            ? competitionRecords[_lastCompetitionIndex + 1]
-            : null;
+    _currentRecord = competitionRecords[_currentRecordIndex];
+    _nextRecord = _currentRecordIndex < competitionRecords.length - 1
+        ? competitionRecords[_currentRecordIndex + 1]
+        : null;
 
     LatLng interpolatedPosition;
-    if (nextRecord != null) {
+    if (_nextRecord != null) {
       double progress =
-          (currentTimeSeconds - currentRecord.elapsedTime.inSeconds) /
-              (nextRecord.elapsedTime.inSeconds -
-                  currentRecord.elapsedTime.inSeconds);
+          (currentTimeSeconds - _currentRecord!.elapsedTime.inSeconds) /
+              (_nextRecord!.elapsedTime.inSeconds -
+                  _currentRecord!.elapsedTime.inSeconds);
       progress =
           min(1.0, max(0.0, progress)); // Ensure progress is between 0 and 1
 
       interpolatedPosition = LatLng(
-        currentRecord.latitude +
-            (nextRecord.latitude - currentRecord.latitude) * progress,
-        currentRecord.longitude +
-            (nextRecord.longitude - currentRecord.longitude) * progress,
+        _currentRecord!.latitude +
+            (_nextRecord!.latitude - _currentRecord!.latitude) * progress,
+        _currentRecord!.longitude +
+            (_nextRecord!.longitude - _currentRecord!.longitude) * progress,
       );
     } else {
       interpolatedPosition =
-          LatLng(currentRecord.latitude, currentRecord.longitude);
+          LatLng(_currentRecord!.latitude, _currentRecord!.longitude);
     }
 
     value.update((val) {
@@ -227,8 +230,6 @@ class RunningController extends GetxController {
         ),
       );
     });
-
-    _lastCompetitionRecord = currentRecord;
   }
 
   void _saveRunningRecord(LatLng location) {
