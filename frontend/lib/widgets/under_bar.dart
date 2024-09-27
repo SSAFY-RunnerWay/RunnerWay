@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../common/MyFlutterApp.dart';
+import '../common/my_flutter_app.dart';
 import '../controllers/under_bar_controller.dart';
 import '../views/running/running_view.dart';
 

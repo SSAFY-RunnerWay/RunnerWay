@@ -1,3 +1,4 @@
+import 'package:frontend/controllers/location_controller.dart';
 import 'package:frontend/controllers/main_controller.dart';
 import 'package:frontend/controllers/runner_controller.dart';
 import 'package:get/get.dart';
@@ -131,9 +132,10 @@ class FilterCondition extends StatelessWidget {
       IconButton(
         onPressed: () async {
           // 현위치로 위치 정보 갱신
-          if (Get.currentRoute == '/main')
-            await Get.find<MainController>().updateCurrentLocation();
-          else
+          if (Get.currentRoute == '/main') {
+            await Get.find<LocationController>().getCurrentLocation();
+            Get.find<MainController>().fetchOfficialCourses();
+          } else
             await Get.find<RunnerController>().updateCurrentLocation();
         },
         icon: Image.asset(

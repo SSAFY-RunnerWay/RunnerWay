@@ -57,7 +57,7 @@ class RunningView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 네트워크 체크
-    NetworkController.checkInitialConnectivity(context);
+    Get.find<NetworkController>().checkInitialConnectivity(context);
 
     return Scaffold(
       // appBar: AppBar(
