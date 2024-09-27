@@ -192,7 +192,6 @@ class MainView extends StatelessWidget {
           ),
         ],
       ),
-      // bottomNavigationBar: UnderBar(),
     );
   }
 }
