@@ -41,7 +41,7 @@ public class OAuthController {
             content = @Content(mediaType = "application/json")
         ),
         @ApiResponse(
-            responseCode = "201",
+            responseCode = "303",
             description = "이미 가입되어 있는 회원임. Access Token을 넘겨주니 이를 저장하고 메인페이지로 이동해야함",
             content = @Content(mediaType = "application/json")
         )
@@ -63,7 +63,7 @@ public class OAuthController {
         );
 
         String responseBody = objectMapper.writeValueAsString(alreadySignUpResponseDto);
-        return ResponseEntity.status(201)
+        return ResponseEntity.status(303)
             .contentType(MediaType.APPLICATION_JSON)
             .body(responseBody);
     }
