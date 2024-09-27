@@ -21,6 +21,10 @@ class RunningController extends GetxController {
   List<LatLng> _realTimePath = [];
 
   bool isOfficialRun = false;
+  bool isCompetitionMode = false;
+  List<RunningRecord> competitionRecords = [];
+  int competitionRecordIndex = 0;
+  Timer? competitionTimer;
 
   RunningController() {
     _runningService = RunningService();
@@ -40,10 +44,16 @@ class RunningController extends GetxController {
     isLoading(false);
   }
 
-  Future<void> startRun({bool isOfficial = false}) async {
+  Future<void> startRun(
+      {bool isOfficial = false, bool isCompetition = false}) async {
     isOfficialRun = isOfficial;
+    isCompetitionMode = isCompetition;
     if (isOfficialRun) {
       await loadSavedPath();
+    }
+    if (isCompetitionMode) {
+      await loadCompetitionRecords();
+      startCompetitionMode();
     }
     _startLocationUpdates();
     _startTimer();
@@ -145,13 +155,46 @@ class RunningController extends GetxController {
     }
   }
 
+  Future<void> loadCompetitionRecords() async {
+    competitionRecords =
+        await _fileService.readSavedRunningRecords('tmp_1727402730962');
+    competitionRecordIndex = 0;
+  }
+
+  void startCompetitionMode() {
+    competitionTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (competitionRecordIndex < competitionRecords.length) {
+        updateCompetitionMarker();
+        competitionRecordIndex++;
+      } else {
+        competitionTimer?.cancel();
+      }
+    });
+  }
+
+  void updateCompetitionMarker() {
+    RunningRecord record = competitionRecords[competitionRecordIndex];
+    value.update((val) {
+      val?.markers
+          .removeWhere((marker) => marker.markerId.value == 'competition');
+      val?.markers.add(
+        Marker(
+          markerId: MarkerId('competition'),
+          position: LatLng(record.latitude, record.longitude),
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+        ),
+      );
+    });
+  }
+
   void _saveRunningRecord(LatLng location) {
     RunningRecord record = RunningRecord(
       latitude: location.latitude,
       longitude: location.longitude,
-      timestamp: DateTime.now(),
+      elapsedTime: value.value.elapsedTime,
     );
-    _fileService.appendRunningRecord(record);
+    _fileService.appendRunningRecord(record, 'currentRun');
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -161,6 +204,7 @@ class RunningController extends GetxController {
   Future<void> endRunning() async {
     _positionSubscription?.cancel();
     _timer?.cancel();
+    competitionTimer?.cancel();
 
     try {
       final recordId = await _runningService.endRunningSession();
@@ -173,6 +217,7 @@ class RunningController extends GetxController {
   Future<void> endRunning2() async {
     _positionSubscription?.cancel();
     _timer?.cancel();
+    competitionTimer?.cancel();
 
     try {
       final tempRecordId = 'tmp_${DateTime.now().millisecondsSinceEpoch}';
@@ -192,10 +237,19 @@ class RunningController extends GetxController {
     }
   }
 
+  Duration get currentCompetitionTime {
+    if (competitionRecords.isEmpty ||
+        competitionRecordIndex >= competitionRecords.length) {
+      return Duration.zero;
+    }
+    return competitionRecords[competitionRecordIndex].elapsedTime;
+  }
+
   @override
   void onClose() {
     _positionSubscription?.cancel();
     _timer?.cancel();
+    competitionTimer?.cancel();
     _mapController?.dispose();
     super.onClose();
   }

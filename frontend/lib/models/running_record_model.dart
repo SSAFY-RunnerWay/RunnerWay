@@ -1,22 +1,27 @@
-import 'package:intl/intl.dart';
-
 class RunningRecord {
   final double latitude;
   final double longitude;
-  final DateTime timestamp;
+  final Duration elapsedTime;
 
   RunningRecord({
     required this.latitude,
     required this.longitude,
-    required this.timestamp,
+    required this.elapsedTime,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'latitude': latitude,
       'longitude': longitude,
-      'timestamp':
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(timestamp.toUtc()),
+      'elapsedTime': elapsedTime.inSeconds, // 초 단위로 저장
     };
+  }
+
+  factory RunningRecord.fromJson(Map<String, dynamic> json) {
+    return RunningRecord(
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      elapsedTime: Duration(seconds: json['elapsedTime']),
+    );
   }
 }

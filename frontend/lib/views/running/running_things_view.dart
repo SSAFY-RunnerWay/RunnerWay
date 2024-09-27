@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/network_controller.dart';
+import 'package:frontend/views/running/competition_course_running_view.dart';
 import 'package:frontend/views/running/free_course_running_view.dart';
 import 'package:frontend/views/running/official_course_running_view.dart';
 import 'package:frontend/widgets/map/running_map.dart';
@@ -119,6 +120,11 @@ class RunningThingsView extends StatelessWidget {
               onPressed: () => Get.to(() => OfficialCourseRunningView()),
               // Navigates to the RunningDetail page
               child: const Text('Go to Official Course Running'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.to(() => CompetitionCourseRunningView()),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to Competition Course Running'),
             ),
           ],
         ),

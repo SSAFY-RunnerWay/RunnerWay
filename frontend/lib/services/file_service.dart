@@ -16,6 +16,11 @@ class FileService {
     return File('$path/tmp.json');
   }
 
+  Future<File> _getFile(String fileName) async {
+    final path = await _localPath;
+    return File('$path/$fileName.json');
+  }
+
   Future<void> resetJson() async {
     try {
       final file = await _tmpFile;
@@ -31,23 +36,20 @@ class FileService {
     }
   }
 
-  Future<void> appendRunningRecord(RunningRecord record) async {
+  Future<void> appendRunningRecord(
+      RunningRecord record, String fileName) async {
     try {
-      final file = await _tmpFile;
+      final file = await _getFile(fileName);
 
-      // Read the existing file content
       List<dynamic> records = [];
       if (await file.exists()) {
         String contents = await file.readAsString();
-        // Parse the existing JSON content
         records = jsonDecode(contents) as List<dynamic>;
       }
 
-      // Add the new record
       records.add(record.toJson());
 
-      // Write the updated list back to the file
-      await file.writeAsString(jsonEncode(records), mode: FileMode.writeOnly);
+      await file.writeAsString(jsonEncode(records), mode: FileMode.write);
 
       print('Successfully appended record to file: ${file.path}');
     } catch (e) {
@@ -77,6 +79,24 @@ class FileService {
       }
     } catch (e) {
       print('Error reading saved path: $e');
+      return [];
+    }
+  }
+
+  Future<List<RunningRecord>> readSavedRunningRecords(String fileName) async {
+    try {
+      final file = await _getFile(fileName);
+
+      if (await file.exists()) {
+        String contents = await file.readAsString();
+        List<dynamic> jsonList = jsonDecode(contents);
+        return jsonList.map((json) => RunningRecord.fromJson(json)).toList();
+      } else {
+        print('File $fileName.json does not exist.');
+        return [];
+      }
+    } catch (e) {
+      print('Error reading saved running records: $e');
       return [];
     }
   }
