@@ -154,9 +154,11 @@ class _SignUpViewState extends State<SignUpView> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: screenWidth / 6),
-                    child: SignupInput(inputType: 'height'),
+                    child: SignupInput(
+                        inputType: 'height', controller: _heightController),
                   ),
-                  SignupInput(inputType: 'weight'),
+                  SignupInput(
+                      inputType: 'weight', controller: _weightController),
                 ],
               ),
               SizedBox(height: 25),
@@ -276,13 +278,19 @@ class _SignUpViewState extends State<SignUpView> {
           isActive: isButtonActive,
           onTap: isButtonActive
               ? () async {
+                  int? height = _heightController.text.isNotEmpty
+                      ? int.tryParse(_heightController.text)
+                      : null;
+                  int? weight = _weightController.text.isNotEmpty
+                      ? int.tryParse(_weightController.text)
+                      : null;
                   await _authController.signup(
                     Auth(
                       email: widget.email,
                       nickname: _nicknameController.text,
                       birth: DateTime.tryParse(_dateController.text),
-                      height: int.tryParse(_heightController.text),
-                      weight: int.tryParse(_weightController.text),
+                      height: height,
+                      weight: weight,
                       gender: selectedGender == 'man' ? 1 : 0, // 성별 설정
                       joinType: 'kakao',
                       memberImage: MemberImage(
@@ -293,7 +301,7 @@ class _SignUpViewState extends State<SignUpView> {
                     ),
                   );
 
-                  Get.to(SignUpView2());
+                  Get.toNamed('/signup2');
                 }
               : null, // '다음' 버튼 클릭 시 동작
         ),

@@ -6,8 +6,9 @@ class AuthService {
   final AuthRepository _repository = AuthRepository();
 
   // 사용자 이메일 확인
-  Future<String?> getOuathKakao(String email) async {
+  Future<dynamic> getOuathKakao(String email) async {
     final auth = await _repository.getOuathKakao(email);
+    log('service: $auth');
     return auth;
   }
 
@@ -28,7 +29,7 @@ class AuthService {
     try {
       await _repository.sendFavoriteTag(requestBody);
     } catch (e) {
-      throw Exception('선호 태그 전송 중 오류 발생: $e');
+      throw Exception('선호 태그 전송 중 오류 발생 service: $e');
     }
   }
 

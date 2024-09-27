@@ -3,10 +3,11 @@ import 'package:frontend/views/runnerPick/runner_pick_view.dart';
 import 'package:frontend/views/search/search_view.dart';
 import 'package:frontend/views/mypage/mypage_view.dart';
 import 'package:frontend/views/record/record_view.dart';
+import 'package:frontend/views/auth/signup_view2.dart';
+import 'package:frontend/views/auth/signup_view.dart';
 import 'package:get/get.dart';
 import 'package:frontend/views/main/main_view.dart';
 import 'package:frontend/views/runner/runner_view.dart';
-import 'package:frontend/views/auth/signup_view.dart';
 
 class AppRoutes {
   static final routes = [
@@ -47,6 +48,10 @@ class AppRoutes {
         page: () => SignUpView(
               email: '',
             ),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/signup2',
+        page: () => SignUpView2(),
         transition: Transition.noTransition),
   ];
 }
