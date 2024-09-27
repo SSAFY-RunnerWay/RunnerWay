@@ -32,6 +32,7 @@ class Course(Base):
     average_calorie = Column(Float, nullable=False)  # 평균 칼로리
     lat = Column(Float, nullable=False)  # 위도
     lng = Column(Float, nullable=False)  # 경도
+    area = Column(String(45), nullable=False)
 
     # Member와의 관계 설정
     member = relationship("Member", back_populates="courses")

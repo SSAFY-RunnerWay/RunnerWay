@@ -13,12 +13,12 @@ app = FastAPI()
 @app.get("/recommendation")
 def getCourses(
     member_id: int = Query(...), 
-    lat: float = Query(...),
-    lng: float = Query(...),
+    area: str = Query(...),
     db: Session = Depends(get_db)
 ):
     # log_path = "C:/Users/SSAFY/Desktop/Project/runnerway/lightFM/lightfm-api/app/running_logs4.csv"
     # log_path = "./running_logs4.csv"
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     log_path = os.path.join(BASE_DIR, "running_logs4.csv")
-    return load_data(db, log_path, member_id, lat, lng)
+    data = load_data(db, log_path, member_id, area)
+    return data

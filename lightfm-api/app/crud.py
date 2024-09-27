@@ -25,21 +25,17 @@ def get_favorite_courses(db: Session, member_id: int):
     return favorite_courses
 
 
-def get_courses(db: Session, lat: float, lng: float):
-    courses = db.query(Course).filter(Course.course_id != 0,
-    (6371 * func.acos(
-        func.cos(func.radians(lat)) * func.cos(func.radians(Course.lat)) *
-        func.cos(func.radians(Course.lng) - func.radians(lng)) +
-        func.sin(func.radians(lat)) * func.sin(func.radians(Course.lat))
-    )) <= 3,
-    Course.course_type == 'official').all()
-    # courses = db.query(Course, CourseImage).outerjoin(CourseImage, Course.course_id == CourseImage.course_id).filter(Course.course_id != 0,
+def get_courses(db: Session, area: str):
+    # courses = db.query(Course).filter(Course.course_id != 0,
     # (6371 * func.acos(
     #     func.cos(func.radians(lat)) * func.cos(func.radians(Course.lat)) *
     #     func.cos(func.radians(Course.lng) - func.radians(lng)) +
     #     func.sin(func.radians(lat)) * func.sin(func.radians(Course.lat))
     # )) <= 3,
     # Course.course_type == 'official').all()
+
+    courses = db.query(Course).filter(Course.course_id != 0, Course.area == area,Course.course_type == 'official').all()
+
     return courses
 
 

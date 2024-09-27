@@ -19,6 +19,7 @@ class CourseBase(BaseModel):
     average_calorie: float
     lat: float
     lng: float
+    area: str
 
 class Course(CourseBase):
     course_id: int
