@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:frontend/controllers/running_map_controller.dart';
+import 'package:frontend/controllers/running_controller.dart';
 
 class FreeCourseRunningView extends StatelessWidget {
-  final RunningMapController controller = Get.put(RunningMapController());
+  final RunningController controller = Get.put(RunningController());
 
   FreeCourseRunningView({super.key});
 
@@ -98,7 +98,11 @@ class FreeCourseRunningView extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await controller.endRunning2();
+                        await Future.delayed(Duration(seconds: 6));
+                        Get.back();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(
