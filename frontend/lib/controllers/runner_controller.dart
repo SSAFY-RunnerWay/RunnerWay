@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:app_settings/app_settings.dart';
 import 'package:frontend/controllers/filter_controller.dart';
 import 'package:frontend/services/course_service.dart';
 import 'package:geolocator/geolocator.dart';
