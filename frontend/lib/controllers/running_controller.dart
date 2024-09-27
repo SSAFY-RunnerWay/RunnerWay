@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'dart:async';
+import 'dart:developer';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
 import 'package:frontend/models/running_map_model.dart';
 import 'package:frontend/models/running_record_model.dart';
 import 'package:frontend/services/running_service.dart';
@@ -18,12 +18,13 @@ class RunningController extends GetxController {
   final value = RunningMapModel().obs;
   GoogleMapController? _mapController;
   final Set<Polyline> _polylines = {};
-  List<LatLng> _realTimePath = []; // 실시간 경로 추적용
+  List<LatLng> _realTimePath = [];
+
+  bool isOfficialRun = false;
 
   RunningController() {
     _runningService = RunningService();
     _fileService = FileService();
-    _loadPresetPath();
   }
 
   @override
@@ -36,10 +37,16 @@ class RunningController extends GetxController {
     log('초기화 시작');
     isLoading(true);
     await _setInitialLocation();
-    // 추후 초기화
-    // await _fileService.resetJson();
-    _startTimer();
     isLoading(false);
+  }
+
+  Future<void> startRun({bool isOfficial = false}) async {
+    isOfficialRun = isOfficial;
+    if (isOfficialRun) {
+      await loadSavedPath();
+    }
+    _startLocationUpdates();
+    _startTimer();
   }
 
   Future<void> _setInitialLocation() async {
@@ -93,7 +100,7 @@ class RunningController extends GetxController {
       val?.pointOnMap.add(newLocation);
       val?.mapCenter = newLocation;
 
-      _updatePolyline();
+      _updateRealTimePolyline();
     });
 
     _saveRunningRecord(newLocation);
@@ -118,12 +125,24 @@ class RunningController extends GetxController {
     });
   }
 
-  void _updatePolyline() {
+  void _updateRealTimePolyline() {
     value.update((val) {
-      val?.polyline.clear();
-      val?.polyline
-          .add(_runningService.createRealTimePolyline(val.pointOnMap ?? []));
+      Polyline realTimePolyline =
+          _runningService.createRealTimePolyline(val?.pointOnMap ?? []);
+      val?.polyline.removeWhere(
+          (polyline) => polyline.polylineId.value == 'realTimePath');
+      val?.polyline.add(realTimePolyline);
     });
+  }
+
+  Future<void> loadSavedPath() async {
+    if (isOfficialRun) {
+      Polyline savedPathPolyline =
+          await _runningService.createSavedPathPolyline('tmp_1727402730962');
+      value.update((val) {
+        val?.polyline.add(savedPathPolyline);
+      });
+    }
   }
 
   void _saveRunningRecord(LatLng location) {
@@ -137,7 +156,6 @@ class RunningController extends GetxController {
 
   void onMapCreated(GoogleMapController controller) {
     _mapController = controller;
-    _startLocationUpdates();
   }
 
   Future<void> endRunning() async {
@@ -145,21 +163,10 @@ class RunningController extends GetxController {
     _timer?.cancel();
 
     try {
-      // Service layer handles the main logic
       final recordId = await _runningService.endRunningSession();
-      // Transition to result screen with recordId
       Get.toNamed('/running-result', arguments: recordId);
     } catch (e) {
-      // Error handling (showing snackbar)
       Get.snackbar('Error', 'Failed to end running session');
-    }
-  }
-
-  Future<void> _loadPresetPath() async {
-    final presetPolyline = await _runningService.loadPresetPath();
-    if (presetPolyline != null) {
-      _polylines.add(presetPolyline);
-      update(); // 상태 업데이트
     }
   }
 
@@ -168,27 +175,14 @@ class RunningController extends GetxController {
     _timer?.cancel();
 
     try {
-      // 임시 recordId 생성 (현재 시간을 사용)
       final tempRecordId = 'tmp_${DateTime.now().millisecondsSinceEpoch}';
-
-      // tmp.json 파일을 tempRecordId.json으로 이름 변경
       await _fileService.renameFile2(tempRecordId);
 
       print('Running session ended. Data saved as: $tempRecordId.json');
 
-      // 사용자에게 저장 완료 알림
-      // Get.snackbar(
-      //   'Success',
-      //   'Running record saved locally',
-      //   snackPosition: SnackPosition.BOTTOM,
-      //   duration: Duration(seconds: 5),
-      // );
-
-      // 결과 화면으로 이동
       // Get.toNamed('/running-result', arguments: tempRecordId);
     } catch (e) {
       print('Error ending running session: $e');
-      // 에러 발생 시 사용자에게 알림
       Get.snackbar(
         'Error',
         'Failed to save running record',

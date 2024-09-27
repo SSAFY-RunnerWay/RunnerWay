@@ -1,9 +1,9 @@
 import 'dart:developer' as dev;
 import 'dart:io';
 import 'dart:convert';
-import 'dart:math';
 import 'package:path_provider/path_provider.dart';
 import 'package:frontend/models/running_record_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FileService {
   Future<String> get _localPath async {
@@ -53,6 +53,31 @@ class FileService {
     } catch (e) {
       print('Error appending to file: $e');
       throw e;
+    }
+  }
+
+  Future<List<LatLng>> readSavedPath(String fileName) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$fileName.json');
+
+      if (await file.exists()) {
+        String contents = await file.readAsString();
+        List<dynamic> jsonList = jsonDecode(contents);
+
+        return jsonList
+            .map((point) => LatLng(
+                  point['latitude'] as double,
+                  point['longitude'] as double,
+                ))
+            .toList();
+      } else {
+        print('File $fileName.json does not exist.');
+        return [];
+      }
+    } catch (e) {
+      print('Error reading saved path: $e');
+      return [];
     }
   }
 

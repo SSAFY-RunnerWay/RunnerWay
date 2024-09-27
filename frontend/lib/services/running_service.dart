@@ -51,14 +51,14 @@ class RunningService extends GetxService {
     return "$minutes'${seconds.toString().padLeft(2, '0')}''";
   }
 
-  Polyline createRealTimePolyline(List<LatLng> points) {
-    return Polyline(
-      polylineId: const PolylineId('realTimePath'),
-      color: Colors.blue,
-      width: 5,
-      points: points,
-    );
-  }
+  // Polyline createRealTimePolyline(List<LatLng> points) {
+  //   return Polyline(
+  //     polylineId: const PolylineId('realTimePath'),
+  //     color: Colors.blue,
+  //     width: 5,
+  //     points: points,
+  //   );
+  // }
 
   Duration calculateElapsedTime(DateTime startTime) {
     return DateTime.now().difference(startTime);
@@ -108,5 +108,25 @@ class RunningService extends GetxService {
     } catch (e) {
       rethrow; // Propagate error back to the controller for handling
     }
+  }
+
+  Future<Polyline> createSavedPathPolyline(String fileName) async {
+    List<LatLng> savedPath = await _fileService.readSavedPath(fileName);
+    return Polyline(
+      polylineId: PolylineId('savedPath'),
+      color: Colors.red, // 저장된 경로는 빨간색으로 표시
+      width: 5,
+      points: savedPath,
+    );
+  }
+
+  // 실시간 경로를 위한 polyline 생성 메서드 (기존 메서드 수정)
+  Polyline createRealTimePolyline(List<LatLng> points) {
+    return Polyline(
+      polylineId: PolylineId('realTimePath'),
+      color: Colors.blue, // 실시간 경로는 파란색으로 표시
+      width: 5,
+      points: points,
+    );
   }
 }
