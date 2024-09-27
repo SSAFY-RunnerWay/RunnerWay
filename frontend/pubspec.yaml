@@ -49,6 +49,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   kakao_flutter_sdk_user: ^1.9.5 # 카카오 로그인 API 패키지
+  flutter_native_splash: ^2.4.1
 
 dev_dependencies:
   flutter_test:

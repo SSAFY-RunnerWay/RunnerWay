@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomModal extends StatelessWidget {
   final String title;
   final String content;
+  final String? confirmText;
   final VoidCallback onConfirm;
 
   const CustomModal({
@@ -10,6 +11,7 @@ class CustomModal extends StatelessWidget {
     required this.title,
     required this.content,
     required this.onConfirm,
+    this.confirmText,
   }) : super(key: key);
 
   @override
@@ -41,7 +43,7 @@ class CustomModal extends StatelessWidget {
             Text(
               content,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 13,
               ),
             ),
             SizedBox(
@@ -57,7 +59,7 @@ class CustomModal extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 90, vertical: 12),
               ),
               child: Text(
-                '확인',
+                confirmText ?? '확인',
                 style: TextStyle(color: Colors.white),
               ),
             ),
