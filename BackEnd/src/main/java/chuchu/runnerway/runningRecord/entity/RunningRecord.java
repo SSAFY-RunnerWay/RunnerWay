@@ -10,6 +10,8 @@ import lombok.Getter;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -19,7 +21,7 @@ public class RunningRecord {
     }
 
     @Builder
-    public RunningRecord(Long recordId, Member member, Course course, Time score, double runningDistance, double calorie, double averageFace, String comment, Timestamp startDate, Timestamp finishDate) {
+    public RunningRecord(Long recordId, Member member, Course course, LocalTime score, double runningDistance, double calorie, double averageFace, String comment, LocalDateTime startDate, LocalDateTime finishDate) {
         this.recordId = recordId;
         this.member = member;
         this.course = course;
@@ -49,7 +51,7 @@ public class RunningRecord {
     private Course course;
 
     @Column(name = "score", nullable = false)
-    private Time score;
+    private LocalTime score;
 
     @Column(name = "running_distance", nullable = false)
     private double runningDistance;
@@ -64,9 +66,9 @@ public class RunningRecord {
     private String comment;
 
     @Column(name = "start_date", nullable = false)
-    private Timestamp startDate;
+    private LocalDateTime startDate;
     @Column(name = "finish_date", nullable = false)
-    private Timestamp finishDate;
+    private LocalDateTime finishDate;
 
     public void updateRunningRecord(RecordUpdateCommentRequestDto requestDto){
         this.comment = requestDto.getComment();

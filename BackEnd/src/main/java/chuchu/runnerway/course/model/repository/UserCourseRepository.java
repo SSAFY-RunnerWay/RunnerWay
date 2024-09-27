@@ -9,29 +9,29 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserCourseRepository extends JpaRepository<Course, Long> {
 
-    @Query(value = "SELECT * FROM course c " +
-            "WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(c.lat)) * " +
-            "cos(radians(c.lng) - radians(:lng)) + sin(radians(:lat)) * sin(radians(c.lat)))) <= 3 " +
-            "AND c.course_type = 'user'",
-            nativeQuery = true)
-    List<Course> findAll(@Param("lat") double lat, @Param("lng") double lng);
 
     @Query(value = "SELECT * FROM course c " +
-        "WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(c.lat)) * " +
-        "cos(radians(c.lng) - radians(:lng)) + sin(radians(:lat)) * sin(radians(c.lat)))) <= 3 " +
+            "WHERE c.area = :area " +
+            "AND c.course_type = 'user'",
+            nativeQuery = true)
+    List<Course> findAll(@Param("area") String area);
+
+
+    @Query(value = "SELECT * FROM course c " +
+        "WHERE c.area = :area " +
         "AND c.course_type = 'user' " +
         "ORDER BY c.count DESC " +
         "LIMIT 3",
         nativeQuery = true)
-    List<Course> findPopularAll(@Param("lat") double lat, @Param("lng") double lng);
+    List<Course> findPopularAll(@Param("area") String area);
+
 
     @Query(value = "SELECT * FROM course c " +
-        "WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(c.lat)) * " +
-        "cos(radians(c.lng) - radians(:lng)) + sin(radians(:lat)) * sin(radians(c.lat)))) <= 3 " +
+        "WHERE c.area = :area " +
         "AND c.course_type = 'user' " +
         "AND c.regist_date >= NOW() - INTERVAL 14 DAY " +
         "ORDER BY c.count DESC " +
         "LIMIT 3",
         nativeQuery = true)
-    List<Course> findPopularLately(@Param("lat") double lat, @Param("lng") double lng);
+    List<Course> findPopularLately(@Param("area") String area);
 }

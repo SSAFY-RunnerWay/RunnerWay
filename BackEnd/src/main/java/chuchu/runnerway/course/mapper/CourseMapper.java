@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.mapper;
 
+import chuchu.runnerway.course.dto.AreaDto;
 import chuchu.runnerway.course.dto.CourseImageDto;
 import chuchu.runnerway.course.dto.response.OfficialDetailResponseDto;
 import chuchu.runnerway.course.dto.response.OfficialListResponseDto;
@@ -18,6 +19,11 @@ public interface CourseMapper {
     OfficialDetailResponseDto toOfficialDetailResponseDto(Course course);
 
     CourseImageDto toCourseImageDto(CourseImage courseImage);
+
+    @Named("area")
+    AreaDto toAreaDto(Course course);
+    @IterableMapping(qualifiedByName = "area")
+    List<AreaDto> toAreaDtoList(List<Course> courses);
 
     @Mapping(source = "course.courseImage.url", target = "courseImage.url")
     @Named("OfficialList")

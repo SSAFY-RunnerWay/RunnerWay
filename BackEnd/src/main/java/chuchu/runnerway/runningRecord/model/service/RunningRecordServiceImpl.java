@@ -24,10 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Time;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.time.LocalTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -77,7 +75,7 @@ public class RunningRecordServiceImpl implements RunningRecordService{
 
     @Transactional
     @Override
-    public boolean registRecord(RecordRegistRequestDto requestDto) {
+    public Map<String, Object> registRecord(RecordRegistRequestDto requestDto) {
         Long memberId = MemberInfo.getId();
         Member member = memberRepository.findById(memberId)
                         .orElseThrow(NoSuchElementException::new);
@@ -90,8 +88,13 @@ public class RunningRecordServiceImpl implements RunningRecordService{
         image.createPersonalImage(runningRecord, requestDto);
         personalImageRepository.save(image);
 
+        Map<String, Object> data = new HashMap<>();
+        data.put("recordId", runningRecord.getRecordId());
+        boolean check = registRankingCheck(runningRecord.getCourse(), runningRecord);
+        data.put("rankingCheck", check);
+
         // 코스 랭킹 등록
-        return registRanking(runningRecord.getCourse(), runningRecord, requestDto.getLogPath());
+        return data;
     }
 
     @Transactional
@@ -119,12 +122,12 @@ public class RunningRecordServiceImpl implements RunningRecordService{
     @Transactional
     @Override
 //    @CacheEvict(value = "rankCache", key = "#course.courseId", condition = "#result == true")
-    public boolean registRanking(Course course, RunningRecord runningRecord, String logPath) {
+    public boolean registRankingCheck(Course course, RunningRecord runningRecord) {
         // 1. 코스에 대한 랭킹 조회
         List<Ranking> rankings = rankingRepository.findByCourse_CourseIdOrderByScore(course.getCourseId());
 
         // 현재 뛴 시간 조회
-        Time score = runningRecord.getScore();
+        LocalTime score = runningRecord.getScore();
 
         // 예외처리 : 랭킹의 인원이 5명 이하일 시
         Long memberId = MemberInfo.getId();
@@ -135,16 +138,12 @@ public class RunningRecordServiceImpl implements RunningRecordService{
             // 만약 내 아이디가 존재한다면
             Ranking myRanking = rankingRepository.findByCourse_CourseIdAndMember_MemberId(course.getCourseId(), memberId);
             if(myRanking != null){
-                if(score.before(myRanking.getScore())){
+                if(score.isBefore(myRanking.getScore())){
                     rankingRepository.deleteById(myRanking.getRankId());
                 }
                 else return false;
             }
 
-            Ranking ranking = new Ranking();
-            ranking.createRanking(course, member, score, logPath);
-            rankingRepository.save(ranking);
-            Objects.requireNonNull(cacheManager.getCache("rankCache")).evict(course.getCourseId());
             return true;
         }
 
@@ -153,27 +152,13 @@ public class RunningRecordServiceImpl implements RunningRecordService{
             // 랭킹에 인원이 다 차지 않았는데 내 기록이 존재하고 기록 갱신이라면
             // 내 기록을 삭제하고 새로 갱신된 기록으로 대체
             if(myRanking != null){
-                if(score.before(myRanking.getScore())){
+                if(score.isBefore(myRanking.getScore())){
                     rankingRepository.deleteById(myRanking.getRankId());
-                    Member member = memberRepository.findById(memberId)
-                            .orElseThrow(NoSuchElementException::new);
-                    Ranking ranking = new Ranking();
-                    ranking.createRanking(course, member, score, logPath);
-                    rankingRepository.save(ranking);
-                    Objects.requireNonNull(cacheManager.getCache("rankCache")).evict(course.getCourseId());
                     return true;
                 }
                 else return false;
             }
-            if(score.before(rankings.get(rankings.size()-1).getScore())){
-                Member member = memberRepository.findById(memberId)
-                                .orElseThrow(NoSuchElementException::new);
-                rankingRepository.deleteById(rankings.get(rankings.size()-1).getRankId());
-                Ranking ranking = new Ranking();
-                ranking.createRanking(course, member, score, logPath);
-                log.info("path: {}", ranking.getPath());
-                rankingRepository.save(ranking);
-                Objects.requireNonNull(cacheManager.getCache("rankCache")).evict(course.getCourseId());
+            if(score.isBefore(rankings.get(rankings.size()-1).getScore())){
                 return true;
             }
             return false;

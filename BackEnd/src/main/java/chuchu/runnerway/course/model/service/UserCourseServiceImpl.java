@@ -10,9 +10,13 @@ import chuchu.runnerway.course.model.repository.UserCourseRepository;
 import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
 import chuchu.runnerway.member.repository.MemberRepository;
+
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import com.uber.h3core.H3Core;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,12 +31,22 @@ public class UserCourseServiceImpl implements UserCourseService {
     private final CourseImageRepository courseImageRepository;
     private final ModelMapper mapper;
     private final MemberRepository memberRepository;
+    private static final H3Core h3;
+    private static final int resolution = 7;
+
+    static {
+        try {
+            h3 = H3Core.newInstance();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Transactional
     @Override
     public List<UserListResponseDto> findAllUserCourse(double lat, double lng) {
-        List<Course> courses = userCourseRepository.findAll(lat, lng);
-
+        String h3Index = h3.geoToH3Address(lat, lng, resolution);
+        List<Course> courses = userCourseRepository.findAll(h3Index);
         return courses.stream()
             .map(course -> {
                 // Course -> UserListResponseDto 변환
@@ -70,7 +84,8 @@ public class UserCourseServiceImpl implements UserCourseService {
         Member member = memberRepository.findById(userCourseRegistRequestDto.getMemberId()).orElseThrow(
             NotFoundMemberException::new
         );
-
+        String area = h3.geoToH3Address(userCourseRegistRequestDto.getLat(), userCourseRegistRequestDto.getLng(), resolution);
+        userCourseRegistRequestDto.setArea(area);
         userCourse.updateUserCourse(userCourseRegistRequestDto, member);
         Course savedCourse = userCourseRepository.save(userCourse);
 
@@ -80,7 +95,8 @@ public class UserCourseServiceImpl implements UserCourseService {
     @Transactional
     @Override
     public List<UserListResponseDto> findPopularAllUserCourse(double lat, double lng) {
-        List<Course> courses = userCourseRepository.findPopularAll(lat, lng);
+        String h3Index = h3.geoToH3Address(lat, lng, resolution);
+        List<Course> courses = userCourseRepository.findPopularAll(h3Index);
         return courses.stream()
             .map(course -> {
                 // Course -> UserListResponseDto 변환
@@ -100,7 +116,8 @@ public class UserCourseServiceImpl implements UserCourseService {
     @Transactional
     @Override
     public List<UserListResponseDto> findPopularLatelyUserCourse(double lat, double lng) {
-        List<Course> courses = userCourseRepository.findPopularLately(lat, lng);
+        String h3Index = h3.geoToH3Address(lat, lng, resolution);
+        List<Course> courses = userCourseRepository.findPopularLately(h3Index);
         return courses.stream()
             .map(course -> {
                 // Course -> UserListResponseDto 변환

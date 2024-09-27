@@ -2,7 +2,6 @@ package chuchu.runnerway.course.controller;
 
 import chuchu.runnerway.course.dto.RecommendationDto;
 import chuchu.runnerway.course.dto.response.OfficialDetailResponseDto;
-import chuchu.runnerway.course.dto.response.OfficialListResponseDto;
 import chuchu.runnerway.course.model.service.IncrementCountService;
 import chuchu.runnerway.course.model.service.OfficialCourseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -75,5 +75,10 @@ public class OfficialCourseController {
         incrementCourseCount.updateAllCacheCountsToDB();
 
         return ResponseEntity.ok("등록 성공");
+    }
+
+    @GetMapping("/area")
+    public void area() throws IOException {
+        officialCourseService.area();
     }
 }

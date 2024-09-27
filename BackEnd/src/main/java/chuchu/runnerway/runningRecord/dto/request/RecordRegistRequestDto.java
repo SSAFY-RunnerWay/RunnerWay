@@ -8,6 +8,8 @@ import lombok.Data;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 public class RecordRegistRequestDto {
@@ -17,7 +19,7 @@ public class RecordRegistRequestDto {
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
-    private Time score;
+    private LocalTime score;
     @NotNull
     private double runningDistance;
     @NotNull
@@ -27,11 +29,10 @@ public class RecordRegistRequestDto {
     private String comment;
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp startDate;
+    private LocalDateTime startDate;
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp finishDate;
+    private LocalDateTime finishDate;
     private PersonalImageDto personalImage;
-    private String logPath;
 
 }
