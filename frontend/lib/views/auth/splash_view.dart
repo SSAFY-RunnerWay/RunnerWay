@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:frontend/controllers/network_controller.dart';
 import 'package:frontend/widgets/modal/custom_modal.dart';
 import 'package:get/get.dart';
