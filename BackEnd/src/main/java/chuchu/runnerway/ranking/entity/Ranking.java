@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.sql.Time;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -16,7 +17,7 @@ public class Ranking {
     }
 
     @Builder
-    public Ranking(Long rankId, Member member, Course course, Time score, String path) {
+    public Ranking(Long rankId, Member member, Course course, LocalTime score, String path) {
         this.rankId = rankId;
         this.member = member;
         this.course = course;
@@ -38,12 +39,12 @@ public class Ranking {
     private Course course;
 
     @Column(name = "score", nullable = false)
-    private Time score;
+    private LocalTime score;
 
     @Column(name = "path",  nullable = false)
     private String path;
 
-    public void createRanking(Course course, Member member, Time score, String path){
+    public void createRanking(Course course, Member member, LocalTime score, String path){
         this.course = course;
         this.member = member;
         this.score = score;

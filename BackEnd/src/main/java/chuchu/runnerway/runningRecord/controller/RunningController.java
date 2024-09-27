@@ -90,12 +90,9 @@ public class RunningController {
     })
     @PostMapping
     public ResponseEntity<?> registerRunningRecord(@Valid @RequestBody RecordRegistRequestDto requestDto){
-        boolean rankingCheck = runningRecordService.registRecord(requestDto);
+        Map<String, Object> rankingCheck = runningRecordService.registRecord(requestDto);
 
-        if(rankingCheck)
-            return ResponseEntity.status(201).body("true");
-        else
-            return ResponseEntity.status(201).body("false");
+        return ResponseEntity.status(201).body(rankingCheck);
     }
 
     @Operation(summary = "러닝 기록 사진 수정", description = "러닝 기록 사진 수정 시 사용하는 API")

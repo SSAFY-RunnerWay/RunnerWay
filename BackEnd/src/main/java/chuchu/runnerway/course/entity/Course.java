@@ -95,6 +95,9 @@ public class Course {
     @Column(name = "lng", nullable = false)
     private double lng;
 
+    @Column(name = "area", nullable = false)
+    private String area;
+
     @OneToOne(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private CourseImage courseImage;
@@ -112,6 +115,7 @@ public class Course {
         this.courseType = userCourseRegistRequestDto.getCourseType();       // 코스 타입
         this.averageCalorie = userCourseRegistRequestDto.getAverageCalorie(); // 예상 평균 소모 칼로리
         this.lat = userCourseRegistRequestDto.getLat();                     // 위도
-        this.lng = userCourseRegistRequestDto.getLng();                     // 경도
+        this.lng = userCourseRegistRequestDto.getLng();
+        this.area = userCourseRegistRequestDto.getArea();// 경도
     }
 }

@@ -10,6 +10,7 @@ import chuchu.runnerway.runningRecord.dto.response.RecordResponseDto;
 import chuchu.runnerway.runningRecord.entity.RunningRecord;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RunningRecordService {
     List<RecordResponseDto> getRecords(int year, int month, Integer day);
@@ -18,11 +19,11 @@ public interface RunningRecordService {
 
     RecordMonthData getAnalysisRecord(int year, int month);
 
-    boolean registRecord(RecordRegistRequestDto requestDto);
+    Map<String, Object> registRecord(RecordRegistRequestDto requestDto);
 
     void updateRecordPicture(RecordUpdatePictureRequestDto requestDto);
 
     void updateRecordComment(RecordUpdateCommentRequestDto requestDto);
 
-    boolean registRanking(Course course, RunningRecord runningRecord, String logPath);
+    boolean registRankingCheck(Course course, RunningRecord runningRecord);
 }

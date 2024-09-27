@@ -1,19 +1,18 @@
 package chuchu.runnerway.ranking.controller;
 
+import chuchu.runnerway.ranking.dto.request.RankingRegisterRequestDto;
 import chuchu.runnerway.ranking.dto.response.RankingResponseDto;
 import chuchu.runnerway.ranking.model.service.RankingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -54,6 +53,20 @@ public class RankingController {
     public ResponseEntity<?> getRankingByCourse(@PathVariable("courseId") Long courseId){
         List<RankingResponseDto> rankings = rankingService.getRankingByCourse(courseId);
         return ResponseEntity.status(200).body(rankings);
+    }
+
+    @PostMapping
+    @Operation(summary = "코스 랭킹 등록", description = "코스 랭킹을 등록할 때 사용하는 API")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "코스 랭킹 등록",
+                    content = @Content(mediaType = "application/json")
+            ),
+    })
+    public ResponseEntity<?> registRanking(@Valid @RequestBody RankingRegisterRequestDto rankingRegisterRequestDto){
+        rankingService.registRanking(rankingRegisterRequestDto);
+        return ResponseEntity.status(201).body("랭킹 등록 완료!!");
     }
 
 
