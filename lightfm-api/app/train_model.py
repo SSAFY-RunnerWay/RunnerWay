@@ -16,38 +16,15 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
-def load_data(db: Session, log_filepath: str, member_id: int, lat: float, lng: float):
+def load_data(db: Session, log_filepath: str, member_id: int, area: str):
     # 1. ORM으로 데이터 불러오기
     start = time.time()
-    courses = get_courses(db, lat, lng)
-    end = time.time()
-    print(f"{end - start:.5f} sec")
+
+    courses = get_courses(db, area)
     course_tags = get_course_tags(db)
     favorite_courses = get_favorite_courses(db, member_id)
-    # ORM 객체를 Pandas DataFrame으로 변환
-    # courses_df = pd.DataFrame([{
-    #     'course_id': course.course_id,
-    #     'name': course.name,
-    #     'address': course.address,
-    #     'content': course.content,
-    #     'level': course.level,
-    #     'count': course.count,
-    #     'average_slope': course.average_slope,
-    #     'average_downhill': course.average_downhill,
-    #     'average_time': str(course.average_time),
-    #     'course_length': course.course_length,
-    #     'member_id': course.member_id,
-    #     'course_type': course.course_type,
-    #     'regist_date': course.regist_date,
-    #     'average_calorie': course.average_calorie,
-    #     'lat': course.lat,
-    #     'lng': course.lng,
-    #     'course_image': {
-    #         'courseId': course.course_image.course_id if course.course_image else None,
-    #         'url': course.course_image.url if course.course_image else None,
-    #         'path': course.course_image.path if course.course_image else None
-    #     } if course.course_image else None
-    # } for course, course_image in courses])
+    if not courses:
+        return None
     courses_data = [
         {
             'course_id': course.course_id,
@@ -66,19 +43,12 @@ def load_data(db: Session, log_filepath: str, member_id: int, lat: float, lng: f
             'average_calorie': course.average_calorie,
             'lat': course.lat,
             'lng': course.lng,
-            # 'course_image': {
-            #     'courseId': course.course_image.course_id if course.course_image else None,
-            #     'url': course.course_image.url if course.course_image else None,
-            #     'path': course.course_image.path if course.course_image else None
-            # } if course.course_image else None
         }
         for course in courses
     ]
-    end = time.time()
 
     courses_df = pd.DataFrame.from_records(courses_data)
     
-    print(f"{end - start:.5f} sec")
 
     print("Course data loaded:", courses_df.shape)
     course_tags_df = pd.DataFrame([{
@@ -101,35 +71,38 @@ def load_data(db: Session, log_filepath: str, member_id: int, lat: float, lng: f
     
     logs_df = pd.read_csv(log_filepath)
     print("Running logs loaded:", logs_df.shape)
+
+
     # 3. 중복 로그 제거
     logs_df = logs_df.drop_duplicates(subset=['member_id', 'course_id'])
     print("Running logs after removing duplicates:", logs_df.shape)
 
     # 4. 코스와 태그 데이터 병합
-    
     courses_with_tags_df = courses_df.merge(course_tags_df, on='course_id', how='left')
     print("Merged course and tags data:", courses_with_tags_df.shape)
-    
+
+
 
     # 5. 로그와 선호 태그 데이터 병합
     logs_df = logs_df.merge(favorite_course_df[['member_id', 'tag_name']], on='member_id', how='left')
     print("Merged logs and favorite tags data:", logs_df.shape)
-    
+
+
     # 6. 사용자와 코스의 상호작용 행렬 생성
     interactions = coo_matrix((np.ones(len(logs_df)), (logs_df['member_id'], logs_df['course_id'])))
     print("Interactions matrix shape:", interactions.shape)
-    
-    model = LightFM(loss='logistic')  # Logistic 손실 함수 사용
-    
-    
 
-    print
+    
+    model = LightFM(loss='warp')  # Logistic 손실 함수 사용
+    
+    
     try:
         print("Fitting the model...")
         model.fit(interactions, epochs=50, num_threads=2)
         print("Model training completed.")
     except Exception as e:
         print(f"Error during model training: {e}")
+
 
     # 모델 저장
     dump(model, 'lightfm_model.joblib')
@@ -139,7 +112,6 @@ def load_data(db: Session, log_filepath: str, member_id: int, lat: float, lng: f
     # 추천 항목 가져오기
     user_id = member_id
     print(f"Generating recommendations for user {user_id}...")
-    print(logs_df)
 
     user_logs = logs_df[logs_df['member_id'] == user_id]
     scores = model.predict(user_id, np.arange(interactions.shape[1]))
@@ -165,4 +137,6 @@ def load_data(db: Session, log_filepath: str, member_id: int, lat: float, lng: f
     print(table)
     # recommendations = top_items[['course_id', 'name', 'level', 'average_slope', '추천 점수']].to_dict(orient='records')
     recommendations = top_items[['course_id', 'name', 'level', 'average_slope', 'address', 'count', 'course_length', 'course_type', 'lat', 'lng', '추천 점수']].rename(columns={'course_id': 'courseId', 'average_slope' : 'averageSlope', 'course_length' : 'courseLength', 'course_type' : 'courseType', '추천 점수' : 'recommendationScore'}).to_dict(orient='records')
+    end = time.time()
+    print(f"{end - start:.5f} sec")
     return recommendations
