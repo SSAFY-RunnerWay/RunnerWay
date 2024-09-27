@@ -12,6 +12,8 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -21,7 +23,7 @@ class SplashView extends StatelessWidget {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                CircularProgressIndicator(),
+                // CircularProgressIndicator(),
                 SizedBox(height: 20),
                 Text(
                   '네트워크 상태를 확인하는 중...',
@@ -33,8 +35,12 @@ class SplashView extends StatelessWidget {
           if (locationController.hasPositioned.value == null) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                CircularProgressIndicator(),
+              children: [
+                Image.asset(
+                  'assets/logo/logo.png',
+                  width: screenWidth / 2,
+                ),
+                // CircularProgressIndicator(),
                 SizedBox(height: 20),
                 Text(
                   '위치 정보를 확인하는 중...',
