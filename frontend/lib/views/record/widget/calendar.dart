@@ -53,11 +53,20 @@ class _CalendarState extends State<Calendar> {
         ),
         TableCalendar(
           onDaySelected: onDaySelected,
-          selectedDayPredicate: (date) => isSameDay(selectedDate, date),
+          selectedDayPredicate: (date) =>
+              isSameDay(selectedDate, date) && !isSameDay(date, DateTime.now()),
           focusedDay: focusedDate,
           firstDay: DateTime(2024, 1, 1),
           lastDay: DateTime(2025, 1, 31),
-          calendarStyle: CalendarStyle(outsideDaysVisible: false),
+          calendarStyle: CalendarStyle(
+              outsideDaysVisible: false,
+              todayTextStyle: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  color: Color(0xFF1EA6FC)),
+              todayDecoration: BoxDecoration(color: null),
+              selectedTextStyle: TextStyle(color: Colors.black),
+              selectedDecoration: BoxDecoration(color: Colors.transparent)),
           headerStyle: HeaderStyle(
             titleTextFormatter: (date, locale) => "",
             formatButtonVisible: false,
