@@ -12,6 +12,10 @@ class DioClient {
         baseUrl: 'https://j11b304.p.ssafy.io/api/',
         connectTimeout: const Duration(seconds: 20),
         receiveTimeout: const Duration(seconds: 20),
+        followRedirects: false,
+        validateStatus: (status) {
+          return status! < 400;
+        },
         headers: {
           'Accept': 'application/json',
         },
