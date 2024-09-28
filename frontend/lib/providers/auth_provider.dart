@@ -60,18 +60,39 @@ class AuthProvider {
     }
   }
 
-  // 선호 태그 등록 여부 조회
-  Future<bool> checkFavoriteTag() async {
+  // 닉네임 중복 체크
+  Future<bool> nickNameCheck(String nickname) async {
     try {
-      // final response = await dioClient.dio.get(
-      //   'members/tags',
-      // );
       final response = await dio.get(
-        'https://j11b304.p.ssafy.io/members/tags',
+        'https://j11b304.p.ssafy.io/api/members/duplication-nickname/${Uri.encodeComponent(nickname)}',
       );
 
       if (response.statusCode == 200) {
-        return response.data == true;
+        return response.data['duplicateResult']; // 서버 응답에서 중복 여부 반환
+      } else {
+        throw Exception('닉네임 중복 확인 실패: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('닉네임 중복 확인 중 오류 발생 provider: $e');
+    }
+  }
+
+  // 선호 태그 등록 여부 조회
+  Future<bool> checkFavoriteTag() async {
+    final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+    try {
+      final response = await dio.get(
+        'https://j11b304.p.ssafy.io/api/members/tags',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${accessToken}',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return response.data['isRegist'];
       } else {
         throw Exception('선호 태그 조회 실패: 서버 오류 (${response.statusCode})');
       }
@@ -83,10 +104,8 @@ class AuthProvider {
 
   // 선호 태그 등록
   Future<void> sendFavoriteTag(Map<String, dynamic> requestBody) async {
-    log('${requestBody}');
     final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
     log('${accessToken}');
-    log('아 왜그래');
 
     try {
       // final response = await dioClient.dio.post(
@@ -98,7 +117,7 @@ class AuthProvider {
               options: Options(
                 headers: {
                   'Authorization': 'Bearer ${accessToken}',
-                  'Content-Type': 'application/json', // 필요에 따라 추가
+                  'Content-Type': 'application/json',
                 },
               ),
               data: requestBody);

@@ -94,6 +94,9 @@ class RunnerPickView extends StatelessWidget {
                 },
               );
             }),
+            SizedBox(
+              height: 20,
+            ),
 
             // 최근 인기 많은 코스
             Text(

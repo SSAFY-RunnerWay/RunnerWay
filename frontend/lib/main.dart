@@ -1,4 +1,6 @@
+import 'package:frontend/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/location_controller.dart';
 import 'package:get/get.dart';
 import 'routes/app_routes.dart';
 import 'controllers/under_bar_controller.dart';
@@ -10,7 +12,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   // 웹 환경에서 카카오 로그인을 정상적으로 완료하려면 runApp() 호출 전 아래 메서드 호출 필요
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
   // runApp() 호출 전 Flutter SDK 초기화
   KakaoSdk.init(
@@ -25,10 +27,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      NetworkController.checkInitialConnectivity(context);
-    });
     // 앱 시작 시 전역 상태로 UnderBarController 등록
+    Get.put(UnderBarController());
+    final AuthController authController = Get.put(AuthController());
+    final NetworkController networkController = Get.put(NetworkController());
+    final LocationController locationController = Get.put(LocationController());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      networkController.checkInitialConnectivity(context);
+    });
+
     Get.put(UnderBarController());
     return SafeArea(
       child: GetMaterialApp(
@@ -37,7 +45,7 @@ class MyApp extends StatelessWidget {
           colorSchemeSeed: Colors.white,
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: '/main',
+        initialRoute: '/splash',
         getPages: AppRoutes.routes,
         scrollBehavior: NoBounceScrollBehavior(), // 커스텀 스크롤 동작 적용
       ),

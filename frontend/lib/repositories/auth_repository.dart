@@ -25,6 +25,15 @@ class AuthRepository {
     }
   }
 
+  // 닉네임 중복 체크
+  Future<bool> nickNameCheck(String nickname) async {
+    try {
+      return await _provider.nickNameCheck(nickname); // 중복 여부 반환
+    } catch (e) {
+      throw Exception('닉네임 중복 확인 중 오류 발생 repository: $e');
+    }
+  }
+
   // 선호 태그 등록 여부 확인
   Future<bool> checkFavoriteTag() async {
     try {

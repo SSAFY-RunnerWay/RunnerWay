@@ -9,8 +9,14 @@ import 'package:get/get.dart';
 import 'package:frontend/views/main/main_view.dart';
 import 'package:frontend/views/runner/runner_view.dart';
 
+import '../views/auth/splash_view.dart';
+
 class AppRoutes {
   static final routes = [
+    GetPage(
+        name: '/splash',
+        page: () => SplashView(),
+        transition: Transition.noTransition),
     GetPage(
         name: '/main',
         page: () => MainView(),

@@ -64,22 +64,21 @@ class AuthController extends GetxController {
     try {
       final response = await _authService.getOuathKakao(userEmail);
       log('${response}');
-      // 서버에서 받은 응답이 이메일인 경우
+      // 서버에서 받은 응답이 이메일인 경우(신규 회원)
       if (response == userEmail) {
         email.value = userEmail;
         Get.to(SignUpView(email: email.value));
+        // TODO toNamed로 바꾸기
+        // Get.toNamed('/signup', arguments: {'email': email.value}); //이렇게 두면 오류 남
       }
 
-      // 서버에서 받은 응답이 accessToken인 경우
+      // 서버에서 받은 응답이 accessToken인 경우(기존 회원)
       else if (response['token'] != null) {
-        log('token null 아님');
-
         // accessToken 저장
         await _saveToken(response['token']);
-        // 메인 페이지로 이동
+        // 기존 회원이라면 선호 코스 등록 여부 확인 t / f
 
-        // checkFavoriteTag();
-        Get.offAll(MainView());
+        checkFavoriteTag();
       } else {
         log('서버 응답에서 예상치 못한 값이 있습니다.');
       }
@@ -107,6 +106,23 @@ class AuthController extends GetxController {
     }
   }
 
+  // 이메일 중복 체크
+  Future<bool> checkNickname(String nickname) async {
+    try {
+      final isAvailable = await _authService.checkNicknameDuplicate(nickname);
+      if (isAvailable) {
+        Get.snackbar('오류', '이미 사용 중인 닉네임입니다.');
+        return true;
+      } else {
+        Get.snackbar('성공', '사용 가능한 닉네임입니다.');
+        return false;
+      }
+    } catch (e) {
+      log('이메일 체크 controller: $e');
+      return false;
+    }
+  }
+
 // 토큰 저장
   Future<void> _saveToken(String? accessToken) async {
     log('저장할 accessToken _ controller: ${accessToken}');
@@ -125,9 +141,9 @@ class AuthController extends GetxController {
     try {
       final isTagRegistered = await _authService.checkFavoriteTag();
       if (isTagRegistered) {
-        Get.to(MainView());
+        Get.toNamed('main');
       } else {
-        Get.to(SignUpView2());
+        Get.toNamed('signup2');
       }
     } catch (e) {
       log('선호 태그 확인 중 오류 발생 controller: $e');
@@ -141,9 +157,7 @@ class AuthController extends GetxController {
         "favoriteCourses": favoriteTags.map((tag) => {"tagName": tag}).toList()
       };
       await _authService.sendFavoriteTag(requestBody);
-
-      Get.snackbar('성공', '선호 태그가 등록되었습니다.');
-      Get.offAll(MainView());
+      Get.toNamed('/main');
     } catch (e) {
       Get.snackbar('오류', '선호 태그 등록 중 오류가 발생했습니다.');
     }

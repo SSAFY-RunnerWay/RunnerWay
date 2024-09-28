@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'package:dio/dio.dart';
 import '../models/auth.dart';
 import '../repositories/auth_repository.dart';
 
 class AuthService {
   final AuthRepository _repository = AuthRepository();
+  Dio dio = Dio();
 
   // 사용자 이메일 확인
   Future<dynamic> getOuathKakao(String email) async {
@@ -21,6 +23,15 @@ class AuthService {
     } catch (e) {
       log('회원가입 중 오류 발생 service: $e');
       throw e;
+    }
+  }
+
+// 닉네임 중복 체크 함수 추가
+  Future<bool> checkNicknameDuplicate(String nickname) async {
+    try {
+      return await _repository.nickNameCheck(nickname);
+    } catch (e) {
+      throw Exception('닉네임 중복 확인 중 오류 발생 service: $e');
     }
   }
 
