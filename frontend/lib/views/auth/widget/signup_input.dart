@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 class SignupInput extends StatelessWidget {
   final String inputType;
+  final TextEditingController controller;
 
-  const SignupInput({Key? key, required this.inputType}) : super(key: key);
+  const SignupInput(
+      {Key? key, required this.inputType, required this.controller})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +44,7 @@ class SignupInput extends StatelessWidget {
             children: [
               Expanded(
                 child: TextField(
+                  controller: controller,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: InputBorder.none,
