@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class FavoriteTag extends StatefulWidget {
+class FavoriteCourses extends StatefulWidget {
   final Function(String) onItemTapped;
   final String text;
   final String imagePath;
 
-  const FavoriteTag({
+  const FavoriteCourses({
     super.key,
     required this.text,
     required this.onItemTapped,
@@ -16,14 +16,12 @@ class FavoriteTag extends StatefulWidget {
   _FavoriteTagState createState() => _FavoriteTagState();
 }
 
-class _FavoriteTagState extends State<FavoriteTag> {
-  // 선택 상태를 관리하는 변수 추가
+class _FavoriteTagState extends State<FavoriteCourses> {
   bool _isSelected = false;
 
-  // 선택 상태에 따라 색상을 변경하는 함수
   void _toggleSelection() {
     setState(() {
-      _isSelected = !_isSelected; // 선택 상태를 반전
+      _isSelected = !_isSelected;
     });
   }
 
@@ -44,10 +42,10 @@ class _FavoriteTagState extends State<FavoriteTag> {
         child: Container(
           height: 40,
           decoration: BoxDecoration(
-            color: _buttonColor, // 상태에 따른 배경색 설정
+            color: _buttonColor,
             borderRadius: BorderRadius.circular(30),
             border: Border.all(
-              color: _borderColor, // 상태에 따른 테두리 색상 설정
+              color: _borderColor,
               width: 1,
             ),
           ),

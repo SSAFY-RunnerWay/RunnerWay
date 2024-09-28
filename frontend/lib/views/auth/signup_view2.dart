@@ -42,6 +42,16 @@ class _SignUpView2State extends State<SignUpView2> {
     });
   }
 
+  Future<void> submitFavoriteTags() async {
+    // favoriteTag 리스트를 그대로 전송
+    log('보낼 데이터: $favoriteTag'); // 요청 데이터 확인용 로그
+    try {
+      await _authController.sendFavoriteTag(favoriteTag); // List<String> 전송
+    } catch (e) {
+      log('태그 전송 중 오류 발생: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,13 +79,12 @@ class _SignUpView2State extends State<SignUpView2> {
                     '평소에 선호하는',
                     style: TextStyle(
                       color: Color(0xFF1C1516),
-                      fontSize: 20,
+                      fontSize: 24,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -83,13 +92,13 @@ class _SignUpView2State extends State<SignUpView2> {
                     '러닝 코스 태그를 골라주세요',
                     style: TextStyle(
                       color: Color(0xFF1C1516),
-                      fontSize: 20,
+                      fontSize: 24,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 19),
+              SizedBox(height: 13),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -107,64 +116,102 @@ class _SignUpView2State extends State<SignUpView2> {
 
               // FavoriteTag 들어가자
               Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
                 spacing: 10,
                 runSpacing: 10,
                 children: [
-                  FavoriteTag(
-                    text: '오르막길이 많은',
-                    imagePath: 'assets/images/auth/mountain.png',
-                    onItemTapped: (text) {
-                      handleTagTapped(0, text);
-                    },
-                  ),
-                  FavoriteTag(
-                    text: '내리막길이 많은',
-                    imagePath: 'assets/images/auth/man_no.png',
-                    onItemTapped: (text) {
-                      handleTagTapped(1, text);
-                    },
-                  ),
-                  FavoriteTag(
-                    text: '평지 중심 코스',
-                    imagePath: 'assets/images/auth/man_ok.png',
-                    onItemTapped: (text) {
-                      handleTagTapped(2, text);
-                    },
-                  ),
-                  FavoriteTag(
-                    text: '강가 근처 코스',
-                    imagePath: 'assets/images/auth/man_ok.png',
-                    onItemTapped: (text) {
-                      handleTagTapped(3, text);
-                    },
-                  ),
-                  FavoriteTag(
-                    text: '접근성이 좋은',
-                    imagePath: 'assets/images/auth/man_ok.png',
-                    onItemTapped: (text) {
-                      handleTagTapped(4, text);
-                    },
-                  ),
-                  FavoriteTag(
-                    text: '해안가 근처 코스',
-                    imagePath: 'assets/images/auth/man_ok.png',
-                    onItemTapped: (text) {
-                      handleTagTapped(5, text);
-                    },
-                  ),
-                  FavoriteTag(
-                    text: '자전거 도로와 함께하는',
-                    imagePath: 'assets/images/auth/man_ok.png',
-                    onItemTapped: (text) {
-                      handleTagTapped(6, text);
-                    },
-                  ),
-                  FavoriteTag(
-                    text: '사람 적은',
-                    imagePath: 'assets/images/auth/man_ok.png',
-                    onItemTapped: (text) {
-                      handleTagTapped(7, text);
-                    },
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FavoriteCourses(
+                            text: '오르막길이 많은',
+                            imagePath: 'assets/images/auth/mountain.png',
+                            onItemTapped: (text) {
+                              handleTagTapped(0, text);
+                            },
+                          ),
+                          SizedBox(width: 10),
+                          FavoriteCourses(
+                            text: '내리막길이 많은',
+                            imagePath: 'assets/images/auth/man_no.png',
+                            onItemTapped: (text) {
+                              handleTagTapped(1, text);
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FavoriteCourses(
+                            text: '평지 중심 코스',
+                            imagePath: 'assets/images/auth/man_ok.png',
+                            onItemTapped: (text) {
+                              handleTagTapped(2, text);
+                            },
+                          ),
+                          SizedBox(width: 10),
+                          FavoriteCourses(
+                            text: '강가 근처 코스',
+                            imagePath: 'assets/images/auth/man_ok.png',
+                            onItemTapped: (text) {
+                              handleTagTapped(3, text);
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FavoriteCourses(
+                            text: '접근성이 좋은',
+                            imagePath: 'assets/images/auth/man_ok.png',
+                            onItemTapped: (text) {
+                              handleTagTapped(4, text);
+                            },
+                          ),
+                          SizedBox(width: 10),
+                          FavoriteCourses(
+                            text: '해안가 근처 코스',
+                            imagePath: 'assets/images/auth/man_ok.png',
+                            onItemTapped: (text) {
+                              handleTagTapped(5, text);
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FavoriteCourses(
+                            text: '자전거 도로와 함께하는',
+                            imagePath: 'assets/images/auth/man_ok.png',
+                            onItemTapped: (text) {
+                              handleTagTapped(6, text);
+                            },
+                          ),
+                          SizedBox(width: 10),
+                          FavoriteCourses(
+                            text: '사람 적은',
+                            imagePath: 'assets/images/auth/man_ok.png',
+                            onItemTapped: (text) {
+                              handleTagTapped(7, text);
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -179,7 +226,7 @@ class _SignUpView2State extends State<SignUpView2> {
           isActive: isAnyTagSelected,
           onTap: isAnyTagSelected
               ? () async {
-                  await _authController.sendFavoriteTag(favoriteTag);
+                  await submitFavoriteTags(); // 태그 전송 함수 호출
                 }
               : null,
         ),

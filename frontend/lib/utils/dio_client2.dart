@@ -27,12 +27,16 @@ class DioClient {
           log('Request[${options.method}] => PATH: ${options.path}');
 
           final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+          log('interceptor accesstoken: ${accessToken}');
           if (accessToken != null && !_isAuthorizationExcluded(options.path)) {
             options.headers['Authorization'] = 'Bearer $accessToken';
           }
           handler.next(options);
+
+          log('interceptor 통과');
         },
         onError: (DioException e, handler) async {
+          log('에러 발생 : ${e.message}');
           if (e.response?.statusCode == 401 && !_isRefreshing) {
             if (_refreshTokenFuture == null) {
               _isRefreshing = true;
@@ -75,7 +79,7 @@ class DioClient {
   Future<void> _refreshToken() async {
     try {
       OAuthToken newToken = await AuthApi.instance.refreshToken();
-      log('새로운 토큰: ${newToken.accessToken}');
+      log('새로운 토큰 client: ${newToken.accessToken}');
 
       await _storage.write(key: 'ACCESS_TOKEN', value: newToken.accessToken);
       await _storage.write(key: 'REFRESH_TOKEN', value: newToken.refreshToken);

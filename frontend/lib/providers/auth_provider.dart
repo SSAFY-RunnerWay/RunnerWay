@@ -1,22 +1,31 @@
 import 'dart:developer';
+import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/utils/dio_client2.dart';
 import '../models/auth.dart';
 
 class AuthProvider {
   final dioClient = DioClient();
+  Dio dio = Dio();
+  final _storage = FlutterSecureStorage();
 
   // 사용자 회원 여부 확인 _ 이메일로 확인
-  Future<String?> fetchOauthKakao(String email) async {
+  Future<dynamic> fetchOauthKakao(String email) async {
     try {
-      final response = await dioClient.dio.post('oauth/kakao/${email}');
-      log('사용자 이메일 조회 provider: $response');
-      // 서버의 응답이 200 OK인 경우 데이터 반환 -> 회원가입 진행
+      // final response = await dioClient.dio.post('oauth/kakao/${email}');
+      final response = await dio.post(
+          'https://j11b304.p.ssafy.io/api/oauth/kakao/${Uri.encodeComponent(email)}',
+          options: Options(
+              followRedirects: false,
+              validateStatus: (status) {
+                return status! < 500;
+              }));
+      log('사용자 이메일 조회 provider: ${response.data}');
+
       if (response.statusCode == 200) {
         return response.data['email']; // 서버에서 반환한 이메일 데이터
-        // 이미 가입되어 있는 경우
       } else if (response.statusCode == 303) {
-        // 이미 있는 회원이라 토큰 넘겨주고 메인페이지로 이동
-        return response.data['accessToken'];
+        return response.data;
       } else {
         throw Exception('회원가입 실패: 서버 응답 오류 (${response.statusCode})');
       }
@@ -29,56 +38,96 @@ class AuthProvider {
   // 회원가입
   Future<Map<String, dynamic>> fetchSignupkakao(Auth authData) async {
     try {
-      log('${authData.toJson()}');
-      final response =
-          await dioClient.dio.post('/members/sign-up', data: authData.toJson());
+      log('autoData: ${authData.toJson()}');
+      // final response =
+      //     await dioClient.dio.post('/members/sign-up', data: authData.toJson());
+      final response = await dio.post(
+        'https://j11b304.p.ssafy.io/api/members/sign-up',
+        data: authData.toJson(),
+      );
+      log('서버 응답 provider: ${response.data}');
 
       if (response.statusCode == 200) {
         log('회원가입 성공 provider: ${response.data}');
-        return response.data;
+        return {'accessToken': response.data};
       } else {
         // 500에러
         throw Exception('회원가입 실패 provider: 서버 응답 오류 (${response.statusCode})');
       }
+    } on DioException catch (e) {
+      log('회원가입 중 오류 발생 provider: ${e}');
+      throw Exception('회원가입 중 오류 발생 provider: ${e}');
+    }
+  }
+
+  // 닉네임 중복 체크
+  Future<bool> nickNameCheck(String nickname) async {
+    try {
+      final response = await dio.get(
+        'https://j11b304.p.ssafy.io/api/members/duplication-nickname/${Uri.encodeComponent(nickname)}',
+      );
+
+      if (response.statusCode == 200) {
+        return response.data['duplicateResult']; // 서버 응답에서 중복 여부 반환
+      } else {
+        throw Exception('닉네임 중복 확인 실패: ${response.statusCode}');
+      }
     } catch (e) {
-      log('회원가입 중 오류 발생 provider: $e');
-      throw e;
+      throw Exception('닉네임 중복 확인 중 오류 발생 provider: $e');
     }
   }
 
   // 선호 태그 등록 여부 조회
   Future<bool> checkFavoriteTag() async {
+    final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
     try {
-      final response = await dioClient.dio.get(
-        'members/tags',
+      final response = await dio.get(
+        'https://j11b304.p.ssafy.io/api/members/tags',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${accessToken}',
+            'Content-Type': 'application/json',
+          },
+        ),
       );
 
       if (response.statusCode == 200) {
-        return response.data == true;
+        return response.data['isRegist'];
       } else {
         throw Exception('선호 태그 조회 실패: 서버 오류 (${response.statusCode})');
       }
     } catch (e) {
-      log('선호 태그 조회 중 오류 발생: $e');
+      log('선호 태그 조회 중 오류 발생 provider: $e');
       throw e;
     }
   }
 
   // 선호 태그 등록
   Future<void> sendFavoriteTag(Map<String, dynamic> requestBody) async {
-    try {
-      final response = await dioClient.dio.post(
-        '/members/tags', // 실제 API 경로
-        data: requestBody,
-      );
+    final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+    log('${accessToken}');
 
+    try {
+      // final response = await dioClient.dio.post(
+      //   '/members/tags',
+      //   data: requestBody,
+      // );
+      final response =
+          await dio.post('https://j11b304.p.ssafy.io/api/members/tags',
+              options: Options(
+                headers: {
+                  'Authorization': 'Bearer ${accessToken}',
+                  'Content-Type': 'application/json',
+                },
+              ),
+              data: requestBody);
       if (response.statusCode == 200) {
         log('선호 태그 등록 성공');
       } else {
         throw Exception('선호 태그 등록 실패: 서버 오류 (${response.statusCode})');
       }
     } catch (e) {
-      log('선호 태그 등록 중 오류 발생: $e');
+      log('선호 태그 등록 중 오류 발생 provider: $e');
       throw e;
     }
   }

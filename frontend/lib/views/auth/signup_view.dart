@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/widgets/button/wide_button.dart';
 import 'package:frontend/widgets/modal/birth_modal.dart';
 import 'package:frontend/views/auth/widget/signup_input.dart';
-import 'package:frontend/views/auth/signup_view2.dart';
 import 'package:frontend/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:frontend/models/auth.dart';
@@ -32,9 +31,8 @@ class _SignUpViewState extends State<SignUpView> {
   }
 
   void _onNicknameChanged() {
-    // 닉네임 입력하면 버튼 활성화
     setState(() {
-      isButtonActive = _nicknameController.text.trim().isNotEmpty;
+      isButtonActive = _nicknameController.text.trim().length > 1;
     });
   }
 
@@ -111,6 +109,19 @@ class _SignUpViewState extends State<SignUpView> {
                   Expanded(
                     child: TextField(
                       controller: _nicknameController,
+                      // 닉네임 글자 수 제한
+                      onChanged: (text) {
+                        if (text.characters.length > 8) {
+                          _nicknameController.text =
+                              text.characters.take(8).toString(); // 8자로 자르기
+                          // 커서 뒤로 이동
+                          _nicknameController.selection =
+                              TextSelection.fromPosition(TextPosition(
+                                  offset: _nicknameController.text.length));
+                        } else if (text.characters.length < 2) {
+                          isButtonActive = false;
+                        }
+                      },
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         enabledBorder: OutlineInputBorder(
@@ -154,9 +165,11 @@ class _SignUpViewState extends State<SignUpView> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: screenWidth / 6),
-                    child: SignupInput(inputType: 'height'),
+                    child: SignupInput(
+                        inputType: 'height', controller: _heightController),
                   ),
-                  SignupInput(inputType: 'weight'),
+                  SignupInput(
+                      inputType: 'weight', controller: _weightController),
                 ],
               ),
               SizedBox(height: 25),
@@ -180,7 +193,7 @@ class _SignUpViewState extends State<SignUpView> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedGender = 'woman'; // "woman"을 선택하면 상태 변경
+                        selectedGender = 'woman'; //
                       });
                     },
                     child: Container(
@@ -242,29 +255,7 @@ class _SignUpViewState extends State<SignUpView> {
                   ),
                 ],
               ),
-              SizedBox(height: 2), // 간격을 위한 SizedBox 추가
-              // "signup다음" 버튼 추가
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    // 다른 페이지로 이동하는 로직 추가
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              SignUpView2()), // NextPage는 이동할 페이지
-                    );
-                  },
-                  child: Text(
-                    'signup다음',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
-              ),
+              SizedBox(height: 2),
             ],
           ),
         ),
@@ -276,24 +267,37 @@ class _SignUpViewState extends State<SignUpView> {
           isActive: isButtonActive,
           onTap: isButtonActive
               ? () async {
-                  await _authController.signup(
-                    Auth(
-                      email: widget.email,
-                      nickname: _nicknameController.text,
-                      birth: DateTime.tryParse(_dateController.text),
-                      height: int.tryParse(_heightController.text),
-                      weight: int.tryParse(_weightController.text),
-                      gender: selectedGender == 'man' ? 1 : 0, // 성별 설정
-                      joinType: 'kakao',
-                      memberImage: MemberImage(
-                        memberId: null,
-                        url: "",
-                        path: "",
+                  bool isNicknameCheck = await _authController
+                      .checkNickname(_nicknameController.text);
+                  if (isNicknameCheck) {
+                    Get.snackbar('오류', '이미 사용중인 닉네임입니다');
+                  } else {
+                    int? height = _heightController.text.isNotEmpty
+                        ? int.tryParse(_heightController.text)
+                        : null;
+                    int? weight = _weightController.text.isNotEmpty
+                        ? int.tryParse(_weightController.text)
+                        : null;
+                    await _authController.signup(
+                      Auth(
+                        email: widget.email,
+                        nickname: _nicknameController.text,
+                        birth: DateTime.tryParse(_dateController.text),
+                        height: height,
+                        weight: weight,
+                        gender: selectedGender == 'man' ? 1 : 0,
+                        // 성별 설정
+                        joinType: 'kakao',
+                        memberImage: MemberImage(
+                          memberId: null,
+                          url: "",
+                          path: "",
+                        ),
                       ),
-                    ),
-                  );
+                    );
 
-                  Get.to(SignUpView2());
+                    Get.toNamed('/signup2');
+                  }
                 }
               : null, // '다음' 버튼 클릭 시 동작
         ),
