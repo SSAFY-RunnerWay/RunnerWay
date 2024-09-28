@@ -9,6 +9,7 @@ import 'controllers/network_controller.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   // 웹 환경에서 카카오 로그인을 정상적으로 완료하려면 runApp() 호출 전 아래 메서드 호출 필요
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,7 @@ Future<void> main() async {
   // runApp() 호출 전 Flutter SDK 초기화
   KakaoSdk.init(
     nativeAppKey: dotenv.get("KAKAO_NATIVE_APP_KEY"),
+    // nativeAppKey: 'KAKAO_NATIVE_APP_KEY',
   );
   runApp(const MyApp());
 }

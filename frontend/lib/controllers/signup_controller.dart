@@ -13,8 +13,7 @@ class SignUpController extends GetxController {
   Future<void> loginWithKakao() async {
     try {
       if (await isKakaoTalkInstalled()) {
-        // 카카오톡이 설치되어 있을 때
-        await UserApi.instance.loginWithKakaoTalk();
+        await UserApi.instance.loginWithKakaoTalk(); // 카카오톡이 설치되어 있을 때
       } else {
         // 카카오톡이 설치되어 있지 않을 때
         await UserApi.instance.loginWithKakaoAccount();
