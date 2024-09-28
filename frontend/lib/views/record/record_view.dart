@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/views/base_view.dart';
+import 'package:intl/intl.dart';
+import 'package:frontend/views/record/widget/running_list.dart';
 import '../../widgets/line.dart';
 import 'widget/calendar.dart';
 
-class RecordView extends StatelessWidget {
+class RecordView extends StatefulWidget {
   const RecordView({super.key});
+
+  @override
+  _RecordViewState createState() => _RecordViewState();
+}
+
+class _RecordViewState extends State<RecordView> {
+  DateTime? selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +126,43 @@ class RecordView extends StatelessWidget {
               SizedBox(height: 10),
               Line(),
               SizedBox(height: 10),
-              Calendar(),
+              Calendar(
+                onDateSelected: (date) {
+                  setState(() {
+                    selectedDate = date;
+                  });
+                },
+              ),
               Line(),
+              // 클릭 날짜
+              if (selectedDate != null) ...[
+                Row(
+                  children: [
+                    // SizedBox(width: 18),
+                    // 날짜 불러오기
+                    Text(
+                      'TUE',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF1EA6FC)),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      DateFormat('dd').format(selectedDate!),
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF1EA6FC)),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                // 러닝 카드 들어갈 곳
+
+                // SizedBox(height: 18),
+                RunningCard(),
+              ],
             ],
           ),
         ),
