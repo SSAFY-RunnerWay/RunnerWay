@@ -1,11 +1,9 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:frontend/utils/dio_client2.dart';
 import '../models/auth.dart';
 
 class AuthProvider {
-  final dioClient = DioClient();
   Dio dio = Dio();
   final _storage = FlutterSecureStorage();
 
