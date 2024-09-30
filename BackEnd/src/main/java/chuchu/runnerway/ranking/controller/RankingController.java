@@ -52,6 +52,9 @@ public class RankingController {
     })
     public ResponseEntity<?> getRankingByCourse(@PathVariable("courseId") Long courseId){
         List<RankingResponseDto> rankings = rankingService.getRankingByCourse(courseId);
+        if(rankings.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
         return ResponseEntity.status(200).body(rankings);
     }
 
