@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/auth/signup_view.dart';
@@ -10,8 +11,20 @@ class AuthController extends GetxController {
   var email = ''.obs;
   var isLoggedIn = false.obs;
 
-  final AuthService _authService = AuthService();
+  TextEditingController nicknameController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+  TextEditingController weightController = TextEditingController();
   final _storage = FlutterSecureStorage(); // 토큰 저장
+  final AuthService _authService = AuthService();
+  // 선택된 성별 및 버튼 활성화 상태
+  var selectedGender = ''.obs;
+  var isButtonActive = false.obs;
+  RxBool isEditable = false.obs;
+  // 닉네임 변경 감지 함수
+  void onNicknameChanged(String nickname) {
+    isButtonActive.value = nicknameController.text.trim().length > 1;
+  }
 
   // 카카오톡 로그인
   Future<void> loginWithKakao() async {
@@ -172,6 +185,31 @@ class AuthController extends GetxController {
     } catch (error) {
       log('로그아웃 실패 controller: $error');
       Get.snackbar('오류', '로그아웃에 실패했습니다.');
+    }
+  }
+
+  // 사용자 정보 불러오기
+  Future<void> fetchUserInfo() async {
+    // Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
+    try {
+      // TODO
+      // 서버에서 Map<String, dynamic> 데이터를 받음
+      Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
+      log('${userInfoMap}');
+      Auth userInfo = Auth.fromJson(userInfoMap);
+
+      // 받아온 데이터를 직접 TextEditingController에 설정
+      nicknameController.text = 'ㅇㅇㅇㅇ';
+      // nicknameController.text = userInfo.nickname ?? '';
+      dateController.text = userInfo.birth?.toString() ?? '';
+      heightController.text = userInfo.height?.toString() ?? '';
+      weightController.text = userInfo.weight?.toString() ?? '';
+      selectedGender.value = userInfo.gender == 1 ? 'man' : 'woman';
+
+      log('회원 정보 불러오기 성공: $userInfoMap');
+    } catch (e) {
+      log('회원 정보 불러오기controller: $e');
+      Get.snackbar('오류', '회원 정보를 가져오는 데 실패했습니다.');
     }
   }
 }
