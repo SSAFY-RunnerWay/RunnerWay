@@ -5,6 +5,7 @@ import 'package:frontend/widgets/line.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+//TODO MaterialStateProperty 바꾸기
 class MypageView extends StatelessWidget {
   MypageView({Key? key}) : super(key: key);
   final AuthController _authController = Get.put(AuthController());
