@@ -43,8 +43,7 @@ public class RankingServiceImpl implements RankingService{
     @Cacheable(value = "rankCache", key = "#courseId", unless = "#result == null")
     public List<RankingResponseDto> getRankingByCourse(Long courseId) {
         List<Ranking> rankings = rankingRepository.findByCourse_CourseIdOrderByScore(courseId);
-        if(rankings.isEmpty())
-            throw new NoSuchElementException();
+//        if(rankings.isEmpty()) return null;
 
         return rankingMapper.toRankingResponseDto(rankings);
     }
