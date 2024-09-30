@@ -87,4 +87,6 @@ class CourseService {
 
     return courses;
   }
+
+  // 러닝 기록 목록 조회
 }

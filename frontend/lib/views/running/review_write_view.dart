@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import '../../widgets/button/register_button.dart';
 import '../../widgets/map/result_map.dart';
 import '../../widgets/review_record_item.dart';
 import '../../widgets/review_info_item.dart'; // LocationInfo 위젯 import
@@ -50,6 +51,11 @@ class ReviewWriteViewState extends State<ReviewWriteView> {
     super.dispose();
   }
 
+  void onRegisterTapped(int index) {
+    // 여기에 등록 로직을 구현하세요.
+    print("Register button tapped");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +68,12 @@ class ReviewWriteViewState extends State<ReviewWriteView> {
         ),
         backgroundColor: Colors.white,
         toolbarHeight: 56,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 16), // 오른쪽 패딩 추가
+            child: RegisterButton(onItemTapped: onRegisterTapped),
+          ),
+        ],
       ),
       body: Column(
         children: [
