@@ -6,8 +6,8 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 class DioClient {
   late final Dio _dio;
   final _storage = FlutterSecureStorage();
-  bool _isRefreshing = false; // 토큰 갱신 중인지 확인
-  Future<void>? _refreshTokenFuture; // 토큰 갱신이 중복되지 않도록 Future 저장
+  bool _isRefreshing = false;
+  Future<void>? _refreshTokenFuture;
 
   DioClient() {
     _dio = Dio(
@@ -26,17 +26,18 @@ class DioClient {
         onRequest: (options, handler) async {
           log('Request[${options.method}] => PATH: ${options.path}');
 
-          // 저장된 액세스 토큰 읽기
           final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+          log('interceptor accesstoken: ${accessToken}');
           if (accessToken != null && !_isAuthorizationExcluded(options.path)) {
-            // 토큰을 Authorization 헤더에 추가
             options.headers['Authorization'] = 'Bearer $accessToken';
           }
-          handler.next(options); // 요청 계속 진행
+          handler.next(options);
+
+          log('interceptor 통과');
         },
         onError: (DioException e, handler) async {
+          log('에러 발생 : ${e.message}');
           if (e.response?.statusCode == 401 && !_isRefreshing) {
-            // 401 에러가 발생하면 토큰 갱신 시도
             if (_refreshTokenFuture == null) {
               _isRefreshing = true;
               _refreshTokenFuture = _refreshToken();
@@ -60,12 +61,12 @@ class DioClient {
                 data: e.requestOptions.data,
                 queryParameters: e.requestOptions.queryParameters,
               );
-              handler.resolve(clonedRequest); // 성공적으로 재시도된 요청 처리
+              handler.resolve(clonedRequest);
             } else {
               handler.next(e); // 갱신 실패 시 에러 처리
             }
           } else {
-            handler.next(e); // 다른 에러는 그대로 처리
+            handler.next(e);
           }
         },
       ),
@@ -78,7 +79,7 @@ class DioClient {
   Future<void> _refreshToken() async {
     try {
       OAuthToken newToken = await AuthApi.instance.refreshToken();
-      log('새로운 토큰: ${newToken.accessToken}');
+      log('새로운 토큰 client: ${newToken.accessToken}');
 
       await _storage.write(key: 'ACCESS_TOKEN', value: newToken.accessToken);
       await _storage.write(key: 'REFRESH_TOKEN', value: newToken.refreshToken);
@@ -88,6 +89,7 @@ class DioClient {
   }
 
   // 토큰이 필요 없는 경로 확인
+  // TODO
   bool _isAuthorizationExcluded(String path) {
     const excludedPaths = [
       '/oauth/kakao',
