@@ -8,6 +8,7 @@ import chuchu.runnerway.member.dto.request.MemberUpdateRequestDto;
 import chuchu.runnerway.member.dto.response.DuplicateNicknameResponseDto;
 import chuchu.runnerway.member.dto.response.MemberIsFavoriteCourseResponseDto;
 import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
+import chuchu.runnerway.member.dto.response.MemberUpdateResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
 import chuchu.runnerway.member.exception.ResignedMemberException;
@@ -156,8 +157,8 @@ public class MemberController {
     public ResponseEntity<?> updateMember(
         @RequestBody MemberUpdateRequestDto memberUpdateRequestDto) {
         Long memberId = MemberInfo.getId();
-        memberService.updateMember(memberUpdateRequestDto, memberId);
-        return ResponseEntity.status(HttpStatus.OK).body("회원정보 수정완료!!");
+        MemberUpdateResponseDto responseDto = memberService.updateMember(memberUpdateRequestDto, memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @DeleteMapping

@@ -11,6 +11,7 @@ import chuchu.runnerway.member.dto.request.MemberUpdateRequestDto;
 import chuchu.runnerway.member.dto.response.DuplicateNicknameResponseDto;
 import chuchu.runnerway.member.dto.response.MemberIsFavoriteCourseResponseDto;
 import chuchu.runnerway.member.dto.response.MemberSelectResponseDto;
+import chuchu.runnerway.member.dto.response.MemberUpdateResponseDto;
 import chuchu.runnerway.member.exception.MemberDuplicateException;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
 import chuchu.runnerway.member.exception.ResignedMemberException;
@@ -65,7 +66,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void updateMember(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId) {
+    public MemberUpdateResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(
             NotFoundMemberException::new
         );
@@ -78,6 +79,9 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(member);
         memberImageRepository.save(memberImage);
+
+        MemberDto memberDto = mapper.map(member, MemberDto.class);
+        return new MemberUpdateResponseDto(jwtUtil.createAccessToken(memberDto));
     }
 
     @Transactional
