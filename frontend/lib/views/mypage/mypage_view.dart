@@ -5,7 +5,6 @@ import 'package:frontend/widgets/line.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-//TODO MaterialStateProperty 바꾸기
 class MypageView extends StatelessWidget {
   MypageView({Key? key}) : super(key: key);
   final AuthController _authController = Get.put(AuthController());
@@ -31,7 +30,7 @@ class MypageView extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 10),
@@ -60,33 +59,42 @@ class MypageView extends StatelessWidget {
             ),
             SizedBox(height: 10),
             OutlinedButton(
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(
-                    Color(0xFFA0A0A0),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Color(
+                    (0xFFA0A0A0),
                   ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  side: MaterialStateProperty.all(
-                      BorderSide(color: Color(0xFFE8E8E8), width: 1)),
-                  fixedSize: MaterialStateProperty.all(Size.fromHeight(20)),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _authController.logout();
+                },
                 child: Text("로그아웃")),
             Line(),
-            TextButton(
-                style: ButtonStyle(
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue)),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ModifyInfoView()));
-                },
-                child: const Text('회원 정보 수정')),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '개인 상세 정보',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                          foregroundColor: Color(0xFF1EA6FC)),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ModifyInfoView()));
+                      },
+                      child: const Text(
+                        '회원 정보 수정',
+                        style: TextStyle(fontSize: 12),
+                      )),
+                ],
+              ),
+            ),
+
             SizedBox(height: 7),
           ],
         ),

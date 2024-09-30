@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:frontend/views/main/main_view.dart';
 import 'package:frontend/views/runner/runner_view.dart';
 
+import '../views/auth/login_view.dart';
 import '../views/mypage/mypage_view.dart';
 
 class AppRoutes {
@@ -63,6 +64,10 @@ class AppRoutes {
     GetPage(
         name: '/modify',
         page: () => ModifyInfoView(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: '/login',
+        page: () => LoginView(),
         transition: Transition.noTransition),
   ];
 }

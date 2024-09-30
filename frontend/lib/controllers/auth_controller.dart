@@ -174,20 +174,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // 로그아웃 함수
-  Future<void> logout() async {
-    try {
-      await UserApi.instance.logout();
-      await _storage.deleteAll(); // 저장된 토큰 삭제
-      isLoggedIn.value = false;
-      email.value = '';
-      log('로그아웃 성공');
-    } catch (error) {
-      log('로그아웃 실패 controller: $error');
-      Get.snackbar('오류', '로그아웃에 실패했습니다.');
-    }
-  }
-
   // 사용자 정보 불러오기
   Future<void> fetchUserInfo() async {
     // Map<String, dynamic> userInfoMap = await _authService.getUserInfo();
@@ -210,6 +196,18 @@ class AuthController extends GetxController {
     } catch (e) {
       log('회원 정보 불러오기controller: $e');
       Get.snackbar('오류', '회원 정보를 가져오는 데 실패했습니다.');
+    }
+  }
+
+  // 로그아웃
+  Future<void> logout() async {
+    try {
+      await _storage.delete(key: 'ACCESS_TOKEN');
+      isLoggedIn.value = false;
+      Get.toNamed('/login');
+    } catch (e) {
+      log('로그아웃 실패 controller: ${e}');
+      Get.snackbar('로그아웃 실패 ', '로그아웃 중 문제가 발생했습니다.');
     }
   }
 }
