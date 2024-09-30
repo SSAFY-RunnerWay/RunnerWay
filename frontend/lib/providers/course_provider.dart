@@ -64,7 +64,7 @@ class CourseProvider {
       final response = await dioClient.dio.get(
         '/ranking/${id}',
       );
-      log('$response');
+      log('ranking: $response');
 
       // 응답이 성공적이면 데이터 반환
       if (response.statusCode == 200) {
