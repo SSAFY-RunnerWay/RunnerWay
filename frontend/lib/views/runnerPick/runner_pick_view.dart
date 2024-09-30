@@ -78,8 +78,9 @@ class RunnerPickView extends StatelessWidget {
                 return Center(child: CircularProgressIndicator());
               }
 
-              // 결과가 없을 때
-              if (runnerPickController.mostPickCourses.isEmpty) {
+              // 로딩이 완료되었으나 데이터가 없을 때
+              if (runnerPickController.mostPickCourses.isEmpty &&
+                  !runnerPickController.isMostPickLoading.value) {
                 return Text("가장 인기 많은 코스를 불러올 수 없습니다.");
               }
 

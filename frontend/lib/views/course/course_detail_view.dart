@@ -73,21 +73,36 @@ class CourseDetailView extends StatelessWidget {
                         ),
                       ),
                       // 코스 랭킹 카드 List
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: rankingList.length,
-                        itemBuilder: (context, index) {
-                          final ranking = rankingList[index];
-                          return RankingCard(
-                            name: ranking.member.nickname,
-                            time: ranking.score,
-                            imageUrl: ranking.member.memberImage?.url,
-                            rank: index + 1,
-                            isActive: true,
-                          );
-                        },
-                      ),
+                      // 랭킹이 있는지 여부에 따른 처리
+                      rankingList.isNotEmpty
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: rankingList.length,
+                              itemBuilder: (context, index) {
+                                final ranking = rankingList[index];
+                                return RankingCard(
+                                  name: ranking.member.nickname,
+                                  time: ranking.score,
+                                  imageUrl: ranking.member.memberImage?.url,
+                                  rank: index + 1,
+                                  isActive: true,
+                                );
+                              },
+                            )
+                          : Center(
+                              // padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text('등록된 랭킹이 없습니다.'),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            )),
 
                       // 코스 상세 정보 위젯
                       CourseSubInfo(

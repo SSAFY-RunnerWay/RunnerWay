@@ -69,6 +69,9 @@ class CourseProvider {
       // 응답이 성공적이면 데이터 반환
       if (response.statusCode == 200) {
         return List<dynamic>.from(response.data);
+      } else if (response.statusCode == 204) {
+        // 204 상태코드면, 빈 리스트 반환
+        return [];
       } else {
         throw Exception('Failed to load courses');
       }

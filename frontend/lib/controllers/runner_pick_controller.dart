@@ -1,9 +1,8 @@
 import 'dart:developer';
 
-import 'package:app_settings/app_settings.dart';
+import 'package:frontend/controllers/location_controller.dart';
 import 'package:frontend/models/course.dart';
 import 'package:frontend/services/course_service.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class RunnerPickController extends GetxController {
@@ -16,9 +15,7 @@ class RunnerPickController extends GetxController {
   var isMostPickLoading = false.obs;
   var isRecentPickLoading = false.obs;
 
-  // 현위치 상태관리
-  var currentPosition = Rxn<Position>();
-
+  final LocationController locationController = Get.find<LocationController>();
   // course sevice
   final CourseService _courseService = CourseService();
 
@@ -26,50 +23,9 @@ class RunnerPickController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // 뷰에 들어올 때마다 위치 정보 가져오기
-    _getCurrentLocation();
-  }
-
-  // 위치 정보를 가져오고 코스를 불러오는 함수
-  Future<void> _getCurrentLocation() async {
-    try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-      // 위치 서비스가 꺼져있는 경우 예외처리
-      if (!serviceEnabled) {
-        print('위치 정보를 가져올 수 없습니다');
-        AppSettings.openAppSettings(type: AppSettingsType.location);
-        return;
-      }
-
-      // 위치 정보 요청이 거절된 경우 예외 처리 (사용자가 위치 권한을 거부)
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          print('Location permissions are denied');
-          return;
-        }
-      }
-
-      // 위치 정보 요청이 영구적으로 거절된 경우 예외 처리:
-      if (permission == LocationPermission.deniedForever) {
-        print('Location permissions are permanently denied.');
-        return;
-      }
-
-      // 현재 위치 가져오기
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-
-      currentPosition.value = position;
-
-      // 위치 정보 기반으로 전체 인기 코스 & 최근 인기 코스 데이터 가져오기
-      _fetchMostPickCourses();
-      _fetchRecentPickCourses();
-    } catch (e) {
-      print("Error getting location: $e");
-    }
+    // 위치 정보 기반으로 전체 인기 코스 & 최근 인기 코스 데이터 가져오기
+    _fetchMostPickCourses();
+    _fetchRecentPickCourses();
   }
 
   Future<void> _fetchMostPickCourses() async {
@@ -78,8 +34,8 @@ class RunnerPickController extends GetxController {
 
     try {
       // 전체 인기 코스 API 통신
-      final courses =
-          await _courseService.getMostPickCourse(currentPosition.value!);
+      final courses = await _courseService
+          .getMostPickCourse(locationController.currentPosition.value!);
       log('전체 인기 코스 controller : $courses');
 
       // 전체 인기 코스 저장
@@ -98,8 +54,8 @@ class RunnerPickController extends GetxController {
 
     try {
       // 전체 인기 코스 API 통신
-      final courses =
-          await _courseService.getRecentPickCourse(currentPosition.value!);
+      final courses = await _courseService
+          .getRecentPickCourse(locationController.currentPosition.value!);
       log('최근 인기 코스 controller : $courses');
 
       // 전체 인기 코스 저장
