@@ -23,7 +23,7 @@ public class OfficialDetailResponseDto {
     private Long count;
     private int level;
     private int averageSlope;
-
+    private int averageDownhill;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime averageTime;

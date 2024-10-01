@@ -16,6 +16,7 @@ public class UserDetailResponseDto {
     private Long count;
     private int level;
     private int averageSlope;
+    private int averageDownhill;
     private LocalDateTime averageTime;
     private double courseLength;
     private double averageCalorie;
