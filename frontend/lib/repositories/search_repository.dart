@@ -15,7 +15,7 @@ class SearchRepository {
   }
 
   // 키워드로 공식 코스 검색 결과 리스트 가져오기
-  Future<List<Course>> getCourseResults(
+  Future<Map<String, dynamic>> getCourseResults(
     String query,
     int page,
   ) async {
@@ -25,6 +25,12 @@ class SearchRepository {
     );
     log('공식 코스 검색 결과 repository :  $response');
 
-    return response.map((course) => Course.fromJson(course)).toList();
+    return {
+      'courses': response['courses']
+          .map<Course>((course) => Course.fromJson(course))
+          .toList(),
+      'totalPages': response['totalPages'],
+      'totalElements': response['totalElements'],
+    };
   }
 }

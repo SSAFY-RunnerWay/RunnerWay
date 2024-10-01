@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/network_controller.dart';
+import 'package:frontend/views/etc/jwt_decode_view.dart';
 import 'package:frontend/views/running/competition_course_running_view.dart';
 import 'package:frontend/views/running/free_course_running_view.dart';
 import 'package:frontend/views/running/official_course_running_view.dart';
@@ -60,7 +61,7 @@ class RunningThingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 네트워크 체크
-    NetworkController.checkInitialConnectivity(context);
+    Get.find<NetworkController>().checkInitialConnectivity(context);
 
     return Scaffold(
       // appBar: AppBar(
@@ -110,6 +111,11 @@ class RunningThingsView extends StatelessWidget {
               onPressed: () => _navigateToReviewWriteView(),
               // Navigates to the RunningDetail page
               child: const Text('Go to ReviewWrite'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.to(() => JwtDecodeView()),
+              // Navigates to the RunningDetail page
+              child: const Text('Go to JWTDecode'),
             ),
             ElevatedButton(
               onPressed: () => Get.to(() => FreeCourseRunningView()),

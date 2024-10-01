@@ -4,10 +4,14 @@ import 'package:intl/intl.dart'; // DateFormat을 위한 패키지 임포트
 
 class BirthModal extends StatelessWidget {
   final TextEditingController birthController;
+  final bool enabled;
 
-  const BirthModal({Key? key, required this.birthController}) : super(key: key);
+  const BirthModal(
+      {Key? key, required this.birthController, this.enabled = true})
+      : super(key: key);
 
   void _selectDate(BuildContext context) async {
+    if (!enabled) return;
     DateTime? tempPickedDate = DateTime.now();
 
     // 하단 달력

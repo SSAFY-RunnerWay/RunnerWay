@@ -1,138 +1,49 @@
-// controllers/main_controller.dart
 import 'dart:developer';
 
 import 'package:frontend/controllers/filter_controller.dart';
+import 'package:frontend/controllers/location_controller.dart';
 import 'package:frontend/services/course_service.dart';
 import 'package:get/get.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:frontend/models/course.dart';
-import 'package:app_settings/app_settings.dart';
 
 class MainController extends GetxController {
-  var currentPosition = Rxn<Position>(); // 현재 위치 정보를 관리
+  // var currentPosition = Rxn<Position>(); // 현재 위치 정보를 관리
   var courses = <Course>[].obs; // 코스 리스트
   var isLoading = true.obs; // 로딩 상태 관리
   var filteredCourses = <Course>[].obs; // 필터링 및 정렬된 코스 결과
 
   final CourseService _courseService = CourseService();
+  final LocationController locationController = Get.find<LocationController>();
   final FilterController filterController = Get.find<FilterController>();
 
   @override
   void onInit() {
     super.onInit();
-    _getCurrentLocation();
-
+    locationController.getCurrentLocation();
+    // courses.
     //초기에 filteredCourses를 courses로 세팅
-    ever(courses, (_) {
-      filteredCourses.assignAll(courses);
-    });
+    ever(locationController.currentPosition, (_) {
+      log('main view 위치 정보 : ${locationController.currentPosition}');
+      fetchOfficialCourses();
 
-    // currentPosition이 변경될 때마다 로그를 출력
-    ever(currentPosition, (Position? pos) {
-      if (pos != null) {
-        log("Current Position: Latitude ${pos.latitude}, Longitude ${pos.longitude}");
-      } else {
-        log("Position not available");
-      }
+      log('filteredCourses: $filteredCourses');
     });
 
     // MainController에만 필터가 적용되도록 콜백 설정
     filterController.onMainFilterUpdated = _applyFiltersToCourses;
   }
 
-  // 위치 정보를 가져오고 코스를 불러오는 함수
-  Future<void> _getCurrentLocation() async {
-    try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-      // 위치 서비스가 꺼져있는 경우 예외처리
-      if (!serviceEnabled) {
-        print('위치 정보를 가져올 수 없습니다');
-        AppSettings.openAppSettings(type: AppSettingsType.location);
-        return;
-      }
-
-      // 위치 정보 요청이 거절된 경우 예외 처리 (사용자가 위치 권한을 거부)
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          print('Location permissions are denied');
-          return;
-        }
-      }
-
-      // 위치 정보 요청이 영구적으로 거절된 경우 예외 처리:
-      if (permission == LocationPermission.deniedForever) {
-        print('Location permissions are permanently denied.');
-        return;
-      }
-
-      // 현재 위치 가져오기
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-
-      currentPosition.value = position;
-
-      // 위치 정보 기반으로 공식 코스 데이터 가져오기
-      _fetchOfficialCourses(position.latitude, position.longitude);
-    } catch (e) {
-      print("Error getting location: $e");
-    }
-  }
-
-  // 위치 정보 업데이트 시 코스 불러오고 필터 적용
-  Future<void> updateCurrentLocation() async {
-    try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-      // 위치 정보를 가져올 수 없는 경우 예외처리
-      if (!serviceEnabled) {
-        print('위치 정보를 가져올 수 없습니다');
-        return;
-      }
-
-      // 위치 정보 요청이 거절된 경우 예외처리
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          print('Location permissions are denied');
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        print('Location permissions are permanently denied.');
-        return;
-      }
-
-      // 현재 위치 가져오기
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-
-      currentPosition.value = position;
-
-      // 위치 정보 기반으로 공식 코스 데이터 가져오기
-      await _fetchOfficialCourses(position.latitude, position.longitude);
-
-      // 필터 및 정렬을 다시 적용
-      _applyFiltersToCourses();
-    } catch (e) {
-      print('위치 정보 갱신 중 문제 발생 : $e');
-    }
-  }
-
   // 코스를 불러오는 함수
-  Future<void> _fetchOfficialCourses(double latitude, double longitude) async {
+  Future<void> fetchOfficialCourses() async {
     isLoading(true);
     try {
-      final fetchedCourses =
-          await _courseService.getCoursesWithDistance(currentPosition.value!);
+      final fetchedCourses = await _courseService
+          .getCoursesWithDistance(locationController.currentPosition.value!);
 
       courses.assignAll(fetchedCourses); // 코스 데이터 업데이트
+      filteredCourses.assignAll(courses);
     } catch (e) {
-      print('Error fetching courses: $e');
+      print('코스를 가져오는 중 오류 발생: $e');
     } finally {
       isLoading(false);
     }
@@ -151,15 +62,19 @@ class MainController extends GetxController {
     filteredList = filteredList.where((course) {
       final selectedLength = filterController.selectedLength;
 
-      if (selectedLength.contains(3)) {
-        return course.courseLength <= 3;
-      } else if (selectedLength.contains(5)) {
-        return course.courseLength >= 3 && course.courseLength <= 5;
-      } else if (selectedLength.contains(10)) {
-        return course.courseLength >= 5 && course.courseLength <= 10;
-      } else {
-        return course.courseLength >= 10;
-      }
+      return selectedLength.any((length) {
+        if (length == 3) {
+          return course.courseLength <= 3;
+        } else if (length == 5) {
+          return course.courseLength > 3 && course.courseLength <= 5;
+        } else if (length == 10) {
+          return course.courseLength > 5 && course.courseLength <= 10;
+        } else if (length == 'over') {
+          return course.courseLength > 10;
+        }
+
+        return false;
+      });
     }).toList();
 
     // 정렬 기준에 맞게 정렬

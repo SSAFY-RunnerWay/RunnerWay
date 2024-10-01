@@ -14,25 +14,13 @@ class CourseProvider {
     double longitude,
   ) async {
     try {
-      final response =
-          await dioClient.dio.get('official-course/list', queryParameters: {
-        'lat': latitude,
-        'lng': longitude,
-      });
-
-      // final response = await dio.get(
-      //   'https://j11b304.p.ssafy.io/api/officialCourse/list',
-      //   queryParameters: {
-      //     'lat': latitude,
-      //     'lng': longitude,
-      //   },
-      //   options: Options(
-      //     headers: {
-      //       'Authorization':
-      //           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k', // 개별 요청에 헤더 추가
-      //     },
-      //   ),
-      // );
+      final response = await dioClient.dio.get(
+        'official-course/list',
+        queryParameters: {
+          'lat': latitude,
+          'lng': longitude,
+        },
+      );
       log('$response');
 
       // 응답이 성공적이면 데이터 반환
@@ -51,15 +39,10 @@ class CourseProvider {
   // 공식 코스 상세 조회 가져오기
   Future<Map<String, dynamic>> fetchOfficialCourseDetail(int id) async {
     try {
-      final response = await dio.get(
-        'https://j11b304.p.ssafy.io/api/official-course/detail/${id}',
-        options: Options(
-          headers: {
-            'Authorization':
-                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k', // 개별 요청에 헤더 추가
-          },
-        ),
+      final response = await dioClient.dio.get(
+        '/official-course/detail/${id}',
       );
+
       log('$response');
 
       // 응답이 성공적이면 데이터 반환
@@ -75,16 +58,11 @@ class CourseProvider {
     }
   }
 
+  // 코스 랭킹 정보 요청
   Future<List<dynamic>> fetchCourseRanking(int id) async {
     try {
-      final response = await dio.get(
-        'https://j11b304.p.ssafy.io/api/ranking/${id}',
-        options: Options(
-          headers: {
-            'Authorization':
-                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k', // 개별 요청에 헤더 추가
-          },
-        ),
+      final response = await dioClient.dio.get(
+        '/ranking/${id}',
       );
       log('$response');
 
@@ -100,4 +78,87 @@ class CourseProvider {
       throw Exception('코스 랭킹 가져오기 실패 : ${e.message}');
     }
   }
+
+  // 러너 코스 요청 API
+  Future<List<dynamic>> fetchRunnerCourse(
+      double latitude, double longitude) async {
+    try {
+      final response =
+          await dioClient.dio.get('/user-course/list', queryParameters: {
+        'lat': latitude,
+        'lng': longitude,
+      });
+
+      log('러너 코스 조회 응답: $response');
+
+      if (response.statusCode == 200) {
+        // 응답 성공 시 요청 데이터 반환
+        return response.data;
+      } else {
+        throw Exception('러너 코스 요청 실패');
+      }
+    } on DioException catch (e) {
+      log('러너 코스 조회 중 문제 발생 : ${e.message}');
+      throw Exception('러너 코스 조회 중 문제 발생 : ${e.message}');
+    }
+  }
+
+  // 전체 인기 유저 코스 조회
+  Future<List<dynamic>> fetchMostPickCourse(
+      double latitude, double longitude) async {
+    try {
+      final response = await dioClient.dio.get(
+        '/user-course/popularity/all',
+        queryParameters: {'lat': latitude, 'lng': longitude},
+      );
+      log('전체 인기 유저 코스 API 통신 결과 : $response');
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('전체 인기 유저 코스 조회 중 문제 발생');
+      }
+    } on DioException catch (e) {
+      log('전체 인기 유저 코스 조회 중 문제 발생 : ${e.message}');
+      throw Exception('전체 인기 유저 코스 조회 중 문제 발생 : ${e.message}');
+    }
+  }
+
+  // 최근 인기 유저 코스 조회
+  Future<List<dynamic>> fetchRecentPickCourse(
+      double latitude, double longitude) async {
+    try {
+      final response = await dioClient.dio.get(
+        '/user-course/popularity/lately',
+        queryParameters: {'lat': latitude, 'lng': longitude},
+      );
+      log('최근 인기 유저 코스 API 통신 결과 : $response');
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('최근 인기 유저 코스 조회 중 문제 발생');
+      }
+    } on DioException catch (e) {
+      log('최근 인기 유저 코스 조회 : ${e.message}');
+      throw Exception('최근 인기 유저 코스 조회 : ${e.message}');
+    }
+  }
+
+  // // 러닝 기록 목록 조회
+  // Future<List<dynamic>> fetchRecordCourse(int year, int month, int day) async {
+  //   try {
+  //     final response = await dioClient.dio.get('/record',
+  //         queryParameters: {'year': year, 'month': month, 'day': day});
+  //     if (response.statusCode == 200) {
+  //       log('Response data: ${response.data}');
+  //       return response.data;
+  //     } else {
+  //       throw Exception('러닝 기록 목록 조회 중 문제 발생');
+  //     }
+  //   } on DioException catch (e) {
+  //     log('러닝 기록 목록 조회 provider: ${e.message}');
+  //     throw Exception('러닝 기록 목록 조회 : ${e.message}');
+  //   }
+  // }
 }

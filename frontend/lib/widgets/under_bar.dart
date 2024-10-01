@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../common/MyFlutterApp.dart';
+import '../common/my_flutter_app.dart';
 import '../controllers/under_bar_controller.dart';
 import '../views/running/running_things_view.dart';
 
@@ -50,7 +50,7 @@ class UnderBar extends StatelessWidget {
                       Positioned(
                         left: screenWidth / 5,
                         top: 7,
-                        child: _buildNavItem(1, '러너픽', MyFlutterApp.road_1,
+                        child: _buildNavItem(1, '러너', MyFlutterApp.road_1,
                             screenWidth / 4, controller,
                             hasSizedBox: true),
                       ),
@@ -161,7 +161,7 @@ class UnderBar extends StatelessWidget {
             Get.toNamed('/main');
             break;
           case 1:
-            Get.toNamed('/runner-pick');
+            Get.toNamed('/runner');
             break;
           case 2:
             Get.toNamed('/record');

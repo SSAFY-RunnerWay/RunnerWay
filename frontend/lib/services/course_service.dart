@@ -37,6 +37,28 @@ class CourseService {
     return course;
   }
 
+  // 러너 코스 전체 조회
+  Future<List<Course>> getRunnerCourse(Position currentPosition) async {
+    final courses = await _repository.getRunnerCourse(
+        currentPosition.latitude, currentPosition.longitude);
+    log('러너 코스 조회 service: $courses');
+
+    return courses.map(
+      (course) {
+        double distance = _calculateDistance(
+          currentPosition.latitude,
+          currentPosition.longitude,
+          course.lat,
+          course.lng,
+        );
+
+        log('courseName : ${course.name}, distance : $distance');
+
+        return course.copyWith(distance: distance);
+      },
+    ).toList();
+  }
+
   // 코스 랭킹 조회
   Future<List<Ranking>> getCourseRanking(int id) async {
     final ranking = await _repository.getCourseRanking(id);
@@ -49,4 +71,22 @@ class CourseService {
       double startLat, double startLng, double endLat, double endLng) {
     return Geolocator.distanceBetween(startLat, startLng, endLat, endLng);
   }
+
+  // 전체 인기 유저 코스 조회
+  Future<List<Course>> getMostPickCourse(Position currentPosition) async {
+    final courses = await _repository.getMostPickCourse(
+        currentPosition.latitude, currentPosition.longitude);
+
+    return courses;
+  }
+
+  // 최근 인기 유저 코스 조회
+  Future<List<Course>> getRecentPickCourse(Position currentPosition) async {
+    final courses = await _repository.getRecentPickCours(
+        currentPosition.latitude, currentPosition.longitude);
+
+    return courses;
+  }
+
+  // 러닝 기록 목록 조회
 }

@@ -12,17 +12,11 @@ class SearchProvider {
     String query,
   ) async {
     try {
-      final response = await dio.get(
-        'https://j11b304.p.ssafy.io/api/search/candidate',
+      final response = await dioClient.dio.get(
+        '/search/candidate',
         queryParameters: {
           'searchWord': query,
         },
-        options: Options(
-          headers: {
-            'Authorization':
-                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsImVtYWlsIjoidGVzMnQyM3cyNEBleGFtcGxlLmNvbTIiLCJuaWNrbmFtZSI6InJ1bm4ydzMyNDIiLCJpYXQiOjE3MjU5NTc2ODMsImV4cCI6MTcyOTU1NzY4M30.64u_30Q6t3lXGYyNwLhSxfilMRtYgWKWSnqGP4XGG6k', // 개별 요청에 헤더 추가
-          },
-        ),
       );
 
       // 응답 성공 시 데이터 반환
@@ -39,8 +33,8 @@ class SearchProvider {
     }
   }
 
-  // 공식 코스 검색 결과 요청
-  Future<List<dynamic>> fetchSearchResults(
+  // 코스 검색 결과 요청
+  Future<Map<String, dynamic>> fetchSearchResults(
     String query,
     int page,
   ) async {
@@ -57,7 +51,11 @@ class SearchProvider {
       // 요청 성공 시 데이터 반환
       if (response.statusCode == 200) {
         log('검색 결과 provider : ${response}');
-        return response.data['searchCourseList'];
+        return {
+          'courses': response.data['searchCourseList'],
+          'totalPages': response.data['totalPages'],
+          'totalElements': response.data['totalElements'],
+        };
       } else {
         throw Exception('검색 결과 조회 실패');
       }

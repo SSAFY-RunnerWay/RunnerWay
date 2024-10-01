@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 
 class SignupInput extends StatelessWidget {
   final String inputType;
+  final TextEditingController controller;
+  final bool enabled;
 
-  const SignupInput({Key? key, required this.inputType}) : super(key: key);
+  const SignupInput(
+      {Key? key,
+      required this.inputType,
+      required this.controller,
+      this.enabled = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +39,18 @@ class SignupInput extends StatelessWidget {
             text,
             style: TextStyle(
               color: Color(0xFF1C1516),
-              fontSize: 15,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 8),
           Row(
             children: [
               Expanded(
                 child: TextField(
+                  controller: controller,
                   keyboardType: TextInputType.number,
+                  enabled: enabled,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     enabledBorder: OutlineInputBorder(

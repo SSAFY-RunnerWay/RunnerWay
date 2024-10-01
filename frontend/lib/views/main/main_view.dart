@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/location_controller.dart';
 import 'package:frontend/widgets/course/course_card.dart';
 import 'package:frontend/widgets/filter_condition.dart';
 import 'package:frontend/widgets/search/search_read_only.dart';
 import 'package:get/get.dart';
 import '../../controllers/filter_controller.dart';
 import '../../controllers/main_controller.dart';
+import '../../controllers/under_bar_controller.dart';
 import '../base_view.dart';
 
 class MainView extends StatelessWidget {
   // filtercontroller 먼저 등록
+  final LocationController locationController = Get.put(LocationController());
   final FilterController filterController = Get.put(FilterController());
   final MainController mainController = Get.put(MainController());
 
   @override
   Widget build(BuildContext context) {
+    // 페이지 진입 시 언더바 인덱스를 업데이트
+    final UnderBarController underBarController =
+        Get.find<UnderBarController>();
+
+    // 메인 뷰 빌드 후 언더바 탭 활성화
+    Future.microtask(() => underBarController.changeTabIndex(0));
+
     // 메인 view에서 필터 타겟을 main으로 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
       filterController.setFilterTarget('main');
     });
+
+    final results = mainController.filteredCourses;
 
     return BaseView(
       child: Column(
@@ -35,14 +47,19 @@ class MainView extends StatelessWidget {
 
           // Runner들의 Pick
           Container(
+              child: GestureDetector(
+            onTap: () {
+              Get.toNamed('/runner-pick');
+            },
             child: Stack(
               children: [
-                // Stack을 Expanded로 감싸 남은 공간을 차지하게 함
+                // 클릭시 러너픽 페이지로 이동
                 Positioned(
                   child: Image.asset(
                     'assets/images/main/running.png',
                   ),
                 ),
+
                 Positioned(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +122,7 @@ class MainView extends StatelessWidget {
                 )
               ],
             ),
-          ),
+          )),
 
           // 오늘의 추천 코스 container
           Expanded(
@@ -120,7 +137,7 @@ class MainView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '오늘의 ',
+                        '러너웨이 공식 ',
                         style: TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 22),
                       ),
@@ -156,16 +173,21 @@ class MainView extends StatelessWidget {
                         }
 
                         return ListView.builder(
-                          itemCount: mainController.filteredCourses.length,
+                          itemCount: results.length + 1,
                           itemBuilder: (context, index) {
-                            return CourseCard(
-                                course: mainController.filteredCourses[index]);
+                            if (index == results.length) {
+                              // SizedBox 추가
+                              return SizedBox(
+                                height: 100,
+                              );
+                            }
+                            return CourseCard(course: results[index]);
                           },
                         );
                       },
                     ),
                   ),
-                  SizedBox(height: 50),
+                  // SizedBox(height: 50),
                 ],
               ),
             ),
