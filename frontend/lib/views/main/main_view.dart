@@ -10,24 +10,59 @@ import '../../controllers/main_controller.dart';
 import '../../controllers/under_bar_controller.dart';
 import '../base_view.dart';
 
-class MainView extends StatelessWidget {
+class MainView extends StatefulWidget {
+  @override
+  _MainViewState createState() => _MainViewState();
+}
+
+class _MainViewState extends State<MainView> {
   // filtercontroller 먼저 등록
   final LocationController locationController = Get.find<LocationController>();
   final FilterController filterController = Get.put(FilterController());
   final MainController mainController = Get.put(MainController());
-  // 페이지 진입 시 언더바 인덱스를 업데이트
   final UnderBarController underBarController = Get.find<UnderBarController>();
 
+  ScrollController _scrollController = ScrollController();
+  bool _isBannerVisible = true;
+
   @override
-  Widget build(BuildContext context) {
-    // 메인 뷰 빌드 후 언더바 탭 활성화
+  void initState() {
+    super.initState();
+    // 페이지 진입 시 언더바 인덱스 업데이트
+    // 현재 실행 중인 작업이 완료된 후 다음 이벤트가 실행되기 전에 실행
     Future.microtask(() => underBarController.changeTabIndex(0));
 
-    // 메인 view에서 필터 타겟을 main으로 설정
+    // 메인 view에서 필터 타겟 main으로 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
       filterController.setFilterTarget('main');
     });
 
+    // ScrollController의 리스너 설정
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels > 150) {
+        if (_isBannerVisible) {
+          setState(() {
+            _isBannerVisible = false;
+          });
+        }
+      } else {
+        if (!_isBannerVisible) {
+          setState(() {
+            _isBannerVisible = true;
+          });
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final results = mainController.filteredCourses;
 
     return BaseView(
@@ -44,93 +79,99 @@ class MainView extends StatelessWidget {
             ),
           ),
 
-          // Runner들의 Pick
-          Container(
+          // Runner들의 Pick 배너
+          if (_isBannerVisible)
+            Container(
               child: GestureDetector(
-            onTap: () {
-              Get.toNamed('/runner-pick');
-            },
-            child: Stack(
-              children: [
-                // 클릭시 러너픽 페이지로 이동
-                Positioned(
-                  child: Image.asset(
-                    'assets/images/main/running.png',
-                  ),
-                ),
-
-                Positioned(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 24,
+                onTap: () {
+                  Get.toNamed('/runner-pick');
+                },
+                child: Stack(
+                  children: [
+                    // 클릭시 러너픽 페이지로 이동
+                    Positioned(
+                      child: Image.asset(
+                        'assets/images/main/running.png',
                       ),
-                      Row(
+                    ),
+
+                    Positioned(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: 20,
+                            height: 24,
                           ),
-                          Text(
-                            '러너들의 ',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20,
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                '러너들의 ',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Text(
+                                'Pick ',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'playball',
+                                  fontSize: 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 6,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 24),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '우리 동네 러너들에게',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  '인기있는 코스를 즐겨보세요 !',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                )
+                              ],
                             ),
-                          ),
-                          Text(
-                            'Pick ',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'playball',
-                              fontSize: 30,
-                            ),
-                          ),
+                          )
                         ],
                       ),
-                      SizedBox(
-                        height: 6,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '우리 동네 러너들에게',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              '인기있는 코스를 즐겨보세요 !',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                    )
+                  ],
+                ),
+              ),
             ),
-          )),
 
           // 오늘의 추천 코스 container
           Expanded(
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  if (_isBannerVisible)
+                    SizedBox(
+                      height: 20,
+                    ),
                   // title
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,6 +221,7 @@ class MainView extends StatelessWidget {
                         }
 
                         return ListView.builder(
+                          controller: _scrollController,
                           itemCount: results.length + 1,
                           itemBuilder: (context, index) {
                             if (index == results.length) {

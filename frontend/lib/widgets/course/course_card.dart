@@ -8,12 +8,104 @@ class CourseCard extends StatelessWidget {
 
   CourseCard({required this.course});
 
+  OverlayEntry? _overlayEntry;
+
+  void _showOverlay(BuildContext context, Offset position, double screenWidth,
+      double screenHeight) {
+    // 팝업 크기 설정
+    double popupWidth = screenWidth * 1 / 2;
+    double popupHeight = 210; // 예시로 설정한 높이
+
+    // 화면 경계를 넘지 않도록 조정
+    double leftPosition = position.dx;
+    double topPosition = position.dy;
+
+    // 오른쪽으로 넘지 않도록 처리
+    if (leftPosition + popupWidth > screenWidth) {
+      leftPosition = screenWidth - popupWidth - 20; // 오른쪽 경계에서 20px 여유를 둠
+    }
+
+    // 아래쪽으로 넘지 않도록 처리
+    if (topPosition + popupHeight > screenHeight) {
+      topPosition = screenHeight - popupHeight - 40; // 아래쪽 경계에서 40px 여유를 둠
+    }
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        // 조정된 position 값을 사용해 팝업 위치 설정
+        top: topPosition,
+        left: leftPosition,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xffA8A8A8).withOpacity(0.25),
+                  blurRadius: 12,
+                  offset: Offset(0, 12),
+                ),
+              ],
+            ),
+            width: popupWidth,
+            height: popupHeight,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '코스 미리 보기',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    color: Colors.black12,
+                  ),
+                  height: 120,
+                  width: screenWidth * 2 / 4,
+                ),
+                SizedBox(
+                  height: 6,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context)?.insert(_overlayEntry!);
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     return GestureDetector(
       onTap: () {
         // 코스 카드 클릭 시 상세 페이지로 이동
         Get.toNamed('/course/${course.courseType}/${course.courseId}');
+      },
+      onLongPressStart: (LongPressStartDetails details) {
+        // 길게 누르기 시작할 때 클릭 위치에 오버레이로 팝업 띄우기
+        _showOverlay(
+            context, details.globalPosition, screenWidth, screenHeight);
+      },
+      onLongPressEnd: (_) {
+        // 길게 누르기를 끝낼 때 팝업 닫기
+        _removeOverlay();
       },
       child: Card(
         margin: EdgeInsets.only(bottom: 18),
