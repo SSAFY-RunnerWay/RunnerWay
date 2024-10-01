@@ -26,7 +26,8 @@ class CourseProvider {
       // 응답이 성공적이면 데이터 반환
       if (response.statusCode == 200) {
         return response.data;
-        // TODO : 204 상태처리
+      } else if (response.statusCode == 204) {
+        return [];
       } else {
         throw Exception('Failed to load courses');
       }
@@ -50,7 +51,7 @@ class CourseProvider {
       if (response.statusCode == 200) {
         return Map<String, dynamic>.from(response.data);
       } else if (response.statusCode == 404) {
-        // TODO : 404  상태처리
+        // 404 : 데이터 없음
         return {};
       } else {
         throw Exception('Failed to load courses');
@@ -75,7 +76,7 @@ class CourseProvider {
       if (response.statusCode == 200) {
         return Map<String, dynamic>.from(response.data);
       } else if (response.statusCode == 404) {
-        // TODO : 404  상태처리
+        // 404 : 데이터 없음
         return {};
       } else {
         throw Exception('Failed to load courses');
@@ -126,6 +127,9 @@ class CourseProvider {
       if (response.statusCode == 200) {
         // 응답 성공 시 요청 데이터 반환
         return response.data;
+      } else if (response.statusCode == 204) {
+        // 204 : 러너 코스 없음
+        return [];
       } else {
         throw Exception('러너 코스 요청 실패');
       }
@@ -176,21 +180,4 @@ class CourseProvider {
       throw Exception('최근 인기 유저 코스 조회 : ${e.message}');
     }
   }
-
-  // // 러닝 기록 목록 조회
-  // Future<List<dynamic>> fetchRecordCourse(int year, int month, int day) async {
-  //   try {
-  //     final response = await dioClient.dio.get('/record',
-  //         queryParameters: {'year': year, 'month': month, 'day': day});
-  //     if (response.statusCode == 200) {
-  //       log('Response data: ${response.data}');
-  //       return response.data;
-  //     } else {
-  //       throw Exception('러닝 기록 목록 조회 중 문제 발생');
-  //     }
-  //   } on DioException catch (e) {
-  //     log('러닝 기록 목록 조회 provider: ${e.message}');
-  //     throw Exception('러닝 기록 목록 조회 : ${e.message}');
-  //   }
-  // }
 }
