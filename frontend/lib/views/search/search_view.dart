@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/under_bar_controller.dart';
 import 'package:frontend/views/main/widget/auto_complete.dart';
 import 'package:frontend/views/search/widget/search_bar.dart';
 import 'package:frontend/views/search/widget/search_prompt.dart';
 import 'package:frontend/views/search/widget/search_result.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/location_controller.dart';
 import '../../controllers/search_controller.dart';
 import '../base_view.dart';
 
 class SearchView extends StatelessWidget {
-  const SearchView({super.key});
+  final LocationController locationController = Get.find<LocationController>();
+  final UnderBarController underBarController = Get.find<UnderBarController>();
 
   @override
   Widget build(BuildContext context) {
+    // 검색 뷰 빌드 후 메인 언더바 탭 활성화
+    Future.microtask(() => underBarController.changeTabIndex(0));
+
     final searchController = Get.put(SearchBarController());
 
     // 쿼리 파라미터 가져오기
