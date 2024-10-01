@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from .models import Course, Member, CourseTags, FavoriteCourse, CourseImage
+from .models import Course, Member, CourseTags, FavoriteCourse, CourseImage, RecommendationLog
 from . import SessionLocal  # 데이터베이스 세션을 가져오는 경우
 
 
@@ -26,14 +26,6 @@ def get_favorite_courses(db: Session, member_id: int):
 
 
 def get_courses(db: Session, area: str):
-    # courses = db.query(Course).filter(Course.course_id != 0,
-    # (6371 * func.acos(
-    #     func.cos(func.radians(lat)) * func.cos(func.radians(Course.lat)) *
-    #     func.cos(func.radians(Course.lng) - func.radians(lng)) +
-    #     func.sin(func.radians(lat)) * func.sin(func.radians(Course.lat))
-    # )) <= 3,
-    # Course.course_type == 'official').all()
-
     courses = db.query(Course).filter(Course.course_id != 0, Course.area == area,Course.course_type == 'official').all()
 
     return courses
@@ -46,6 +38,10 @@ def get_course_tags(db: Session):
 def get_members(db: Session):
     members = db.query(Member).all()
     return members
+
+def get_recommendation_logs(db: Session):
+    logs = db.query(RecommendationLog).all()
+    return logs
 
 # Example of using the CRUD functions
 def main(filepath: str):
