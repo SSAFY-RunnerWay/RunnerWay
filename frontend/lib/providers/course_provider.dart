@@ -49,13 +49,40 @@ class CourseProvider {
       // 응답이 성공적이면 데이터 반환
       if (response.statusCode == 200) {
         return Map<String, dynamic>.from(response.data);
-        // TODO : 204  상태처리
+      } else if (response.statusCode == 404) {
+        // TODO : 404  상태처리
+        return {};
       } else {
         throw Exception('Failed to load courses');
       }
     } on DioException catch (e) {
       // 에러 처리
-      print('코스 상세 정보를 가져오는 중 문제 발생 : ${e.message}');
+      print('공식 코스 상세 정보를 가져오는 중 문제 발생 : ${e.message}');
+      throw Exception('코스 가져오기 실패: ${e.message}');
+    }
+  }
+
+  // 유저 코스 상세 조회
+  Future<Map<String, dynamic>> fetchUserCourseDetail(int id) async {
+    try {
+      final response = await dioClient.dio.get(
+        '/user-course/detail/$id',
+      );
+
+      log('$response');
+
+      // 응답이 성공적이면 데이터 반환
+      if (response.statusCode == 200) {
+        return Map<String, dynamic>.from(response.data);
+      } else if (response.statusCode == 404) {
+        // TODO : 404  상태처리
+        return {};
+      } else {
+        throw Exception('Failed to load courses');
+      }
+    } on DioException catch (e) {
+      // 에러 처리
+      print('유저 코스 상세 정보를 가져오는 중 문제 발생 : ${e.message}');
       throw Exception('코스 가져오기 실패: ${e.message}');
     }
   }

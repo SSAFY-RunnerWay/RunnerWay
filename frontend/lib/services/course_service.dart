@@ -39,7 +39,7 @@ class CourseService {
 
   // 유저 코스 상세 조회
   Future<Course> getUserCourseDetail(int id) async {
-    final course = await _repository.getOfficialCourseDetail(id);
+    final course = await _repository.getUserCourseDetail(id);
 
     return course;
   }
