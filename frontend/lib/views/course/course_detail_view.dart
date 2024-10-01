@@ -54,6 +54,8 @@ class CourseDetailView extends StatelessWidget {
                         content: course.content ?? '설명이 없는 코스입니다.',
                         address: course.address,
                         count: course.count,
+                        type: course.courseType!,
+                        nickName: course.memberNickname,
                       ),
 
                       // 구분선
