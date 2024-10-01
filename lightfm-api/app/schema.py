@@ -88,3 +88,16 @@ class FavoriteCourse(FavoriteCourseBase):
     class Config:
         orm_mode = True
         from_attributes = True
+
+class RecommendationLogBase(BaseModel):
+    course_id: int
+    member_id: int
+    course_level: int
+    average_slope: int
+
+class RecommendationLog(RecommendationLogBase):
+    log_id: int
+
+    class Config:
+        orm_mode = True
+        from_attributes = True

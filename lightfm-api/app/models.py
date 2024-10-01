@@ -90,3 +90,18 @@ class FavoriteCourse(Base):
     tag_name = Column(String(255), nullable=False)  # 태그 이름
 
     member = relationship("Member", back_populates="favorite_courses")
+
+
+class RecommendationLog(Base):
+    __tablename__ = "recommendation_log"
+
+    log_id = Column(BigInteger, primary_key=True, index=True)  # 기본 키
+    course_id = Column(BigInteger, ForeignKey("course.course_id"), nullable=False)  # Course 테이블의 외래키
+    member_id = Column(BigInteger, ForeignKey("member.member_id"), nullable=False)  # Member 테이블의 외래키
+    course_level = Column(Integer, nullable=False)
+    average_slope = Column(Integer, nullable=False)
+
+    # Course와의 관계 설정
+    course = relationship("Course")
+    # Member와의 관계 설정
+    member = relationship("Member")

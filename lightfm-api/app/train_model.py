@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from .crud import get_db, load_running_logs, get_favorite_courses, get_courses, get_course_tags, get_members
-from .models import Course as SQLACourse, Member as SQLAMember, CourseTags as SQLACourseTags, FavoriteCourse as SQLAFavoriteCourse
-from .schema import Course, Member, CourseTags, FavoriteCourse  # Pydantic 스키마 임포트
+from .crud import get_db, load_running_logs, get_favorite_courses, get_courses, get_course_tags, get_members, get_recommendation_logs
+from .models import Course as SQLACourse, Member as SQLAMember, CourseTags as SQLACourseTags, FavoriteCourse as SQLAFavoriteCourse, RecommendationLog as SQLARecommendationLog
+from .schema import Course, Member, CourseTags, FavoriteCourse, RecommendationLog  # Pydantic 스키마 임포트
 from scipy.sparse import coo_matrix
 from lightfm import LightFM
 from joblib import dump
@@ -23,6 +23,7 @@ def load_data(db: Session, log_filepath: str, member_id: int, area: str):
     courses = get_courses(db, area)
     course_tags = get_course_tags(db)
     favorite_courses = get_favorite_courses(db, member_id)
+    logs = get_recommendation_logs(db)
     if not courses:
         return None
     courses_data = [
@@ -69,7 +70,14 @@ def load_data(db: Session, log_filepath: str, member_id: int, area: str):
     if not os.path.exists(log_filepath):
         raise FileNotFoundError(f"File not found: {log_filepath}")
     
-    logs_df = pd.read_csv(log_filepath)
+    # logs_df = pd.read_csv(log_filepath)
+    logs_df = pd.DataFrame([{
+        'log_id' : log.log_id,
+        'course_id' : log.course_id,
+        'member_id' : log.member_id,
+        'course_level' : log.course_level,
+        'average_slope' : log.average_slope,
+    } for log in logs])
     print("Running logs loaded:", logs_df.shape)
 
 
@@ -93,7 +101,7 @@ def load_data(db: Session, log_filepath: str, member_id: int, area: str):
     print("Interactions matrix shape:", interactions.shape)
 
     
-    model = LightFM(loss='warp')  # Logistic 손실 함수 사용
+    model = LightFM(loss='logistic')  # Logistic 손실 함수 사용
     
     
     try:
