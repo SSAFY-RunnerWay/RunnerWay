@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 class SignupInput extends StatelessWidget {
   final String inputType;
   final TextEditingController controller;
+  final bool enabled;
 
   const SignupInput(
-      {Key? key, required this.inputType, required this.controller})
+      {Key? key,
+      required this.inputType,
+      required this.controller,
+      this.enabled = true})
       : super(key: key);
 
   @override
@@ -46,6 +50,7 @@ class SignupInput extends StatelessWidget {
                 child: TextField(
                   controller: controller,
                   keyboardType: TextInputType.number,
+                  enabled: enabled,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     enabledBorder: OutlineInputBorder(
