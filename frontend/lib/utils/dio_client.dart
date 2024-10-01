@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class DioClient {
   late final Dio _dio;
@@ -67,6 +68,14 @@ class DioClient {
     if (response.headers['authorization'] != null) {
       String? newToken = response.headers['authorization']?.first;
       _saveToken(newToken);
+      _decodeToken(newToken);
+    }
+
+    if (response.requestOptions.path.startsWith('members') &&
+        response.requestOptions.method.toUpperCase() == 'PATCH') {
+      String? newToken = response.headers['authorization']?.first;
+      _saveToken(newToken);
+      _decodeToken(newToken);
     }
 
     handler.next(response);
@@ -84,7 +93,29 @@ class DioClient {
   Future<void> _saveToken(String? token) async {
     if (token != null && token.isNotEmpty) {
       await _storage.write(key: 'ACCESS_TOKEN', value: token);
+
       log('토큰 저장: $token');
+    }
+  }
+
+  Future<void> _decodeToken(String? newToken) async {
+    if (newToken != null && newToken.startsWith('Bearer ')) {
+      // "Bearer " 부분을 제거
+      final token = newToken.substring(7);
+
+      // JWT 디코딩
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+
+      log('Decoded JWT: $decodedToken');
+
+      // await _storage.write(key: 'ACCESS_TOKEN', value: token);
+      await _storage.write(key: 'ID', value: decodedToken['id'].toString());
+      await _storage.write(key: 'EMAIL', value: decodedToken['email']);
+      await _storage.write(key: 'NICKNAME', value: decodedToken['nickname']);
+
+      // JWT의 만료 여부 확인
+      bool isTokenExpired = JwtDecoder.isExpired(token);
+      log('Is token expired? $isTokenExpired');
     }
   }
 
