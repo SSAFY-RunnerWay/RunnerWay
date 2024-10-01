@@ -31,8 +31,8 @@ public class RankingServiceImpl implements RankingService{
 
     @Override
     public String getRankerLog(Long rankId) {
-        Ranking ranking = rankingRepository.findByRankId(rankId)
-                .orElseThrow(NoSuchElementException::new);
+        Ranking ranking = rankingRepository.findByRankId(rankId).orElse(null);
+        if(ranking == null) return null;
 
         return ranking.getPath();
 

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -45,7 +46,7 @@ public class RunningRecordServiceImpl implements RunningRecordService{
     public List<RecordResponseDto> getRecords(int year, int month, Integer day) {
         List<RunningRecord> runningRecords = runningRecordRepository.findByDate(year, month, day);
         if(runningRecords.isEmpty()) {
-            throw new NoSuchElementException();
+            return null;
         }
 
         return runningRecordMapper.toRecordResponseDtoList(runningRecords);
@@ -55,7 +56,8 @@ public class RunningRecordServiceImpl implements RunningRecordService{
     @Override
     public RecordDetailResponseDto getRecord(Long recordId) {
         RunningRecord runningRecord = runningRecordRepository.findById(recordId)
-                .orElseThrow(NoSuchElementException::new);
+                .orElse(null);
+        if(runningRecord == null) return null;
 
 
         return runningRecordMapper.toRecordDetailResponseDto(runningRecord);
@@ -65,10 +67,24 @@ public class RunningRecordServiceImpl implements RunningRecordService{
     public RecordMonthData getAnalysisRecord(int year, int month) {
         Map<String, Object> result = runningRecordRepository.getRecordMonthData(year, month)
                 .orElseThrow(NoSuchElementException::new);
+        if(result.get("totalScore") == null){
+            return new RecordMonthData(
+                    0,
+                    0,
+                    "00:00:00",
+                    0
+            );
+        }
+
+        long time = ((Number) result.get("totalScore")).longValue();
+        long hours = time / 3600;
+        long minutes = (time % 3600) / 60;
+        long seconds = time % 60;
+        String formattedTotalScore = String.format("%02d:%02d:%02d", hours, minutes, seconds);
         return new RecordMonthData(
                 ((Number) result.get("totalDistance")).doubleValue(),
                 ((Number) result.get("averageFace")).doubleValue(),
-                (Time) result.get("totalScore"),
+                formattedTotalScore,
                 ((Number) result.get("totalCalorie")).doubleValue()
         );
     }

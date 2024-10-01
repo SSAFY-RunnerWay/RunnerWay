@@ -34,6 +34,7 @@ public class UserCourseController {
     })
     public ResponseEntity<?> selectUserCourseList(@RequestParam Double lat, @RequestParam Double lng) {
         List<UserListResponseDto> userCourseList = userCourseService.findAllUserCourse(lat, lng);
+        if(userCourseList.isEmpty()) return ResponseEntity.status(204).build();
         return ResponseEntity.status(HttpStatus.OK).body(userCourseList);
     }
 
@@ -48,6 +49,7 @@ public class UserCourseController {
     })
     public ResponseEntity<?> getUserCourse(@PathVariable("courseId") Long courseId) {
         UserDetailResponseDto course = userCourseService.getUserCourse(courseId);
+        if(course == null) return ResponseEntity.status(404).body("데이터가 존재하지 않습니다.");
         return ResponseEntity.ok(course);
     }
 
@@ -62,6 +64,7 @@ public class UserCourseController {
     })
     public ResponseEntity<?> selectPopularAllList(@RequestParam Double lat, @RequestParam Double lng) {
         List<UserListResponseDto> userCourseList = userCourseService.findPopularAllUserCourse(lat, lng);
+        if(userCourseList.isEmpty()) return ResponseEntity.status(204).build();
         return ResponseEntity.ok(userCourseList);
     }
 
@@ -76,6 +79,7 @@ public class UserCourseController {
     })
     public ResponseEntity<?> selectPopularLatelyList(@RequestParam Double lat, @RequestParam Double lng) {
         List<UserListResponseDto> userCourseList = userCourseService.findPopularLatelyUserCourse(lat, lng);
+        if(userCourseList.isEmpty()) return ResponseEntity.status(204).build();
         return ResponseEntity.ok(userCourseList);
     }
 

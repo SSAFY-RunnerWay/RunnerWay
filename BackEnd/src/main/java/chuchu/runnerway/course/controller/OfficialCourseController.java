@@ -37,6 +37,7 @@ public class OfficialCourseController {
     })
     public ResponseEntity<?> findAllOfficialCourses(@RequestParam double lat, @RequestParam double lng) {
         List<RecommendationDto> courses = officialCourseService.findAllOfiicialCourse(lat, lng);
+        if(courses == null) return ResponseEntity.status(204).build();
         return ResponseEntity.ok(courses);
     }
 
@@ -51,7 +52,7 @@ public class OfficialCourseController {
     })
     public ResponseEntity<?> getOfficialCourse(@PathVariable("courseId") Long courseId) {
         OfficialDetailResponseDto course = officialCourseService.getOfficialCourse(courseId);
-
+        if(course == null) return ResponseEntity.status(404).body("데이터가 존재하지 않습니다.");
       return ResponseEntity.ok(course);
     }
 

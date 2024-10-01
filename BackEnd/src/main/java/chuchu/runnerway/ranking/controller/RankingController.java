@@ -36,7 +36,7 @@ public class RankingController {
     })
     public ResponseEntity<String> getLankerLog(@PathVariable("rankId") Long rankId){
         String path = rankingService.getRankerLog(rankId);
-
+        if(path == null) return ResponseEntity.status(404).build();
         return ResponseEntity.status(200).body(path);
     }
 

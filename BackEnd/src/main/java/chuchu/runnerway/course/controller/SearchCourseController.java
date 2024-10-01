@@ -34,7 +34,7 @@ public class SearchCourseController {
                                     @RequestParam(value = "size", defaultValue = "10") int size) {
         SelectAllResponseDto selectAllResponseDtoList = searchCourseService.search(searchWord, page, size);
 
-        if(selectAllResponseDtoList.getSearchCourseList().isEmpty()) return ResponseEntity.status(200).body("검색 조건에 일치하는 결과가 없습니다.");
+        if(selectAllResponseDtoList.getSearchCourseList().isEmpty()) return ResponseEntity.status(204).body("검색 조건에 일치하는 결과가 없습니다.");
 
         return ResponseEntity.ok(selectAllResponseDtoList);
     }

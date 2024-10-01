@@ -47,6 +47,7 @@ public class UserCourseServiceImpl implements UserCourseService {
     public List<UserListResponseDto> findAllUserCourse(double lat, double lng) {
         String h3Index = h3.geoToH3Address(lat, lng, resolution);
         List<Course> courses = userCourseRepository.findAll(h3Index);
+//        if(courses.isEmpty()) return null;
         return courses.stream()
             .map(course -> {
                 // Course -> UserListResponseDto 변환
@@ -69,8 +70,9 @@ public class UserCourseServiceImpl implements UserCourseService {
     @Override
     @Cacheable(value = "userCourseCache", key = "#courseId", unless = "#result == null")
     public UserDetailResponseDto getUserCourse(Long courseId) {
-        Course course = userCourseRepository.findById(courseId)
-            .orElseThrow(NoSuchElementException::new);
+        Course course = userCourseRepository.findById(courseId).orElse(null);
+        if(course == null) return null;
+
         UserDetailResponseDto dto = mapper.map(course, UserDetailResponseDto.class);
         dto.setNickname(course.getMember().getNickname());
         dto.setMemberId(course.getMember().getMemberId());

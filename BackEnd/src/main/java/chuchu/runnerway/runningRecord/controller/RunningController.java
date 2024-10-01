@@ -42,6 +42,7 @@ public class RunningController {
             @Valid @ModelAttribute RecordDateRequestDto requestDto) {
 
         List<RecordResponseDto> records = runningRecordService.getRecords(requestDto.getYear(), requestDto.getMonth(), requestDto.getDay());
+        if(records == null) return ResponseEntity.status(204).build();
         return ResponseEntity.status(200).body(records);
     }
 
@@ -56,7 +57,7 @@ public class RunningController {
     @GetMapping("/detail/{recordId}")
     public ResponseEntity<?> getRunningRecord(@PathVariable("recordId") Long recordId){
         RecordDetailResponseDto record = runningRecordService.getRecord(recordId);
-
+        if(record == null) return ResponseEntity.status(404).body("데이터가 존재하지 않습니다.");
         return ResponseEntity.status(200).body(record);
     }
 
