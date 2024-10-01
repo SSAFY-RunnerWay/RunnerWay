@@ -26,6 +26,7 @@ class CourseProvider {
       // 응답이 성공적이면 데이터 반환
       if (response.statusCode == 200) {
         return response.data;
+        // TODO : 204 상태처리
       } else {
         throw Exception('Failed to load courses');
       }
@@ -48,6 +49,7 @@ class CourseProvider {
       // 응답이 성공적이면 데이터 반환
       if (response.statusCode == 200) {
         return Map<String, dynamic>.from(response.data);
+        // TODO : 204  상태처리
       } else {
         throw Exception('Failed to load courses');
       }

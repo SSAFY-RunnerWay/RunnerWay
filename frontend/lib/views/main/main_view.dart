@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/location_controller.dart';
 import 'package:frontend/widgets/course/course_card.dart';
+import 'package:frontend/widgets/empty.dart';
 import 'package:frontend/widgets/filter_condition.dart';
 import 'package:frontend/widgets/search/search_read_only.dart';
 import 'package:get/get.dart';
@@ -165,8 +166,16 @@ class MainView extends StatelessWidget {
                         }
 
                         if (mainController.courses.isEmpty) {
-                          return Center(
-                            child: Text('추천 코스가 없습니다.'),
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Empty(
+                                mainContent: '추천 코스가 없어요',
+                              ),
+                              SizedBox(
+                                height: 110,
+                              ),
+                            ],
                           );
                         }
 
