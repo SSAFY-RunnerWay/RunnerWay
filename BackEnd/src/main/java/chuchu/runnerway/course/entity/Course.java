@@ -27,7 +27,7 @@ public class Course {
         this.name = name;
         this.address = address;
         this.content = content;
-        this.count = count;
+        this.count = (count != null) ? count : 0L;
         this.level = level;
         this.averageSlope = averageSlope;
         this.averageDownhill = averageDownhill;

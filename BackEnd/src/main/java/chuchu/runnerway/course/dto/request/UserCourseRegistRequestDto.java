@@ -24,4 +24,6 @@ public class UserCourseRegistRequestDto {
     private double lng;
     private String area;//경도
     private CourseImageDto courseImage;     //코스이미지
+    private String url;
+    private Long recordId;
 }

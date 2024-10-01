@@ -74,6 +74,10 @@ public class RunningRecord {
         this.comment = requestDto.getComment();
     }
 
+    public void updateRecordCourse(Course course){
+        this.course = course;
+    }
+
     public void registMember(Member member) {
         this.member = member;
     }
