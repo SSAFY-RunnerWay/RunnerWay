@@ -46,7 +46,7 @@ public class OfficialCourseServiceImpl implements OfficialCourseService{
     @Override
     public List<RecommendationDto> findAllOfiicialCourse(double lat, double lng) {
         List<RecommendationDto> courses = getRecommendation(lat, lng);
-        if(courses.isEmpty()) throw new NoSuchElementException();
+        if(courses.isEmpty()) return null;
         for(RecommendationDto course : courses) {
             Optional<CourseImage> courseImage = courseImageRepositoryPrimaryKey.findById(course.getCourseId());
             courseImage.ifPresent(image -> course.setCourseImage(courseMapper.toCourseImageDto(image)));
@@ -57,10 +57,10 @@ public class OfficialCourseServiceImpl implements OfficialCourseService{
     @Override
     @Cacheable(value = "officialCourseCache", key = "#courseId", unless = "#result == null")
     public OfficialDetailResponseDto getOfficialCourse(Long courseId) {
-        Course course = officialCourseRepository.findById(courseId)
-                .orElseThrow(NoSuchElementException::new);
-
+        Course course = officialCourseRepository.findById(courseId).orElse(null);
+        if(course == null) return null;
         OfficialDetailResponseDto dto = courseMapper.toOfficialDetailResponseDto(course);
+
         dto.setMemberId(course.getMember().getMemberId());
 
         return dto;

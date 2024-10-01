@@ -31,7 +31,7 @@ public interface RunningRecordRepository extends JpaRepository<RunningRecord, Lo
 //    Optional<RecordMonthData> getRecordMonthData(@Param("year") int year, @Param("month") int month);
     @Query(value = "SELECT SUM(rr.running_distance) AS totalDistance, " +
         "AVG(rr.average_face) AS averageFace, " +
-        "SEC_TO_TIME(SUM(TIME_TO_SEC(rr.score))) AS totalScore, " +
+        "SUM(TIME_TO_SEC(rr.score)) AS totalScore, " +
         "SUM(rr.calorie) AS totalCalorie " +
         "FROM running_record rr " +
         "WHERE YEAR(rr.start_date) = :year " +
