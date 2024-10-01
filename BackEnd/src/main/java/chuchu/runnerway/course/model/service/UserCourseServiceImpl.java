@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.model.service;
 
+import chuchu.runnerway.course.dto.SlopeDto;
 import chuchu.runnerway.course.dto.request.UserCourseRegistRequestDto;
 import chuchu.runnerway.course.dto.response.UserDetailResponseDto;
 import chuchu.runnerway.course.dto.response.UserListResponseDto;
@@ -16,12 +17,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import chuchu.runnerway.runningRecord.entity.RunningRecord;
+import chuchu.runnerway.runningRecord.model.repository.RunningRecordRepository;
 import com.uber.h3core.H3Core;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +37,7 @@ public class UserCourseServiceImpl implements UserCourseService {
     private final CourseImageRepository courseImageRepository;
     private final ModelMapper mapper;
     private final MemberRepository memberRepository;
+    private final RunningRecordRepository runningRecordRepository;
     private static final H3Core h3;
     private static final int resolution = 7;
 
@@ -41,6 +48,8 @@ public class UserCourseServiceImpl implements UserCourseService {
             throw new RuntimeException(e);
         }
     }
+
+    private final WebClient webClient;
 
     @Transactional
     @Override
@@ -81,17 +90,55 @@ public class UserCourseServiceImpl implements UserCourseService {
 
     @Transactional
     @Override
-    public void registUserCourse(UserCourseRegistRequestDto userCourseRegistRequestDto) {
+    public boolean registUserCourse(UserCourseRegistRequestDto userCourseRegistRequestDto) {
         Course userCourse = Course.builder().build();
+        RunningRecord record = runningRecordRepository.findByRecordId(userCourseRegistRequestDto.getRecordId())
+                .orElseThrow(NoSuchElementException::new);
+        if(record.getCourse().getCourseId() != 0) return false;
         Member member = memberRepository.findById(userCourseRegistRequestDto.getMemberId()).orElseThrow(
             NotFoundMemberException::new
         );
+        // 경사도 계산 및 레벨 계산
+        Mono<SlopeDto> dto = webClient.get()
+                        .uri(uriBuilder -> uriBuilder
+                                .path("/slope")
+                                .queryParam("S3_URL", userCourseRegistRequestDto.getUrl())
+                                .build())
+                        .retrieve()
+                        .bodyToMono(SlopeDto.class);
+
+        SlopeDto slopeDto = dto.block();
+        if(slopeDto != null) {
+            userCourseRegistRequestDto.setAverageSlope(slopeDto.getAverageSlope());
+            userCourseRegistRequestDto.setAverageDownhill(slopeDto.getAverageDownhill());
+            if(slopeDto.getAverageSlope() < 10) {
+                if(userCourseRegistRequestDto.getCourseLength() < 10)
+                    userCourseRegistRequestDto.setLevel(1);
+                else
+                    userCourseRegistRequestDto.setLevel(2);
+            }
+            else if(slopeDto.getAverageSlope() < 20) {
+                if(userCourseRegistRequestDto.getCourseLength() < 5)
+                    userCourseRegistRequestDto.setLevel(2);
+                else
+                    userCourseRegistRequestDto.setLevel(3);
+            }
+            else
+                userCourseRegistRequestDto.setLevel(3);
+        }
+
         String area = h3.geoToH3Address(userCourseRegistRequestDto.getLat(), userCourseRegistRequestDto.getLng(), resolution);
         userCourseRegistRequestDto.setArea(area);
+
         userCourse.updateUserCourse(userCourseRegistRequestDto, member);
         Course savedCourse = userCourseRepository.save(userCourse);
-
         saveMemberImage(userCourseRegistRequestDto, savedCourse);
+
+        // 나혼자뛰기 기록 courseId 변경
+
+        record.updateRecordCourse(savedCourse);
+        runningRecordRepository.save(record);
+        return true;
     }
 
     @Transactional

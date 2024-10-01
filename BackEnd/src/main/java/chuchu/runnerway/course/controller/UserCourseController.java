@@ -92,10 +92,9 @@ public class UserCourseController {
             content = @Content(mediaType = "application/json")
         )
     })
-    public ResponseEntity<?> registUserCourse(
-        @RequestBody UserCourseRegistRequestDto userCourseRegistRequestDto
-    ) {
-        userCourseService.registUserCourse(userCourseRegistRequestDto);
+    public ResponseEntity<?> registUserCourse(@RequestBody UserCourseRegistRequestDto userCourseRegistRequestDto) {
+        boolean check = userCourseService.registUserCourse(userCourseRegistRequestDto);
+        if(!check) return ResponseEntity.status(409).build();
         return ResponseEntity.ok("유저 코스 등록 성공");
     }
 

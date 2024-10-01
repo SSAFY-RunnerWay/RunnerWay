@@ -2,6 +2,7 @@ package chuchu.runnerway.runningRecord.model.service;
 
 import chuchu.runnerway.common.util.MemberInfo;
 import chuchu.runnerway.course.entity.Course;
+import chuchu.runnerway.course.model.repository.OfficialCourseRepository;
 import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.repository.MemberRepository;
 import chuchu.runnerway.ranking.entity.Ranking;
@@ -13,9 +14,11 @@ import chuchu.runnerway.runningRecord.dto.response.RecordDetailResponseDto;
 import chuchu.runnerway.runningRecord.dto.response.RecordMonthData;
 import chuchu.runnerway.runningRecord.dto.response.RecordResponseDto;
 import chuchu.runnerway.runningRecord.entity.PersonalImage;
+import chuchu.runnerway.runningRecord.entity.RecommendationLog;
 import chuchu.runnerway.runningRecord.entity.RunningRecord;
 import chuchu.runnerway.runningRecord.mapper.RunningRecordMapper;
 import chuchu.runnerway.runningRecord.model.repository.PersonalImageRepository;
+import chuchu.runnerway.runningRecord.model.repository.RecommendationLogRepository;
 import chuchu.runnerway.runningRecord.model.repository.RunningRecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,10 +40,12 @@ public class RunningRecordServiceImpl implements RunningRecordService{
     private final RunningRecordMapper runningRecordMapper;
     private final MemberRepository memberRepository;
     private final PersonalImageRepository personalImageRepository;
+    private final RecommendationLogRepository recommendationLogRepository;
 
     private final RankingRepository rankingRepository;
 
     private final CacheManager cacheManager;
+    private final OfficialCourseRepository officialCourseRepository;
 
     @Override
     public List<RecordResponseDto> getRecords(int year, int month, Integer day) {
@@ -109,6 +114,10 @@ public class RunningRecordServiceImpl implements RunningRecordService{
         boolean check = registRankingCheck(runningRecord.getCourse(), runningRecord);
         data.put("rankingCheck", check);
 
+        Course course = officialCourseRepository.findByCourseId(runningRecord.getCourse().getCourseId())
+                        .orElseThrow(NoSuchElementException::new);
+        RecommendationLog log = new RecommendationLog(course, member, course.getLevel(), course.getAverageSlope());
+        recommendationLogRepository.save(log);
         // 코스 랭킹 등록
         return data;
     }

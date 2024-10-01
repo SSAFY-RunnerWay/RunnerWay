@@ -29,7 +29,8 @@ public class WebClientConfig {
                                 .addHandlerLast(new WriteTimeoutHandler(5000, TimeUnit.MILLISECONDS)));
 
         WebClient webClient = WebClient.builder()
-                .baseUrl("https://j11b304.p.ssafy.io")
+//                .baseUrl("https://j11b304.p.ssafy.io")
+                .baseUrl("http://127.0.0.1:8000")
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .filter(
                         ExchangeFilterFunction.ofRequestProcessor(
