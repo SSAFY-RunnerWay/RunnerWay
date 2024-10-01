@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/location_controller.dart';
+import 'package:frontend/widgets/button/scroll_to_top_button.dart';
 import 'package:frontend/widgets/course/course_card.dart';
 import 'package:frontend/widgets/empty.dart';
 import 'package:frontend/widgets/filter_condition.dart';
@@ -260,41 +261,10 @@ class _MainViewState extends State<MainView> {
         ),
       ),
       // 스크롤 시 '맨 위로' 버튼 표시
-      floatingActionButton: _showScrollToTopButton
-          ? Padding(
-              padding: EdgeInsets.only(bottom: 90),
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(
-                    Colors.white,
-                  ), // 배경색 설정
-                  elevation: WidgetStateProperty.all(8), // 그림자 크기 설정
-                  shape: WidgetStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50), // 둥근 모서리 설정
-                    ),
-                  ),
-                  padding: WidgetStateProperty.all(
-                    EdgeInsets.all(20),
-                  ), // 내부 패딩 설정
-                  shadowColor: WidgetStateProperty.all(
-                    Colors.black26,
-                  ), // 그림자 색상 설정
-                ),
-                onPressed: () {
-                  _scrollController.animateTo(
-                    0,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                },
-                child: Icon(
-                  Icons.arrow_upward,
-                  color: Color(0xff1EA6FC),
-                ),
-              ),
-            )
-          : null,
+      floatingActionButton: ScrollToTopButton(
+        scrollController: _scrollController,
+        showScrollToTopButton: _showScrollToTopButton,
+      ),
     );
   }
 }
