@@ -108,7 +108,7 @@ class CourseDetailView extends StatelessWidget {
                     ],
                   );
                 } else {
-                  // TODO: 예외 상황 처리
+                  // 예외 상황 처리
                   return Container(
                     padding: EdgeInsets.symmetric(vertical: 30),
                     child: Empty(mainContent: '코스 정보를 불러올 수 없어요'),
