@@ -24,21 +24,22 @@ class _MainViewState extends State<MainView> {
 
   ScrollController _scrollController = ScrollController();
   bool _isBannerVisible = true;
+  bool _showScrollToTopButton = false;
 
   @override
   void initState() {
     super.initState();
     // 페이지 진입 시 언더바 인덱스 업데이트
-    // 현재 실행 중인 작업이 완료된 후 다음 이벤트가 실행되기 전에 실행
     Future.microtask(() => underBarController.changeTabIndex(0));
 
-    // 메인 view에서 필터 타겟 main으로 설정
+    // 메인 view에서 필터 타겟을 main으로 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
       filterController.setFilterTarget('main');
     });
 
     // ScrollController의 리스너 설정
     _scrollController.addListener(() {
+      // 스크롤 위치가 150을 넘으면 배너 숨기기
       if (_scrollController.position.pixels > 150) {
         if (_isBannerVisible) {
           setState(() {
@@ -49,6 +50,21 @@ class _MainViewState extends State<MainView> {
         if (!_isBannerVisible) {
           setState(() {
             _isBannerVisible = true;
+          });
+        }
+      }
+
+      // 스크롤이 어느 정도 내려가면 '맨 위로 가기' 버튼 보이기
+      if (_scrollController.position.pixels > 300) {
+        if (!_showScrollToTopButton) {
+          setState(() {
+            _showScrollToTopButton = true;
+          });
+        }
+      } else {
+        if (_showScrollToTopButton) {
+          setState(() {
+            _showScrollToTopButton = false;
           });
         }
       }
@@ -65,184 +81,220 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     final results = mainController.filteredCourses;
 
-    return BaseView(
-      child: Column(
-        children: [
-          // SearchBar
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                SearchReadOnly(),
-                SizedBox(height: 5),
-              ],
-            ),
-          ),
-
-          // Runner들의 Pick 배너
-          if (_isBannerVisible)
+    return Scaffold(
+      body: BaseView(
+        child: Column(
+          children: [
+            // SearchBar
             Container(
-              child: GestureDetector(
-                onTap: () {
-                  Get.toNamed('/runner-pick');
-                },
-                child: Stack(
-                  children: [
-                    // 클릭시 러너픽 페이지로 이동
-                    Positioned(
-                      child: Image.asset(
-                        'assets/images/main/running.png',
-                      ),
-                    ),
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  SearchReadOnly(),
+                  SizedBox(height: 5),
+                ],
+              ),
+            ),
 
-                    Positioned(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 24,
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text(
-                                '러너들의 ',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              Text(
-                                'Pick ',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'playball',
-                                  fontSize: 30,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 24),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+            // Runner들의 Pick 배너
+            if (_isBannerVisible)
+              Container(
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed('/runner-pick');
+                  },
+                  child: Stack(
+                    children: [
+                      // 클릭시 러너픽 페이지로 이동
+                      Positioned(
+                        child: Image.asset(
+                          'assets/images/main/running.png',
+                        ),
+                      ),
+
+                      Positioned(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 24,
+                            ),
+                            Row(
                               children: [
+                                SizedBox(
+                                  width: 20,
+                                ),
                                 Text(
-                                  '우리 동네 러너들에게',
+                                  '러너들의 ',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 20,
                                   ),
                                 ),
                                 Text(
-                                  '인기있는 코스를 즐겨보세요 !',
+                                  'Pick ',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
+                                    fontFamily: 'playball',
+                                    fontSize: 30,
                                   ),
-                                )
+                                ),
                               ],
                             ),
-                          )
-                        ],
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 24),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '우리 동네 러너들에게',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  Text(
+                                    '인기있는 코스를 즐겨보세요 !',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+
+            // 오늘의 추천 코스 container
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    if (_isBannerVisible)
+                      SizedBox(
+                        height: 20,
                       ),
-                    )
+                    // title
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '러너웨이 공식 ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 22),
+                        ),
+                        Text(
+                          '추천코스',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 22,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // 검색 조건 위젯
+                    SizedBox(height: 15),
+                    FilterCondition(),
+
+                    // 메인 화면 추천 코스 리스트
+                    SizedBox(height: 25),
+                    Expanded(
+                      child: Obx(
+                        () {
+                          if (mainController.isLoading.value) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+
+                          if (mainController.courses.isEmpty) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Empty(
+                                  mainContent: '추천 코스가 없어요',
+                                ),
+                                SizedBox(
+                                  height: 110,
+                                ),
+                              ],
+                            );
+                          }
+
+                          return ListView.builder(
+                            controller: _scrollController,
+                            itemCount: results.length + 1,
+                            itemBuilder: (context, index) {
+                              if (index == results.length) {
+                                return SizedBox(
+                                  height: 100,
+                                );
+                              }
+                              return CourseCard(course: results[index]);
+                            },
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-
-          // 오늘의 추천 코스 container
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  if (_isBannerVisible)
-                    SizedBox(
-                      height: 20,
-                    ),
-                  // title
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '러너웨이 공식 ',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 22),
-                      ),
-                      Text(
-                        '추천코스',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 22,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // 검색 조건 위젯
-                  SizedBox(height: 15),
-                  FilterCondition(),
-
-                  // 메인 화면 추천 코스 리스트
-                  SizedBox(height: 25),
-                  Expanded(
-                    child: Obx(
-                      () {
-                        if (mainController.isLoading.value) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-
-                        if (mainController.courses.isEmpty) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Empty(
-                                mainContent: '추천 코스가 없어요',
-                              ),
-                              SizedBox(
-                                height: 110,
-                              ),
-                            ],
-                          );
-                        }
-
-                        return ListView.builder(
-                          controller: _scrollController,
-                          itemCount: results.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == results.length) {
-                              // SizedBox 추가
-                              return SizedBox(
-                                height: 100,
-                              );
-                            }
-                            return CourseCard(course: results[index]);
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  // SizedBox(height: 50),
-                ],
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
+      // 스크롤 시 '맨 위로' 버튼 표시
+      floatingActionButton: _showScrollToTopButton
+          ? Padding(
+              padding: EdgeInsets.only(bottom: 90),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(
+                    Colors.white,
+                  ), // 배경색 설정
+                  elevation: WidgetStateProperty.all(8), // 그림자 크기 설정
+                  shape: WidgetStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50), // 둥근 모서리 설정
+                    ),
+                  ),
+                  padding: WidgetStateProperty.all(
+                    EdgeInsets.all(20),
+                  ), // 내부 패딩 설정
+                  shadowColor: WidgetStateProperty.all(
+                    Colors.black26,
+                  ), // 그림자 색상 설정
+                ),
+                onPressed: () {
+                  _scrollController.animateTo(
+                    0,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                child: Icon(
+                  Icons.arrow_upward,
+                  color: Color(0xff1EA6FC),
+                ),
+              ),
+            )
+          : null,
     );
   }
 }
