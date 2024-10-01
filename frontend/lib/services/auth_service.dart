@@ -52,4 +52,14 @@ class AuthService {
       throw Exception('선호 태그 확인 중 오류 발생: $e');
     }
   }
+
+  // 사용자 정보 불러오기
+  Future<Map<String, dynamic>> getUserInfo() async {
+    try {
+      log('service사용자정보: ${_repository.getUserInfo()}');
+      return await _repository.getUserInfo();
+    } catch (e) {
+      throw Exception('사용자 정보 불러오는 중 발생: $e');
+    }
+  }
 }

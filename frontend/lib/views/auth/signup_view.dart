@@ -6,50 +6,17 @@ import 'package:frontend/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:frontend/models/auth.dart';
 
-class SignUpView extends StatefulWidget {
+class SignUpView extends StatelessWidget {
   final String email;
 
   const SignUpView({super.key, required this.email});
 
   @override
-  _SignUpViewState createState() => _SignUpViewState();
-}
-
-class _SignUpViewState extends State<SignUpView> {
-  final TextEditingController _nicknameController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _heightController = TextEditingController();
-  final TextEditingController _weightController = TextEditingController();
-  final AuthController _authController = Get.put(AuthController());
-  String selectedGender = ''; // "woman", "man"으로 구분
-  bool isButtonActive = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _nicknameController.addListener(_onNicknameChanged);
-  }
-
-  void _onNicknameChanged() {
-    setState(() {
-      isButtonActive = _nicknameController.text.trim().length > 1;
-    });
-  }
-
-  @override
-  void dispose() {
-    _nicknameController.dispose();
-    _dateController.dispose();
-    _heightController.dispose();
-    _weightController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final AuthController _authController = Get.find<AuthController>();
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         scrolledUnderElevation: 0,
         centerTitle: true,
@@ -108,19 +75,19 @@ class _SignUpViewState extends State<SignUpView> {
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: _nicknameController,
+                      controller: _authController.nicknameController,
                       // 닉네임 글자 수 제한
                       onChanged: (text) {
                         if (text.characters.length > 8) {
-                          _nicknameController.text =
+                          _authController.nicknameController.text =
                               text.characters.take(8).toString(); // 8자로 자르기
                           // 커서 뒤로 이동
-                          _nicknameController.selection =
+                          _authController.nicknameController.selection =
                               TextSelection.fromPosition(TextPosition(
-                                  offset: _nicknameController.text.length));
-                        } else if (text.characters.length < 2) {
-                          isButtonActive = false;
+                                  offset: _authController
+                                      .nicknameController.text.length));
                         }
+                        _authController.onNicknameChanged(text);
                       },
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -159,17 +126,19 @@ class _SignUpViewState extends State<SignUpView> {
                 ],
               ),
               SizedBox(height: 7),
-              BirthModal(birthController: _dateController),
+              BirthModal(birthController: _authController.dateController),
               // 키 몸무게 input
               Row(
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: screenWidth / 6),
                     child: SignupInput(
-                        inputType: 'height', controller: _heightController),
+                        inputType: 'height',
+                        controller: _authController.heightController),
                   ),
                   SignupInput(
-                      inputType: 'weight', controller: _weightController),
+                      inputType: 'weight',
+                      controller: _authController.weightController),
                 ],
               ),
               SizedBox(height: 25),
@@ -192,66 +161,71 @@ class _SignUpViewState extends State<SignUpView> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selectedGender = 'woman'; //
-                      });
+                      _authController.selectedGender.value = 'woman';
                     },
-                    child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: selectedGender == 'woman'
-                            ? Color(0xFF1EA6FC).withOpacity(0.1)
-                            : Color(0xFFE3E5E5).withOpacity(0.3),
-                        border: Border.all(
-                          color: selectedGender == 'woman'
-                              ? Color(0xFF1EA6FC)
-                              : Color(0xFFE3E5E5).withOpacity(0.8),
-                          width: selectedGender == 'woman' ? 4.0 : 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(60),
-                      ),
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        selectedGender == 'woman'
-                            ? 'assets/images/auth/woman_ok.png'
-                            : 'assets/images/auth/woman_no.png',
-                        width: 85,
-                        height: 85,
-                      ),
-                    ),
+                    child: Obx(() => Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color:
+                                _authController.selectedGender.value == 'woman'
+                                    ? Color(0xFF1EA6FC).withOpacity(0.1)
+                                    : Color(0xFFE3E5E5).withOpacity(0.3),
+                            border: Border.all(
+                              color: _authController.selectedGender.value ==
+                                      'woman'
+                                  ? Color(0xFF1EA6FC)
+                                  : Color(0xFFE3E5E5).withOpacity(0.8),
+                              width: _authController.selectedGender.value ==
+                                      'woman'
+                                  ? 4.0
+                                  : 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(60),
+                          ),
+                          alignment: Alignment.center,
+                          child: Image.asset(
+                            _authController.selectedGender.value == 'woman'
+                                ? 'assets/images/auth/woman_ok.png'
+                                : 'assets/images/auth/woman_no.png',
+                            width: 85,
+                            height: 85,
+                          ),
+                        )),
                   ),
                   SizedBox(width: 30),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selectedGender = 'man'; // "man"을 선택하면 상태 변경
-                      });
+                      _authController.selectedGender.value = 'man';
                     },
-                    child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: selectedGender == 'man'
-                            ? Color(0xFF1EA6FC).withOpacity(0.1)
-                            : Color(0xFFE3E5E5).withOpacity(0.3),
-                        border: Border.all(
-                          color: selectedGender == 'man'
-                              ? Color(0xFF1EA6FC)
-                              : Color(0xFFE3E5E5).withOpacity(0.8),
-                          width: selectedGender == 'man' ? 4.0 : 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(60),
-                      ),
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        selectedGender == 'man'
-                            ? 'assets/images/auth/man_ok.png'
-                            : 'assets/images/auth/man_no.png',
-                        width: 85,
-                        height: 85,
-                      ),
-                    ),
+                    child: Obx(() => Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: _authController.selectedGender.value == 'man'
+                                ? Color(0xFF1EA6FC).withOpacity(0.1)
+                                : Color(0xFFE3E5E5).withOpacity(0.3),
+                            border: Border.all(
+                              color:
+                                  _authController.selectedGender.value == 'man'
+                                      ? Color(0xFF1EA6FC)
+                                      : Color(0xFFE3E5E5).withOpacity(0.8),
+                              width:
+                                  _authController.selectedGender.value == 'man'
+                                      ? 4.0
+                                      : 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(60),
+                          ),
+                          alignment: Alignment.center,
+                          child: Image.asset(
+                            _authController.selectedGender.value == 'man'
+                                ? 'assets/images/auth/man_ok.png'
+                                : 'assets/images/auth/man_no.png',
+                            width: 85,
+                            height: 85,
+                          ),
+                        )),
                   ),
                 ],
               ),
@@ -264,29 +238,33 @@ class _SignUpViewState extends State<SignUpView> {
         padding: const EdgeInsets.all(20),
         child: WideButton(
           text: '다음',
-          isActive: isButtonActive,
-          onTap: isButtonActive
+          isActive: _authController.isButtonActive.value,
+          onTap: _authController.isButtonActive.value
               ? () async {
                   bool isNicknameCheck = await _authController
-                      .checkNickname(_nicknameController.text);
+                      .checkNickname(_authController.nicknameController.text);
                   if (isNicknameCheck) {
                     Get.snackbar('오류', '이미 사용중인 닉네임입니다');
                   } else {
-                    int? height = _heightController.text.isNotEmpty
-                        ? int.tryParse(_heightController.text)
+                    int? height = _authController
+                            .heightController.text.isNotEmpty
+                        ? int.tryParse(_authController.heightController.text)
                         : null;
-                    int? weight = _weightController.text.isNotEmpty
-                        ? int.tryParse(_weightController.text)
+                    int? weight = _authController
+                            .weightController.text.isNotEmpty
+                        ? int.tryParse(_authController.weightController.text)
                         : null;
                     await _authController.signup(
                       Auth(
-                        email: widget.email,
-                        nickname: _nicknameController.text,
-                        birth: DateTime.tryParse(_dateController.text),
+                        email: this.email,
+                        nickname: _authController.nicknameController.text,
+                        birth: DateTime.tryParse(
+                            _authController.dateController.text),
                         height: height,
                         weight: weight,
-                        gender: selectedGender == 'man' ? 1 : 0,
-                        // 성별 설정
+                        gender: _authController.selectedGender.value == 'man'
+                            ? 1
+                            : 0,
                         joinType: 'kakao',
                         memberImage: MemberImage(
                           memberId: null,
@@ -299,7 +277,7 @@ class _SignUpViewState extends State<SignUpView> {
                     Get.toNamed('/signup2');
                   }
                 }
-              : null, // '다음' 버튼 클릭 시 동작
+              : null,
         ),
       ),
     );

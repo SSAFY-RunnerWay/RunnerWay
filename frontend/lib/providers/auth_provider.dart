@@ -129,4 +129,36 @@ class AuthProvider {
       throw e;
     }
   }
+
+// 개인정보 조회
+  Future<Map<String, dynamic>> getUserInfo() async {
+    try {
+      final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
+      log('개인정보조회 provider: ${accessToken}');
+      final response = await dio.get(
+        'https://j11b304.p.ssafy.io/api/members',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        log('$response');
+        if (response.data is Map<String, dynamic>) {
+          return response.data as Map<String, dynamic>;
+        } else {
+          throw Exception('서버에서 잘못된 형식의 데이터를 반환했습니다.');
+        }
+      } else {
+        throw Exception('서버 응답 오류: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      log('DioException 발생: ${e.message}');
+      throw Exception('개인 정보 조회 중 오류 발생: $e');
+    } catch (e) {
+      throw Exception('예상치 못한 오류 발생: $e');
+    }
+  }
 }
