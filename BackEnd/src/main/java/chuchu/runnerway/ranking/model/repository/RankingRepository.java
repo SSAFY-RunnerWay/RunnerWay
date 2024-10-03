@@ -11,6 +11,7 @@ public interface RankingRepository extends JpaRepository<Ranking, Long> {
     Optional<Ranking> findByRankId(Long rankingId);
 
     List<Ranking> findByCourse_CourseIdOrderByScore(Long courseId);
+    List<Ranking> findByCourse_CourseIdAndIsDeleteFalseOrderByScore(Long courseId);
 
     Ranking findByCourse_CourseIdAndMember_MemberId(Long courseId, Long memberId);
 }

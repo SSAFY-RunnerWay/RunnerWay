@@ -86,9 +86,20 @@ public class RunningRecordServiceImpl implements RunningRecordService{
         long minutes = (time % 3600) / 60;
         long seconds = time % 60;
         String formattedTotalScore = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+        double averageFace = ((Number) result.get("averageFace")).doubleValue();
+        int fMinute = (int) averageFace;
+        int fSecond = (int) Math.round((averageFace - fMinute) * 100);
+        int second = fMinute*60 + fSecond;
+        second /= ((Number) result.get("totalCount")).intValue();
+        averageFace = 0.0;
+        averageFace += (double) second / 60;
+        averageFace += ((double) fSecond % 60) / 100;
+
+
         return new RecordMonthData(
                 ((Number) result.get("totalDistance")).doubleValue(),
-                ((Number) result.get("averageFace")).doubleValue(),
+                Math.round(averageFace * 100) / 100.0,
                 formattedTotalScore,
                 ((Number) result.get("totalCalorie")).doubleValue()
         );

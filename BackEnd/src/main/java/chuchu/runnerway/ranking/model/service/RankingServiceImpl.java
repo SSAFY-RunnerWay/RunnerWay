@@ -48,8 +48,7 @@ public class RankingServiceImpl implements RankingService{
     @Override
     @Cacheable(value = "rankCache", key = "#courseId", unless = "#result == null")
     public List<RankingResponseDto> getRankingByCourse(Long courseId) {
-        List<Ranking> rankings = rankingRepository.findByCourse_CourseIdOrderByScore(courseId);
-
+        List<Ranking> rankings = rankingRepository.findByCourse_CourseIdAndIsDeleteFalseOrderByScore(courseId);
         return rankingMapper.toRankingResponseDto(rankings);
     }
 
@@ -70,9 +69,8 @@ public class RankingServiceImpl implements RankingService{
 
     @Override
     public boolean rankingRenewCheck(RankingCheckRequestDto rankingCheckRequestDto) {
-        List<Ranking> rankings = rankingRepository.findByCourse_CourseIdOrderByScore(rankingCheckRequestDto.getCourseId());
+        List<Ranking> rankings = rankingRepository.findByCourse_CourseIdAndIsDeleteFalseOrderByScore(rankingCheckRequestDto.getCourseId());
         LocalTime score = LocalTime.parse(rankingCheckRequestDto.getScore(), DateTimeFormatter.ofPattern("HH:mm:ss"));
-
         Long memberId = MemberInfo.getId();
         if(rankings.size() < 5){
             Member member = memberRepository.findById(memberId)
@@ -82,7 +80,8 @@ public class RankingServiceImpl implements RankingService{
             Ranking myRanking = rankingRepository.findByCourse_CourseIdAndMember_MemberId(rankingCheckRequestDto.getCourseId(), memberId);
             if(myRanking != null){
                 if(score.isBefore(myRanking.getScore())){
-                    rankingRepository.deleteById(myRanking.getRankId());
+                    myRanking.deleteRanking();
+                    rankingRepository.save(myRanking);
                 }
                 else return false;
             }
@@ -96,12 +95,19 @@ public class RankingServiceImpl implements RankingService{
             // 내 기록을 삭제하고 새로 갱신된 기록으로 대체
             if(myRanking != null){
                 if(score.isBefore(myRanking.getScore())){
-                    rankingRepository.deleteById(myRanking.getRankId());
+                    myRanking.deleteRanking();
+                    rankingRepository.save(myRanking);
                     return true;
                 }
                 else return false;
             }
-            return score.isBefore(rankings.get(rankings.size() - 1).getScore());
+            Ranking ranking = rankingRepository.findByRankId(rankings.get(rankings.size()-1).getRankId()).orElse(null);
+            if(ranking != null && score.isBefore(ranking.getScore())){
+                ranking.deleteRanking();
+                rankingRepository.save(ranking);
+                return true;
+            }
+            return false;
         }
     }
 
