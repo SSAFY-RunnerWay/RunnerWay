@@ -5,8 +5,8 @@ import chuchu.runnerway.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
-import java.sql.Time;
 import java.time.LocalTime;
 
 @Entity
@@ -23,6 +23,7 @@ public class Ranking {
         this.course = course;
         this.score = score;
         this.path = path;
+        this.isDelete = false;
     }
 
     @Id
@@ -44,11 +45,20 @@ public class Ranking {
     @Column(name = "path",  nullable = false)
     private String path;
 
+    @Column(name = "is_delete", columnDefinition = "TINYINT(1)")
+    @ColumnDefault("false")
+    private Boolean isDelete;
+
     public void createRanking(Course course, Member member, LocalTime score, String path){
         this.course = course;
         this.member = member;
         this.score = score;
         this.path = path;
+        this.isDelete = false;
+    }
+
+    public void deleteRanking(){
+        this.isDelete = true;
     }
 
 }

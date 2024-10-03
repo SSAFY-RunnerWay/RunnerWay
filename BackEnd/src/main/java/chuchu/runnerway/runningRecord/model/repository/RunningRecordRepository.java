@@ -24,15 +24,12 @@ public interface RunningRecordRepository extends JpaRepository<RunningRecord, Lo
 
     Optional<RunningRecord> findByRecordId(Long recordId);
 
-//    @Query(value = "SELECT new com.chuchu.runnerway.runningRecord.dto.response.RecordMonthData(SUM(rr.runningDistance), AVG(rr.averageFace), SEC_TO_TIME(SUM(TIME_TO_SEC(rr.score))), SUM(rr.calorie)) " +
-//            "FROM RunningRecord rr " +
-//            "WHERE YEAR(rr.startDate) = :year " +
-//            "AND MONTH(rr.startDate) = :month")
-//    Optional<RecordMonthData> getRecordMonthData(@Param("year") int year, @Param("month") int month);
+
     @Query(value = "SELECT SUM(rr.running_distance) AS totalDistance, " +
-        "AVG(rr.average_face) AS averageFace, " +
+        "SUM(rr.average_face) AS averageFace, " +
         "SUM(TIME_TO_SEC(rr.score)) AS totalScore, " +
-        "SUM(rr.calorie) AS totalCalorie " +
+        "SUM(rr.calorie) AS totalCalorie, " +
+        "COUNT(*) AS totalCount " +
         "FROM running_record rr " +
         "WHERE YEAR(rr.start_date) = :year " +
         "AND MONTH(rr.start_date) = :month",
