@@ -28,11 +28,19 @@ public class RecordRegistRequestDto {
     private double averageFace;
     private String comment;
     @NotNull
+    private String address;
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime finishDate;
+
+    @NotNull
+    private double lat;
+    @NotNull
+    private double lng;
+
     private PersonalImageDto personalImage;
 
 }

@@ -21,17 +21,20 @@ public class RunningRecord {
     }
 
     @Builder
-    public RunningRecord(Long recordId, Member member, Course course, LocalTime score, double runningDistance, double calorie, double averageFace, String comment, LocalDateTime startDate, LocalDateTime finishDate) {
+    public RunningRecord(Long recordId, Member member, Course course, LocalTime score, String address, double runningDistance, double calorie, double averageFace, String comment, LocalDateTime startDate, LocalDateTime finishDate, double lat, double lng) {
         this.recordId = recordId;
         this.member = member;
         this.course = course;
         this.score = score;
+        this.address = address;
         this.runningDistance = runningDistance;
         this.calorie = calorie;
         this.averageFace = averageFace;
         this.comment = comment;
         this.startDate = startDate;
         this.finishDate = finishDate;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +56,9 @@ public class RunningRecord {
     @Column(name = "score", nullable = false)
     private LocalTime score;
 
+    @Column(name = "address", nullable = false)
+    private String address;
+
     @Column(name = "running_distance", nullable = false)
     private double runningDistance;
 
@@ -69,6 +75,11 @@ public class RunningRecord {
     private LocalDateTime startDate;
     @Column(name = "finish_date", nullable = false)
     private LocalDateTime finishDate;
+
+    @Column(name = "lat", nullable = false)
+    private double lat;
+    @Column(name = "lng", nullable = false)
+    private double lng;
 
     public void updateRunningRecord(RecordUpdateCommentRequestDto requestDto){
         this.comment = requestDto.getComment();

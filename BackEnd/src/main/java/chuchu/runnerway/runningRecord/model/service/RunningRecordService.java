@@ -25,5 +25,4 @@ public interface RunningRecordService {
 
     void updateRecordComment(RecordUpdateCommentRequestDto requestDto);
 
-    boolean registRankingCheck(Course course, RunningRecord runningRecord);
 }
