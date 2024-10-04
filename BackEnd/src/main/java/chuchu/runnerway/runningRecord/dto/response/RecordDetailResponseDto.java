@@ -13,9 +13,11 @@ public class RecordDetailResponseDto {
     private String courseName;
     private String comment;
     private LocalDateTime startDate;
+    private String address;
     private LocalTime score;
     private double averageFace;
     private double calorie;
-
+    private double lat;
+    private double lng;
     private String url;
 }

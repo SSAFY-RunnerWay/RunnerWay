@@ -93,8 +93,8 @@ public class RunningRecordServiceImpl implements RunningRecordService{
         int second = fMinute*60 + fSecond;
         second /= ((Number) result.get("totalCount")).intValue();
         averageFace = 0.0;
-        averageFace += (double) second / 60;
-        averageFace += ((double) fSecond % 60) / 100;
+        averageFace += (int)((double) second / 60);
+        averageFace += ((double) second % 60) / 100;
 
 
         return new RecordMonthData(
@@ -122,8 +122,6 @@ public class RunningRecordServiceImpl implements RunningRecordService{
 
         Map<String, Object> data = new HashMap<>();
         data.put("recordId", runningRecord.getRecordId());
-        boolean check = registRankingCheck(runningRecord.getCourse(), runningRecord);
-        data.put("rankingCheck", check);
 
         Course course = officialCourseRepository.findByCourseId(runningRecord.getCourse().getCourseId())
                         .orElseThrow(NoSuchElementException::new);
@@ -155,50 +153,7 @@ public class RunningRecordServiceImpl implements RunningRecordService{
         runningRecordRepository.save(runningRecord);
     }
 
-    @Transactional
-    @Override
-//    @CacheEvict(value = "rankCache", key = "#course.courseId", condition = "#result == true")
-    public boolean registRankingCheck(Course course, RunningRecord runningRecord) {
-        // 1. 코스에 대한 랭킹 조회
-        List<Ranking> rankings = rankingRepository.findByCourse_CourseIdOrderByScore(course.getCourseId());
 
-        // 현재 뛴 시간 조회
-        LocalTime score = runningRecord.getScore();
 
-        // 예외처리 : 랭킹의 인원이 5명 이하일 시
-        Long memberId = MemberInfo.getId();
-        if(rankings.size() < 5){
-            Member member = memberRepository.findById(memberId)
-                    .orElseThrow(NoSuchElementException::new);
-
-            // 만약 내 아이디가 존재한다면
-            Ranking myRanking = rankingRepository.findByCourse_CourseIdAndMember_MemberId(course.getCourseId(), memberId);
-            if(myRanking != null){
-                if(score.isBefore(myRanking.getScore())){
-                    rankingRepository.deleteById(myRanking.getRankId());
-                }
-                else return false;
-            }
-
-            return true;
-        }
-
-        else {
-            Ranking myRanking = rankingRepository.findByCourse_CourseIdAndMember_MemberId(course.getCourseId(), memberId);
-            // 랭킹에 인원이 다 차지 않았는데 내 기록이 존재하고 기록 갱신이라면
-            // 내 기록을 삭제하고 새로 갱신된 기록으로 대체
-            if(myRanking != null){
-                if(score.isBefore(myRanking.getScore())){
-                    rankingRepository.deleteById(myRanking.getRankId());
-                    return true;
-                }
-                else return false;
-            }
-            if(score.isBefore(rankings.get(rankings.size()-1).getScore())){
-                return true;
-            }
-            return false;
-        }
-    }
     
 }
