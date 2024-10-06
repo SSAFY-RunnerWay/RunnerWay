@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface OfficialCourseRepository extends JpaRepository<Course, Long> {
 
     @Query(value = "SELECT c FROM Course c " +
-            "WHERE c.courseId NOT IN :existCourseId AND c.area = :area ORDER BY RAND() LIMIT :neededCount")
+            "WHERE c.courseId NOT IN :existCourseId AND c.area = :area AND c.courseType='official' ORDER BY RAND() LIMIT :neededCount")
     List<Course> findCourse(@Param("neededCount") int neededCount, @Param("existCourseId") List<Long> existCourseId, @Param("area") String area);
 
     List<Course> findByCourseIdNot(Long courseId);
