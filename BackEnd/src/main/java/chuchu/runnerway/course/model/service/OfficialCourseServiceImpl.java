@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +47,15 @@ public class OfficialCourseServiceImpl implements OfficialCourseService{
     @Override
     public List<RecommendationDto> findAllOfiicialCourse(double lat, double lng) {
         List<RecommendationDto> courses = getRecommendation(lat, lng);
+        if(courses.size() <= 20){
+            List<Long> existCourseId = courses.stream()
+                    .map(RecommendationDto::getCourseId)
+                    .toList();
+            int neededCourseCount = 20 - courses.size();
+            String area = h3.geoToH3Address(lat, lng, resolution);
+            List<Course> additionalCourses = officialCourseRepository.findCourse(neededCourseCount, existCourseId, area);
+            courses.addAll(courseMapper.toRecommendationDtoList(additionalCourses));
+        }
         if(courses.isEmpty()) return null;
         for(RecommendationDto course : courses) {
             Optional<CourseImage> courseImage = courseImageRepositoryPrimaryKey.findById(course.getCourseId());
@@ -68,6 +78,7 @@ public class OfficialCourseServiceImpl implements OfficialCourseService{
 
     public List<RecommendationDto> getRecommendation (double lat, double lng) {
         Long memberId = MemberInfo.getId();
+        log.info("member: {}", memberId);
         String area = h3.geoToH3Address(lat, lng, resolution);
         log.info("area: {}", area);
         Flux<RecommendationDto> dto = webClient.get()

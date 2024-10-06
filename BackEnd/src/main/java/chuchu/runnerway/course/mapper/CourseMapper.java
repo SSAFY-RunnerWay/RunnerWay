@@ -2,6 +2,7 @@ package chuchu.runnerway.course.mapper;
 
 import chuchu.runnerway.course.dto.AreaDto;
 import chuchu.runnerway.course.dto.CourseImageDto;
+import chuchu.runnerway.course.dto.RecommendationDto;
 import chuchu.runnerway.course.dto.response.OfficialDetailResponseDto;
 import chuchu.runnerway.course.dto.response.OfficialListResponseDto;
 import chuchu.runnerway.course.entity.Course;
@@ -25,10 +26,10 @@ public interface CourseMapper {
     @IterableMapping(qualifiedByName = "area")
     List<AreaDto> toAreaDtoList(List<Course> courses);
 
-    @Mapping(source = "course.courseImage.url", target = "courseImage.url")
+//    @Mapping(source = "course.courseImage.url", target = "courseImage.url")
     @Named("OfficialList")
-    OfficialListResponseDto toOfficialListResponseDto(Course course);
+    RecommendationDto toRecommendationDto(Course course);
 
     @IterableMapping(qualifiedByName = "OfficialList")
-    List<OfficialListResponseDto> toOfficialListResponseDtoList(List<Course> courses);
+    List<RecommendationDto> toRecommendationDtoList(List<Course> courses);
 }
