@@ -54,7 +54,3 @@ def main(filepath: str):
 
         # Here you can do further processing with the loaded data
 
-    
-
-if __name__ == "__main__":
-    main("running_logs.csv")
