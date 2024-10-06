@@ -14,7 +14,7 @@ import sys
 import boto3
 import httpx
 import json
-print(sys.path)
+print("sys.path: ", sys.path)
 
 app = FastAPI()
 
@@ -25,8 +25,7 @@ def getCourses(
     db: Session = Depends(get_db)
 ):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    log_path = os.path.join(BASE_DIR, "running_logs7.csv")
-    data = load_data(db, log_path, member_id, area)
+    data = load_data(db, member_id, area)
     return data
 
 
