@@ -14,6 +14,7 @@ public class RecordResponseDto {
     private double runningDistance;
     private String address;
     private LocalDateTime startDate;
+    private LocalDateTime finishDate;
     private LocalTime score;
     private double averageFace;
     private double lat;

@@ -12,7 +12,9 @@ public class RecordDetailResponseDto {
     private Long courseId;
     private String courseName;
     private String comment;
+    private double runningDistance;
     private LocalDateTime startDate;
+    private LocalDateTime finishDate;
     private String address;
     private LocalTime score;
     private double averageFace;
