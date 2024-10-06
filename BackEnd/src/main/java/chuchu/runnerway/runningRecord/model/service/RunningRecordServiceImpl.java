@@ -49,7 +49,8 @@ public class RunningRecordServiceImpl implements RunningRecordService{
 
     @Override
     public List<RecordResponseDto> getRecords(int year, int month, Integer day) {
-        List<RunningRecord> runningRecords = runningRecordRepository.findByDate(year, month, day);
+        Long memberId = MemberInfo.getId();
+        List<RunningRecord> runningRecords = runningRecordRepository.findByDate(year, month, day, memberId);
         if(runningRecords.isEmpty()) {
             return null;
         }
@@ -70,7 +71,8 @@ public class RunningRecordServiceImpl implements RunningRecordService{
 
     @Override
     public RecordMonthData getAnalysisRecord(int year, int month) {
-        Map<String, Object> result = runningRecordRepository.getRecordMonthData(year, month)
+        Long memberId = MemberInfo.getId();
+        Map<String, Object> result = runningRecordRepository.getRecordMonthData(year, month, memberId)
                 .orElseThrow(NoSuchElementException::new);
         if(result.get("totalScore") == null){
             return new RecordMonthData(
