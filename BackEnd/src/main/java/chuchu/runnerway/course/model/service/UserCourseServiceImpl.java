@@ -26,7 +26,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -50,7 +49,6 @@ public class UserCourseServiceImpl implements UserCourseService {
     }
 
     private final WebClient webClient;
-    private final SearchCourseServiceImpl searchCourseServiceImpl;
 
     @Transactional
     @Override
@@ -140,7 +138,6 @@ public class UserCourseServiceImpl implements UserCourseService {
         record.updateRecordCourse(savedCourse);
         runningRecordRepository.save(record);
 
-        searchCourseServiceImpl.insertCourse();
         return true;
     }
 

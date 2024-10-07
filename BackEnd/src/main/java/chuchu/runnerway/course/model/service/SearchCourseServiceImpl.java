@@ -6,7 +6,6 @@ import chuchu.runnerway.course.entity.CourseType;
 import chuchu.runnerway.course.entity.ElasticSearchCourse;
 import chuchu.runnerway.course.model.repository.ElasticSearchCourseRepository;
 import chuchu.runnerway.course.model.repository.OfficialCourseRepository;
-import chuchu.runnerway.course.model.repository.UserCourseRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -29,7 +28,6 @@ public class SearchCourseServiceImpl implements SearchCourseService{
     private final ElasticSearchCourseRepository elasticSearchCourseRepository;
     private final OfficialCourseRepository officialCourseRepository;
     private final OfficialCourseService officialCourseService;
-    private final UserCourseRepository userCourseRepository;
     private final UserCourseService userCourseService;
 
     // 검색
@@ -100,7 +98,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
 
     @Override
     @Transactional
-    @Scheduled(cron = "0 1 3 * * *", zone = "Asia/Seoul") // 매일 새벽 3시에 elastic index 갱신
+    @Scheduled(cron = "0 30 * * * *", zone = "Asia/Seoul") // 매일 새벽 3시에 elastic index 갱신
     public void insertCourse() {
         elasticSearchCourseRepository.deleteAll();
 
