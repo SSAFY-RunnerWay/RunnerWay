@@ -16,11 +16,13 @@ public interface RunningRecordRepository extends JpaRepository<RunningRecord, Lo
             "join fetch rc.course " +
             "where YEAR(rc.startDate) = :year and " +
             "MONTH(rc.startDate) = :month and " +
-            "(DAY(rc.startDate) = :day or :day is null)")
+            "(DAY(rc.startDate) = :day or :day is null) and " +
+            "rc.member.memberId = :memberId")
     List<RunningRecord> findByDate(
             @Param("year") int year,
             @Param("month") int month,
-            @Param("day") Integer day);
+            @Param("day") Integer day,
+            @Param("memberId") Long memberId);
 
     Optional<RunningRecord> findByRecordId(Long recordId);
 
@@ -32,7 +34,8 @@ public interface RunningRecordRepository extends JpaRepository<RunningRecord, Lo
         "COUNT(*) AS totalCount " +
         "FROM running_record rr " +
         "WHERE YEAR(rr.start_date) = :year " +
-        "AND MONTH(rr.start_date) = :month",
+        "AND MONTH(rr.start_date) = :month " +
+        "AND rr.member_id = :memberId",
         nativeQuery = true)
-    Optional<Map<String, Object>> getRecordMonthData(@Param("year") int year, @Param("month") int month);
+    Optional<Map<String, Object>> getRecordMonthData(@Param("year") int year, @Param("month") int month, @Param("memberId") Long memberId);
 }

@@ -6,7 +6,7 @@ spring:
     include: key
 
   datasource:
-    url: jdbc:mysql://${serverhost}:${dbport}/chutest
+    url: jdbc:mysql://${serverhost}:${dbport}/runnerway
     username: ${mysqlusername}
     password: ${mysqlpassword}
     driver-class-name: com.mysql.cj.jdbc.Driver

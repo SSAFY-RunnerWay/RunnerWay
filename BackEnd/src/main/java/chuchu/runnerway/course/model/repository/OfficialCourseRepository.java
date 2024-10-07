@@ -12,12 +12,9 @@ import java.util.Optional;
 
 public interface OfficialCourseRepository extends JpaRepository<Course, Long> {
 
-    @Query(value = "SELECT * FROM course c " +
-            "WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(c.lat)) * " +
-            "cos(radians(c.lng) - radians(:lng)) + sin(radians(:lat)) * sin(radians(c.lat)))) <= 3 " +
-            "and c.course_type = 'official'",
-            nativeQuery = true)
-    List<Course> findAll(@Param("lat") double lat, @Param("lng") double lng);
+    @Query(value = "SELECT c FROM Course c " +
+            "WHERE c.courseId NOT IN :existCourseId AND c.area = :area AND c.courseType='official' ORDER BY RAND() LIMIT :neededCount")
+    List<Course> findCourse(@Param("neededCount") int neededCount, @Param("existCourseId") List<Long> existCourseId, @Param("area") String area);
 
     List<Course> findByCourseIdNot(Long courseId);
 
@@ -28,5 +25,6 @@ public interface OfficialCourseRepository extends JpaRepository<Course, Long> {
     @Query(value = "UPDATE Course c SET c.area = :h3Index " +
             "WHERE c.courseId = :courseId")
     void updateArea(Long courseId, String h3Index);
+
 
 }
