@@ -107,6 +107,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
         List<Course> coruseList = officialCourseRepository.findAll();
 
         List<ElasticSearchCourse> elasticSearchCourseList = coruseList.stream()
+                .filter(course -> course.getCourseId() != 0)
                 .map(domain -> new ElasticSearchCourse(
                         domain.getCourseId(),
                         domain.getName(),

@@ -53,13 +53,4 @@ public class SearchCourseController {
 
         return ResponseEntity.ok(matchByWordResponseDtoList);
     }
-
-
-    // 추후 스케줄링으로 변경할 api 입니다. 완성 후 지우겠슴다~
-    @PostMapping
-    public ResponseEntity<?> regist() {
-        searchCourseService.insertCourse();
-
-        return ResponseEntity.ok("성공");
-    }
 }

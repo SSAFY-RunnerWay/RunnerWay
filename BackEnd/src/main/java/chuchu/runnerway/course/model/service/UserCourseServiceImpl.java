@@ -50,6 +50,7 @@ public class UserCourseServiceImpl implements UserCourseService {
     }
 
     private final WebClient webClient;
+    private final SearchCourseServiceImpl searchCourseServiceImpl;
 
     @Transactional
     @Override
@@ -138,6 +139,8 @@ public class UserCourseServiceImpl implements UserCourseService {
 
         record.updateRecordCourse(savedCourse);
         runningRecordRepository.save(record);
+
+        searchCourseServiceImpl.insertCourse();
         return true;
     }
 
