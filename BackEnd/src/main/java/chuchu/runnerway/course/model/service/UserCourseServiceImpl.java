@@ -56,7 +56,7 @@ public class UserCourseServiceImpl implements UserCourseService {
     public List<UserListResponseDto> findAllUserCourse(double lat, double lng) {
         String h3Index = h3.geoToH3Address(lat, lng, resolution);
         List<Course> courses = userCourseRepository.findAll(h3Index);
-//        if(courses.isEmpty()) return null;
+
         return courses.stream()
             .map(course -> {
                 // Course -> UserListResponseDto 변환
@@ -150,7 +150,7 @@ public class UserCourseServiceImpl implements UserCourseService {
             .map(course -> {
                 // Course -> UserListResponseDto 변환
                 UserListResponseDto dto = mapper.map(course, UserListResponseDto.class);
-
+                dto.setNickname(course.getMember().getNickname());
                 // calcDistance 함수를 사용해 사용자와 코스 간의 거리 계산
                 double distance = calcDistance(lat, lng, course.getLat(), course.getLng());
 
@@ -171,7 +171,7 @@ public class UserCourseServiceImpl implements UserCourseService {
             .map(course -> {
                 // Course -> UserListResponseDto 변환
                 UserListResponseDto dto = mapper.map(course, UserListResponseDto.class);
-
+                dto.setNickname(course.getMember().getNickname());
                 // calcDistance 함수를 사용해 사용자와 코스 간의 거리 계산
                 double distance = calcDistance(lat, lng, course.getLat(), course.getLng());
 
