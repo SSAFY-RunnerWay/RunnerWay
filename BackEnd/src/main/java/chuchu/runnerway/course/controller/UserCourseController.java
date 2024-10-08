@@ -1,6 +1,7 @@
 package chuchu.runnerway.course.controller;
 
 import chuchu.runnerway.course.dto.request.UserCourseRegistRequestDto;
+import chuchu.runnerway.course.dto.response.RegistCourseResponseDto;
 import chuchu.runnerway.course.dto.response.UserDetailResponseDto;
 import chuchu.runnerway.course.dto.response.UserListResponseDto;
 import chuchu.runnerway.course.model.service.IncrementCountService;
@@ -93,9 +94,9 @@ public class UserCourseController {
         )
     })
     public ResponseEntity<?> registUserCourse(@RequestBody UserCourseRegistRequestDto userCourseRegistRequestDto) {
-        boolean check = userCourseService.registUserCourse(userCourseRegistRequestDto);
-        if(!check) return ResponseEntity.status(409).build();
-        return ResponseEntity.ok("유저 코스 등록 성공");
+        RegistCourseResponseDto responseDto = userCourseService.registUserCourse(userCourseRegistRequestDto);
+        if(!responseDto.getCheck()) return ResponseEntity.status(409).build();
+        return ResponseEntity.ok(responseDto);
     }
 
     @PatchMapping("/{courseId}")

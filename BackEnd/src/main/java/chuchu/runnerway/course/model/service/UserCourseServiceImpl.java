@@ -2,6 +2,7 @@ package chuchu.runnerway.course.model.service;
 
 import chuchu.runnerway.course.dto.SlopeDto;
 import chuchu.runnerway.course.dto.request.UserCourseRegistRequestDto;
+import chuchu.runnerway.course.dto.response.RegistCourseResponseDto;
 import chuchu.runnerway.course.dto.response.UserDetailResponseDto;
 import chuchu.runnerway.course.dto.response.UserListResponseDto;
 import chuchu.runnerway.course.entity.Course;
@@ -92,11 +93,12 @@ public class UserCourseServiceImpl implements UserCourseService {
 
     @Transactional
     @Override
-    public boolean registUserCourse(UserCourseRegistRequestDto userCourseRegistRequestDto) {
+    public RegistCourseResponseDto registUserCourse(UserCourseRegistRequestDto userCourseRegistRequestDto) {
         Course userCourse = Course.builder().build();
         RunningRecord record = runningRecordRepository.findByRecordId(userCourseRegistRequestDto.getRecordId())
                 .orElseThrow(NoSuchElementException::new);
-        if(record.getCourse().getCourseId() != 0) return false;
+        if(record.getCourse().getCourseId() != 0) return new RegistCourseResponseDto(null, false);
+
         Member member = memberRepository.findById(userCourseRegistRequestDto.getMemberId()).orElseThrow(
             NotFoundMemberException::new
         );
@@ -164,7 +166,7 @@ public class UserCourseServiceImpl implements UserCourseService {
 
         elasticSearchCourseRepository.save(elasticSearchCourse);
 
-        return true;
+        return new RegistCourseResponseDto(savedCourse.getCourseId(), true);
     }
 
     @Transactional
