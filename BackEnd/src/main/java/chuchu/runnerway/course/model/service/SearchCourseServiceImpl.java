@@ -98,7 +98,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
 
     @Override
     @Transactional
-    @Scheduled(cron = "0 30 * * * *", zone = "Asia/Seoul") // 매일 새벽 3시에 elastic index 갱신
+    @Scheduled(cron = "0 30 3 * * *", zone = "Asia/Seoul") // 매일 새벽 3시에 elastic index 갱신
     public void insertCourse() {
         elasticSearchCourseRepository.deleteAll();
 

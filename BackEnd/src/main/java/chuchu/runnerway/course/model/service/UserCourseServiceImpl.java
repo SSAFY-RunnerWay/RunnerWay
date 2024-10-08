@@ -6,7 +6,9 @@ import chuchu.runnerway.course.dto.response.UserDetailResponseDto;
 import chuchu.runnerway.course.dto.response.UserListResponseDto;
 import chuchu.runnerway.course.entity.Course;
 import chuchu.runnerway.course.entity.CourseImage;
+import chuchu.runnerway.course.entity.ElasticSearchCourse;
 import chuchu.runnerway.course.model.repository.CourseImageRepository;
+import chuchu.runnerway.course.model.repository.ElasticSearchCourseRepository;
 import chuchu.runnerway.course.model.repository.UserCourseRepository;
 import chuchu.runnerway.member.domain.Member;
 import chuchu.runnerway.member.exception.NotFoundMemberException;
@@ -49,6 +51,7 @@ public class UserCourseServiceImpl implements UserCourseService {
     }
 
     private final WebClient webClient;
+    private final ElasticSearchCourseRepository elasticSearchCourseRepository;
 
     @Transactional
     @Override
@@ -137,6 +140,29 @@ public class UserCourseServiceImpl implements UserCourseService {
 
         record.updateRecordCourse(savedCourse);
         runningRecordRepository.save(record);
+
+        // ELK 갱신
+        ElasticSearchCourse elasticSearchCourse = ElasticSearchCourse.builder()
+                .courseId(savedCourse.getCourseId())
+                .name(savedCourse.getName())
+                .address(savedCourse.getAddress())
+                .content(savedCourse.getContent())
+                .count(savedCourse.getCount())
+                .level(savedCourse.getLevel())
+                .averageSlope(savedCourse.getAverageSlope())
+                .averageDownhill(savedCourse.getAverageDownhill())
+                .averageTime(savedCourse.getAverageTime())
+                .courseLength(savedCourse.getCourseLength())
+                .memberId(savedCourse.getMember().getMemberId())
+                .memberNickname(savedCourse.getMember().getNickname())
+                .courseType(savedCourse.getCourseType())
+                .registDate(savedCourse.getRegistDate())
+                .averageCalorie(savedCourse.getAverageCalorie())
+                .lat(savedCourse.getLat())
+                .lng(savedCourse.getLng())
+                .build();
+
+        elasticSearchCourseRepository.save(elasticSearchCourse);
 
         return true;
     }
