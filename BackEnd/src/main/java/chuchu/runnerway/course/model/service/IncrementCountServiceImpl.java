@@ -80,7 +80,6 @@ public class IncrementCountServiceImpl implements IncrementCountService {
                 image = CourseImage.builder()
                         .courseId(dto.getCourseId())
                         .url(dto.getCourseImage().getUrl())
-                        .path(dto.getCourseImage().getPath())
                         .build();
             }
 
@@ -124,7 +123,6 @@ public class IncrementCountServiceImpl implements IncrementCountService {
                 image = CourseImage.builder()
                         .courseId(dto.getCourseId())
                         .url(dto.getCourseImage().getUrl())
-                        .path(dto.getCourseImage().getPath())
                         .build();
             }
 

@@ -6,5 +6,4 @@ import lombok.Data;
 public class PersonalImageDto {
 
     private String url;
-    private String path;
 }

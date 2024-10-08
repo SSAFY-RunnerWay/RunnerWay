@@ -40,11 +40,7 @@ public class BadgeImage {
     @Column(name = "url")
     private String url;
 
-    @Column(name = "path")
-    private String path;
-
     public void updateBadgeImage(BadgeImageDto badgeImageDto) {
         this.url = badgeImageDto.getUrl();
-        this.path = badgeImageDto.getPath();
     }
 }

@@ -40,11 +40,8 @@ public class MemberImage {
     @Column(name = "url")
     private String url;
 
-    @Column(name = "path")
-    private String path;
 
     public void updateMemberImage(MemberImageDto memberImageDto) {
         this.url = memberImageDto.getUrl();
-        this.path = memberImageDto.getPath();
     }
 }

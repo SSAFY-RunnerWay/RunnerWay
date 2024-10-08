@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.entity;
 
+import chuchu.runnerway.course.dto.CourseImageDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -69,6 +70,6 @@ public class ElasticSearchCourse {
     @Field(type = FieldType.Double, name = "lng")
     private double lng;
 
-    @Field(type = FieldType.Text, name = "url")
-    private String url;
+    @Field(type = FieldType.Object, name = "course_image")
+    private CourseImageDto courseImage;
 }

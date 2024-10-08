@@ -6,5 +6,4 @@ import lombok.Data;
 public class BadgeImageDto {
     private Long badgeItemsId;
     private String url;
-    private String path;
 }

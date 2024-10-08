@@ -9,6 +9,4 @@ public class RecordUpdatePictureRequestDto {
     private Long recordId;
     @NotNull
     private String url;
-    @NotNull
-    private String path;
 }

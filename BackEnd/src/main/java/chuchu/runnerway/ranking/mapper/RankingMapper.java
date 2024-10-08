@@ -30,7 +30,6 @@ public interface RankingMapper {
     // MemberImage를 MemberImageDto로 매핑
     @Mapping(source = "memberImage.memberId", target = "memberId")
     @Mapping(source = "memberImage.url", target = "url")
-    @Mapping(source = "memberImage.path", target = "path")
     MemberImageDto toMemberImageDto(MemberImage memberImage);
 
     @IterableMapping(qualifiedByName = "ranking")

@@ -35,7 +35,4 @@ public class CourseImage {
 
     @Column(name = "url")
     private String url;
-
-    @Column(name = "path")
-    private String path;
 }

@@ -1,5 +1,6 @@
 package chuchu.runnerway.course.model.service;
 
+import chuchu.runnerway.course.dto.CourseImageDto;
 import chuchu.runnerway.course.dto.response.*;
 import chuchu.runnerway.course.entity.Course;
 import chuchu.runnerway.course.entity.CourseType;
@@ -55,19 +56,21 @@ public class SearchCourseServiceImpl implements SearchCourseService{
                         domain.getRegistDate(),
                         domain.getAverageCalorie(),
                         domain.getLat(),
-                        domain.getLng(),
-                        domain.getUrl()
+                        domain.getLng()
                 ))
                 .toList();
 
         for (SearchCourseResponseDto searchCourseResponseDto : searchCourseResponseDtoList) {
+
             if(searchCourseResponseDto.getCourseType() == CourseType.official) {
                 OfficialDetailResponseDto dto = officialCourseService.getOfficialCourse(searchCourseResponseDto.getCourseId());
                 searchCourseResponseDto.setCount(dto.getCount());
+                searchCourseResponseDto.setCourseImage(dto.getCourseImage());
             }
             else {
                 UserDetailResponseDto dto = userCourseService.getUserCourse(searchCourseResponseDto.getCourseId());
                 searchCourseResponseDto.setCount(dto.getCount());
+                searchCourseResponseDto.setCourseImage(dto.getCourseImage());
             }
         }
 
@@ -125,7 +128,7 @@ public class SearchCourseServiceImpl implements SearchCourseService{
                         domain.getAverageCalorie(),
                         domain.getLat(),
                         domain.getLng(),
-                        domain.getCourseImage().getUrl()
+                        new CourseImageDto(domain.getCourseImage().getCourseId(), domain.getCourseImage().getUrl())
                 )).toList();
 
         elasticSearchCourseRepository.saveAll(elasticSearchCourseList);

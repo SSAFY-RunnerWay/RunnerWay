@@ -53,4 +53,12 @@ public class SearchCourseController {
 
         return ResponseEntity.ok(matchByWordResponseDtoList);
     }
+
+    @PostMapping
+    public ResponseEntity<?> regist() {
+        searchCourseService.insertCourse();
+
+        return ResponseEntity.ok("성공");
+    }
+
 }

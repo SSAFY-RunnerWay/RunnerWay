@@ -8,6 +8,7 @@ import chuchu.runnerway.course.dto.response.UserListResponseDto;
 import chuchu.runnerway.course.entity.Course;
 import chuchu.runnerway.course.entity.CourseImage;
 import chuchu.runnerway.course.entity.ElasticSearchCourse;
+import chuchu.runnerway.course.mapper.CourseMapper;
 import chuchu.runnerway.course.model.repository.CourseImageRepository;
 import chuchu.runnerway.course.model.repository.ElasticSearchCourseRepository;
 import chuchu.runnerway.course.model.repository.UserCourseRepository;
@@ -42,6 +43,8 @@ public class UserCourseServiceImpl implements UserCourseService {
     private final RunningRecordRepository runningRecordRepository;
     private static final H3Core h3;
     private static final int resolution = 7;
+
+    private final CourseMapper courseMapper;
 
     static {
         try {
@@ -162,7 +165,7 @@ public class UserCourseServiceImpl implements UserCourseService {
                 .averageCalorie(savedCourse.getAverageCalorie())
                 .lat(savedCourse.getLat())
                 .lng(savedCourse.getLng())
-                .url(savedCourse.getCourseImage().getUrl())
+                .courseImage(courseMapper.toCourseImageDto(savedCourse.getCourseImage()))
                 .build();
 
         elasticSearchCourseRepository.save(elasticSearchCourse);
@@ -219,7 +222,6 @@ public class UserCourseServiceImpl implements UserCourseService {
         CourseImage courseImage = CourseImage.builder()
             .course(savedCourse)
             .url(userCourseRegistRequestDto.getCourseImage().getUrl())
-            .path(userCourseRegistRequestDto.getCourseImage().getPath())
             .build();
         courseImageRepository.save(courseImage);
     }

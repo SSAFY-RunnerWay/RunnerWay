@@ -135,7 +135,6 @@ public class MemberServiceImpl implements MemberService {
         MemberImage memberImage = MemberImage.builder()
             .member(savedMember)
             .url(signUpMemberDto.getMemberImage().getUrl())
-            .path(signUpMemberDto.getMemberImage().getPath())
             .build();
         memberImageRepository.save(memberImage);
     }

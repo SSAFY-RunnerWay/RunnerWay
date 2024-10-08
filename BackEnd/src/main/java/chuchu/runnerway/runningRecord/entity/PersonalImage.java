@@ -23,21 +23,16 @@ public class PersonalImage {
     @Column(name = "url")
     private String url;
 
-    @Column(name = "path")
-    private String path;
-
 
 
     public void createPersonalImage(RunningRecord runningRecord, RecordRegistRequestDto requestDto) {
         this.runningRecord = runningRecord;
         this.url = requestDto.getPersonalImage().getUrl();
-        this.path = requestDto.getPersonalImage().getPath();
     }
 
     public void updatePersonalImage(RunningRecord runningRecord, RecordUpdatePictureRequestDto requestDto){
         this.runningRecord = runningRecord;
         this.url = requestDto.getUrl();
-        this.path = requestDto.getPath();
     }
 
 }
