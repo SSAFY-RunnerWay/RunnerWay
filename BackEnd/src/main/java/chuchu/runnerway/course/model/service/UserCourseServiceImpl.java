@@ -116,13 +116,13 @@ public class UserCourseServiceImpl implements UserCourseService {
             userCourseRegistRequestDto.setAverageSlope(slopeDto.getAverageSlope());
             userCourseRegistRequestDto.setAverageDownhill(slopeDto.getAverageDownhill());
             if(slopeDto.getAverageSlope() < 10) {
-                if(userCourseRegistRequestDto.getCourseLength() < 10)
+                if(userCourseRegistRequestDto.getCourseLength() < 5)
                     userCourseRegistRequestDto.setLevel(1);
                 else
                     userCourseRegistRequestDto.setLevel(2);
             }
             else if(slopeDto.getAverageSlope() < 20) {
-                if(userCourseRegistRequestDto.getCourseLength() < 5)
+                if(userCourseRegistRequestDto.getCourseLength() < 3)
                     userCourseRegistRequestDto.setLevel(2);
                 else
                     userCourseRegistRequestDto.setLevel(3);
