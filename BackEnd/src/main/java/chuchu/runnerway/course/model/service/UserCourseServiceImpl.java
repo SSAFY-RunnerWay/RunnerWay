@@ -162,6 +162,7 @@ public class UserCourseServiceImpl implements UserCourseService {
                 .averageCalorie(savedCourse.getAverageCalorie())
                 .lat(savedCourse.getLat())
                 .lng(savedCourse.getLng())
+                .url(savedCourse.getCourseImage().getUrl())
                 .build();
 
         elasticSearchCourseRepository.save(elasticSearchCourse);

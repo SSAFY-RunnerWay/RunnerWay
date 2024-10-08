@@ -68,4 +68,7 @@ public class ElasticSearchCourse {
 
     @Field(type = FieldType.Double, name = "lng")
     private double lng;
+
+    @Field(type = FieldType.Text, name = "url")
+    private String url;
 }

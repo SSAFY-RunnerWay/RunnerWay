@@ -55,7 +55,8 @@ public class SearchCourseServiceImpl implements SearchCourseService{
                         domain.getRegistDate(),
                         domain.getAverageCalorie(),
                         domain.getLat(),
-                        domain.getLng()
+                        domain.getLng(),
+                        domain.getUrl()
                 ))
                 .toList();
 
@@ -123,7 +124,8 @@ public class SearchCourseServiceImpl implements SearchCourseService{
                         domain.getRegistDate(),
                         domain.getAverageCalorie(),
                         domain.getLat(),
-                        domain.getLng()
+                        domain.getLng(),
+                        domain.getCourseImage().getUrl()
                 )).toList();
 
         elasticSearchCourseRepository.saveAll(elasticSearchCourseList);

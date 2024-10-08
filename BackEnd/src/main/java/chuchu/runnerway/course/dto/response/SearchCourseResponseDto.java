@@ -30,4 +30,5 @@ public class SearchCourseResponseDto {
     private double averageCalorie;
     private double lat;
     private double lng;
+    private String url;
 }
