@@ -17,5 +17,5 @@ public class UserListResponseDto {
     private double lat;
     private double lng;
     private CourseImageDto courseImage;
-    private String nickname;
+    private String memberNickname;
 }
