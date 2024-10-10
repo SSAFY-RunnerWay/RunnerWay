@@ -3,7 +3,7 @@
 
 ## 프로젝트 개요
 
-이 프로젝트는 사용자가 기록한 러닝 데이터를 바탕으로 맞춤형 코스 추천 및 경로 시각화를 제공하는 시스템입니다. 각 사용자별로 달리기, 산책, 자전거 코스 등을 추천하고, 경로의 경사도를 분석하여 사용자에게 최적의 운동 경험을 제공합니다.
+Runner Way는 러닝 코스 추천 기반 기록 관리 및 대결 서비스입니다. 본 프로젝트는 사용자가 기록한 러닝 데이터를 바탕으로 맞춤형 코스 추천 및 경로 시각화를 제공합니다.코스의 경사도를 분석하여 사용자에게 최적의 운동 경험을 제공합니다.
 
 ## 주요 기능
 
@@ -13,25 +13,40 @@
 - **사용자 기록 관리**: 사용자의 운동 기록(거리, 칼로리, 경과 시간 등)을 저장 및 분석
 - **대결 모드**: 랭커 혹은 나와의 대결 모드
 
+## System Architecture
+
+![architecture.png](./Image/architecture.png)
+
 ## Flow Chart
+
 ![flow.png](./Image/flow.png)
+
+
+## API 명세서
+
+![](.Image/.png) // 내일 아침에 수정해주세요
 
 ## 기술 고도화
 
+- Elasticsearch
+    - 검색 엔진 최적화
+    - 음절 단위 역 색인을 통한 통합 검색 엔진 지원
+
+    ![020.png](./Image/020.png)
+
 - 캐시 사용
     - real-time에 대해서 반복적인 update 발생
-        - redis(cache)의 key-value를 이용하여 real-time(참여자 수) update를 하고 특정 기간 (24시간)마다 데이터베이스(mysql) 반영
+        - redis(cache)의 key-value를 이용하여 real-time(참여자 수) update를 하고 24시간마다 데이터베이스(mysql) 반영
     - 가변성이 적은 data 조회
         - 자주 변화하지 않는 data에 대해서 redis(cache)에 저장 후 조회 시 성능 향상
-    - 캐싱 처리 전 성능
-    ![cacheBefore.png](./Image/cacheBefore.png)
-    - 캐싱 처리 후 성능 (대략 14.68배 차이)
-    ![cacheAfter.png](./Image/cacheAfter.png)
+
+    ![022.png](./Image/022.png)
+
 - 추천 알고리즘
     - data 부족 시 CBF, 충분한 data가 쌓여 있을 시 CF알고리즘 이용하여 하이브리드 필터 적용 추천
     - Python LightFm 라이브러리 사용
 
-![image.png](./Image/image.png)
+    ![image.png](./Image/image.png)
 
 - 경사도 계산 알고리즘
     - 국토지리정보원에서 제공하는 DEM(국도 이미지) 이용하여 고도를 불러오고 고도를 이용하여 경사도 계산
@@ -40,72 +55,45 @@
     ![image.png](./Image/image%201.png)
     
 - GPS기반 주변 러닝 코스 목록 조회
-    - 매번 움직일 때 마다 조회하는 것은 DB에 부담이 큼
-    - 갱신하는 버튼을 추가해서 갱신
-    - 조회 시 H3 라이브러리 사용 혹은 구역을 미리 지정 후 구역별 조회
+    - 지도를 육각형으로 나누어, 미리 구역별로 코스 색인 수행
+        - 중복 연산 방지
+    - 추천 갱신 시, 사용자 요청에 따라서만 갱신 (갱신 버튼)
+    - 조회 시 H3 라이브러리를 통한 색인에 따라 구역별 조회
 
-## 개발 현황
+    ![h3.png](./Image/h3.png)
 
-- API 개발 90% 완료
-
-![image.png](./Image/image%202.png)
-
-- 배포 현황
-    - 배포 완료
-    - [https://j11b304.p.ssafy.io/api/secret/swagger-of-chuchu/swagger-ui/index.html](https://j11b304.p.ssafy.io/api/secret/swagger-of-chuchu/swagger-ui/index.html)
-
-![image.png](./Image/image%203.png)
-
-- flutter 현황
-    
-    하단 바 개발 완료 및 gps 경로 그리기 완료
-    
-    ![runnerwaygif.gif](./Image/runnerwaygif.gif)
-    
-
-- 추천 알고리즘 구현
-    - LightFM Library를 사용하여 CF(Collaborate Filtering), CBF(Content Based Filtering) 을 함께 사용하는 Hybrid Filtering 구현
-    - 사용자의 데이터가 적으면 CBF 많다면 CF로 자동 적용
-
-    ![recommend.png](./Image/recommend.png)
-
-- Elastic Search 적용
-    - 글자 단위 연관 검색 및 자동완성 기능
-    ![el1.png](./Image/el1.png)
-    ![el2.png](./Image/el2.png)
-
-- FAST API 적용
-    - WebClient를 사용해 FAST API 사용
-    ![img11.png](./Image/img11.png)
+## 구현 화면
 
 - Front 개발 현황
     - 로그인 페이지
+
     ![img13.png](./Image/img13.png)
 
     - 회원가입 페이지
+
     ![img14.png](./Image/img14.png)
     ![img15.png](./Image/img15.png)
 
     - 검색 결과 입력 시 Elastic Search를 활용한 검색어 매칭
+
     ![img6.png](./Image/img6.png)
 
     - 검색 결과 리스트 조회 및 정렬/필터링 기능
+
     ![img7.png](./Image/img7.png)
 
     - 메인 페이지
     - 정렬/필터링 기능
+
     ![img8.png](./Image/img8.png)
 
     - 러닝 상세 조회 페이지
+
     ![img9.png](./Image/img9.png)
 
     - 리뷰 페이지
+
     ![img10.png](./Image/img10.png)
 
     - 리뷰 작성 페이지
     ![img12.png](./Image/img12.png)
-
-## 추후 개발 현황
-- 유사도 알고리즘 개발
-- Front 개발 및 apk 추출
-- Front - Back 연결
