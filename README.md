@@ -64,26 +64,16 @@ Runner Way는 러닝 코스 추천 기반 기록 관리 및 대결 서비스입�
 
 ## 구현 화면
 
-| 로그인 페이지                        | 회원가입 페이지                             | 선호태그                                |
-| ------------------------------------ | ------------------------------------------- | --------------------------------------- |
-| ![image.png](./Image/login_page.png) | ![image.png](./Image/registration_page.png) | ![image.png](./Image/preferred_tag.png) |
-
-| 메인 페이지(캐시 전)                            | 메인 페이지(캐시 후) 페이지                      | 러너 코스 리스트 페이지                 |
-| ----------------------------------------------- | ------------------------------------------------ | --------------------------------------- |
-| ![image.png](./Image/pre_cache_main_screen.gif) | ![image.png](./Image/post_cache_main_screen.gif) | ![image.png](./Image/runner_screen.gif) |
-
-| 검색                             | 추천 페이지                           | 러닝 상세 페이지                        |
-| -------------------------------- | ------------------------------------- | --------------------------------------- |
-| ![image.png](./Image/search.gif) | ![image.png](./Image/runner_pick.jpg) | ![image.png](./Image/ranking_image.png) |
-
-| 자유 코스                             | 유저 코스                             | 코스 코스                                 |
-| ------------------------------------- | ------------------------------------- | ----------------------------------------- |
-| ![image.png](./Image/free_course.png) | ![image.png](./Image/user_course.png) | ![image.png](./Image/official_course.png) |
-
-| 러닝 시작                               | 러닝 등록                                       | 러닝 기록                                             |
-| --------------------------------------- | ----------------------------------------------- | ----------------------------------------------------- |
-| ![image.png](./Image/running_start.gif) | ![image.png](./Image/runner_course_running.gif) | ![image.png](./Image/running_record_registration.gif) |
-
-| 러닝 달력                                  | 유저 코스 페이지                                     | 유저 코스 등록                                       |
-| ------------------------------------------ | ---------------------------------------------------- | ---------------------------------------------------- |
-| ![image.png](./Image/running_calendar.png) | ![image.png](./Image/runner_course_registration.png) | ![image.png](./Image/runner_course_registration.gif) |
+| 로그인 페이지                                   | 회원가입 페이지                                      | 선호태그                                              |
+| ----------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------- |
+| ![image.png](./Image/login_page.png)            | ![image.png](./Image/registration_page.png)          | ![image.png](./Image/preferred_tag.png)               |
+| 메인 페이지(캐시 전)                            | 메인 페이지(캐시 후) 페이지                          | 러너 코스 리스트 페이지                               |
+| ![image.png](./Image/pre_cache_main_screen.gif) | ![image.png](./Image/post_cache_main_screen.gif)     | ![image.png](./Image/runner_screen.gif)               |
+| 검색                                            | 추천 페이지                                          | 러닝 상세 페이지                                      |
+| ![image.png](./Image/search.gif)                | ![image.png](./Image/runner_pick.jpg)                | ![image.png](./Image/ranking_image.png)               |
+| 자유 코스                                       | 유저 코스                                            | 코스 코스                                             |
+| ![image.png](./Image/free_course.png)           | ![image.png](./Image/user_course.png)                | ![image.png](./Image/official_course.png)             |
+| 러닝 시작                                       | 러닝 등록                                            | 러닝 기록                                             |
+| ![image.png](./Image/running_start.gif)         | ![image.png](./Image/runner_course_running.gif)      | ![image.png](./Image/running_record_registration.gif) |
+| 러닝 달력                                       | 유저 코스 페이지                                     | 유저 코스 등록                                        |
+| ![image.png](./Image/running_calendar.png)      | ![image.png](./Image/runner_course_registration.png) | ![image.png](./Image/runner_course_registration.gif)  |
