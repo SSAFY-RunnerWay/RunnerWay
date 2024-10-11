@@ -20,10 +20,6 @@ Runner Way는 러닝 코스 추천 기반 기록 관리 및 대결 서비스입�
 
 ![flow.png](./Image/flow.png)
 
-## API 명세서
-
-![](.Image/.png) // 내일 아침에 수정해주세요
-
 ## 기술 고도화
 
 - Elasticsearch
